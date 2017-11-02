@@ -7,7 +7,7 @@
 !app/logs/.gitkeep
 /app/phpunit.xml
 /build/
-#/vendor/
+/vendor/
 /bin/
 /composer.phar
 /nbproject/private/
