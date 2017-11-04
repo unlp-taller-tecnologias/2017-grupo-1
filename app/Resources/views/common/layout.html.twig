@@ -19,8 +19,8 @@
         <!-- end: META -->
         <!-- start: MAIN CSS -->
         <link href='https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,200,100,800' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="{{ asset('assets/vendor/rapido/plugins/bootstrap/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/vendor/rapido/plugins/font-awesome/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/rapido/plugins/iCheck/skins/all.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/rapido/plugins/perfect-scrollbar/src/perfect-scrollbar.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/rapido/plugins/animate.css/animate.min.css') }}">
@@ -39,8 +39,6 @@
         <link rel="stylesheet" href="{{ asset('assets/vendor/rapido/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css') }}">
         <!-- end: CSS REQUIRED FOR THIS SUBVIEW CONTENTS-->
         <!-- start: CSS REQUIRED FOR THIS PAGE ONLY -->
-        <link rel="stylesheet" href="{{ asset('assets/vendor/rapido/plugins/weather-icons/css/weather-icons.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/vendor/rapido/plugins/nvd3/nv.d3.min.css') }}">
         <!-- end: CSS REQUIRED FOR THIS PAGE ONLY -->
         <!-- start: CORE CSS -->
         <link rel="stylesheet" href="{{ asset('assets/vendor/rapido/css/styles.css') }}">
@@ -63,12 +61,6 @@
     <!-- start: BODY -->
     <body>
 
-        <!-- start: SLIDING BAR (SB) -->
-        {% block toolbar %}
-            {% include 'common/toolbar.html.twig' %}
-        {% endblock %}
-        <!-- end: SLIDING BAR -->
-
         <div class="main-wrapper">
             <!-- start: TOPBAR -->
             {% block topbar %}
@@ -82,29 +74,17 @@
             {% endblock %}
             <!-- end: PAGESLIDE LEFT -->
 
-            <!-- start: PAGESLIDE RIGHT -->
-            {% block pageslideRight %}
-                {% include 'common/pageSlideRight.html.twig' %}
-            {% endblock %}
-            <!-- end: PAGESLIDE RIGHT -->
-
             <!-- start: MAIN CONTAINER -->
             {% block content %}
-                {% include 'common/content.html.twig' %}
+
             {% endblock %}
             <!-- end: MAIN CONTAINER -->
-
 
             <!-- start: FOOTER -->
             {% block footer %}
                 {% include 'common/footer.html.twig' %}
             {% endblock %}
             <!-- end: FOOTER -->
-
-            <!-- start: SUBVIEW SAMPLE CONTENTS -->
-            {% include 'common/sampleContent.html.twig'%}
-            <!-- end: SUBVIEW SAMPLE CONTENTS -->
-
         </div>
         <!-- start: MAIN JAVASCRIPTS -->
         <!--[if lt IE 9]>
@@ -113,8 +93,7 @@
         <script type="text/javascript" src="{{ asset('assets/vendor/rapido/plugins/jquery-1.11.1.min.js') }}"></script>
         <![endif]-->
         <!--[if gte IE 9]><!-->
-
-        <script src="{{ asset('assets/vendor/rapido/plugins/jQuery/jquery-2.1.1.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
         <!--<![endif]-->
         <script src="{{ asset('assets/vendor/rapido/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js') }}"></script>
         <script src="{{ asset('assets/vendor/rapido/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
@@ -146,7 +125,6 @@
         <script src="{{ asset('assets/vendor/rapido/plugins/summernote/dist/summernote.min.js') }}"></script>
         <script src="{{ asset('assets/vendor/rapido/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
         <script src="{{ asset('assets/vendor/rapido/js/subview.js') }}"></script>
-        <script src="{{ asset('assets/vendor/rapido/js/subview-examples.js') }}"></script>
         <!-- end: JAVASCRIPTS REQUIRED FOR SUBVIEW CONTENTS -->
         <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
         <script src="{{ asset('assets/vendor/rapido/plugins/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
@@ -167,8 +145,8 @@
         <script>
                 $(document).ready(function () {
                     Main.init();
-                    SVExamples.init();
-                    Index.init();
+                    // SVExamples.init();
+                    //Index.init();
                 });
         </script>
 

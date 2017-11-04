@@ -1,4 +1,60 @@
 <?php 
+namespace Symfony\Component\EventDispatcher
+{
+interface EventSubscriberInterface
+{
+public static function getSubscribedEvents();
+}
+}
+namespace Symfony\Component\HttpKernel\EventListener
+{
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+abstract class SessionListener implements EventSubscriberInterface
+{
+public function onKernelRequest(GetResponseEvent $event)
+{
+if (!$event->isMasterRequest()) {
+return;
+}
+$request = $event->getRequest();
+$session = $this->getSession();
+if (null === $session || $request->hasSession()) {
+return;
+}
+$request->setSession($session);
+}
+public static function getSubscribedEvents()
+{
+return array(
+KernelEvents::REQUEST => array('onKernelRequest', 128),
+);
+}
+abstract protected function getSession();
+}
+}
+namespace Symfony\Bundle\FrameworkBundle\EventListener
+{
+use Symfony\Component\HttpKernel\EventListener\SessionListener as BaseSessionListener;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+class SessionListener extends BaseSessionListener
+{
+private $container;
+public function __construct(ContainerInterface $container)
+{
+$this->container = $container;
+}
+protected function getSession()
+{
+if (!$this->container->has('session')) {
+return;
+}
+return $this->container->get('session');
+}
+}
+}
 namespace Symfony\Component\HttpFoundation\Session\Storage
 {
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
@@ -573,6 +629,91 @@ return (bool) $this->container->getParameter('kernel.debug');
 }
 namespace Symfony\Component\Templating
 {
+interface TemplateReferenceInterface
+{
+public function all();
+public function set($name, $value);
+public function get($name);
+public function getPath();
+public function getLogicalName();
+public function __toString();
+}
+}
+namespace Symfony\Component\Templating
+{
+class TemplateReference implements TemplateReferenceInterface
+{
+protected $parameters;
+public function __construct($name = null, $engine = null)
+{
+$this->parameters = array('name'=> $name,'engine'=> $engine,
+);
+}
+public function __toString()
+{
+return $this->getLogicalName();
+}
+public function set($name, $value)
+{
+if (array_key_exists($name, $this->parameters)) {
+$this->parameters[$name] = $value;
+} else {
+throw new \InvalidArgumentException(sprintf('The template does not support the "%s" parameter.', $name));
+}
+return $this;
+}
+public function get($name)
+{
+if (array_key_exists($name, $this->parameters)) {
+return $this->parameters[$name];
+}
+throw new \InvalidArgumentException(sprintf('The template does not support the "%s" parameter.', $name));
+}
+public function all()
+{
+return $this->parameters;
+}
+public function getPath()
+{
+return $this->parameters['name'];
+}
+public function getLogicalName()
+{
+return $this->parameters['name'];
+}
+}
+}
+namespace Symfony\Bundle\FrameworkBundle\Templating
+{
+use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
+class TemplateReference extends BaseTemplateReference
+{
+public function __construct($bundle = null, $controller = null, $name = null, $format = null, $engine = null)
+{
+$this->parameters = array('bundle'=> $bundle,'controller'=> $controller,'name'=> $name,'format'=> $format,'engine'=> $engine,
+);
+}
+public function getPath()
+{
+$controller = str_replace('\\','/', $this->get('controller'));
+$path = (empty($controller) ?'': $controller.'/').$this->get('name').'.'.$this->get('format').'.'.$this->get('engine');
+return empty($this->parameters['bundle']) ?'views/'.$path :'@'.$this->get('bundle').'/Resources/views/'.$path;
+}
+public function getLogicalName()
+{
+return sprintf('%s:%s:%s.%s.%s', $this->parameters['bundle'], $this->parameters['controller'], $this->parameters['name'], $this->parameters['format'], $this->parameters['engine']);
+}
+}
+}
+namespace Symfony\Component\Templating
+{
+interface TemplateNameParserInterface
+{
+public function parse($name);
+}
+}
+namespace Symfony\Component\Templating
+{
 class TemplateNameParser implements TemplateNameParserInterface
 {
 public function parse($name)
@@ -629,6 +770,76 @@ private function isAbsolutePath($file)
 {
 return (bool) preg_match('#^(?:/|[a-zA-Z]:)#', $file);
 }
+}
+}
+namespace Symfony\Component\Config
+{
+interface FileLocatorInterface
+{
+public function locate($name, $currentPath = null, $first = true);
+}
+}
+namespace Symfony\Bundle\FrameworkBundle\Templating\Loader
+{
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Templating\TemplateReferenceInterface;
+class TemplateLocator implements FileLocatorInterface
+{
+protected $locator;
+protected $cache;
+private $cacheHits = array();
+public function __construct(FileLocatorInterface $locator, $cacheDir = null)
+{
+if (null !== $cacheDir && is_file($cache = $cacheDir.'/templates.php')) {
+$this->cache = require $cache;
+}
+$this->locator = $locator;
+}
+protected function getCacheKey($template)
+{
+return $template->getLogicalName();
+}
+public function locate($template, $currentPath = null, $first = true)
+{
+if (!$template instanceof TemplateReferenceInterface) {
+throw new \InvalidArgumentException('The template must be an instance of TemplateReferenceInterface.');
+}
+$key = $this->getCacheKey($template);
+if (isset($this->cacheHits[$key])) {
+return $this->cacheHits[$key];
+}
+if (isset($this->cache[$key])) {
+return $this->cacheHits[$key] = realpath($this->cache[$key]) ?: $this->cache[$key];
+}
+try {
+return $this->cacheHits[$key] = $this->locator->locate($template->getPath(), $currentPath);
+} catch (\InvalidArgumentException $e) {
+throw new \InvalidArgumentException(sprintf('Unable to find template "%s" : "%s".', $template, $e->getMessage()), 0, $e);
+}
+}
+}
+}
+namespace Symfony\Component\Routing
+{
+interface RequestContextAwareInterface
+{
+public function setContext(RequestContext $context);
+public function getContext();
+}
+}
+namespace Symfony\Component\Routing\Generator
+{
+use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\RequestContextAwareInterface;
+interface UrlGeneratorInterface extends RequestContextAwareInterface
+{
+const ABSOLUTE_URL = 0;
+const ABSOLUTE_PATH = 1;
+const RELATIVE_PATH = 2;
+const NETWORK_PATH = 3;
+public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH);
 }
 }
 namespace Symfony\Component\Routing\Generator
@@ -823,6 +1034,355 @@ return''=== $path ||'/'=== $path[0]
 }
 }
 }
+namespace Symfony\Component\Routing
+{
+use Symfony\Component\HttpFoundation\Request;
+class RequestContext
+{
+private $baseUrl;
+private $pathInfo;
+private $method;
+private $host;
+private $scheme;
+private $httpPort;
+private $httpsPort;
+private $queryString;
+private $parameters = array();
+public function __construct($baseUrl ='', $method ='GET', $host ='localhost', $scheme ='http', $httpPort = 80, $httpsPort = 443, $path ='/', $queryString ='')
+{
+$this->setBaseUrl($baseUrl);
+$this->setMethod($method);
+$this->setHost($host);
+$this->setScheme($scheme);
+$this->setHttpPort($httpPort);
+$this->setHttpsPort($httpsPort);
+$this->setPathInfo($path);
+$this->setQueryString($queryString);
+}
+public function fromRequest(Request $request)
+{
+$this->setBaseUrl($request->getBaseUrl());
+$this->setPathInfo($request->getPathInfo());
+$this->setMethod($request->getMethod());
+$this->setHost($request->getHost());
+$this->setScheme($request->getScheme());
+$this->setHttpPort($request->isSecure() ? $this->httpPort : $request->getPort());
+$this->setHttpsPort($request->isSecure() ? $request->getPort() : $this->httpsPort);
+$this->setQueryString($request->server->get('QUERY_STRING',''));
+return $this;
+}
+public function getBaseUrl()
+{
+return $this->baseUrl;
+}
+public function setBaseUrl($baseUrl)
+{
+$this->baseUrl = $baseUrl;
+return $this;
+}
+public function getPathInfo()
+{
+return $this->pathInfo;
+}
+public function setPathInfo($pathInfo)
+{
+$this->pathInfo = $pathInfo;
+return $this;
+}
+public function getMethod()
+{
+return $this->method;
+}
+public function setMethod($method)
+{
+$this->method = strtoupper($method);
+return $this;
+}
+public function getHost()
+{
+return $this->host;
+}
+public function setHost($host)
+{
+$this->host = strtolower($host);
+return $this;
+}
+public function getScheme()
+{
+return $this->scheme;
+}
+public function setScheme($scheme)
+{
+$this->scheme = strtolower($scheme);
+return $this;
+}
+public function getHttpPort()
+{
+return $this->httpPort;
+}
+public function setHttpPort($httpPort)
+{
+$this->httpPort = (int) $httpPort;
+return $this;
+}
+public function getHttpsPort()
+{
+return $this->httpsPort;
+}
+public function setHttpsPort($httpsPort)
+{
+$this->httpsPort = (int) $httpsPort;
+return $this;
+}
+public function getQueryString()
+{
+return $this->queryString;
+}
+public function setQueryString($queryString)
+{
+$this->queryString = (string) $queryString;
+return $this;
+}
+public function getParameters()
+{
+return $this->parameters;
+}
+public function setParameters(array $parameters)
+{
+$this->parameters = $parameters;
+return $this;
+}
+public function getParameter($name)
+{
+return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
+}
+public function hasParameter($name)
+{
+return array_key_exists($name, $this->parameters);
+}
+public function setParameter($name, $parameter)
+{
+$this->parameters[$name] = $parameter;
+return $this;
+}
+}
+}
+namespace Symfony\Component\Routing\Matcher
+{
+use Symfony\Component\Routing\RequestContextAwareInterface;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+interface UrlMatcherInterface extends RequestContextAwareInterface
+{
+public function match($pathinfo);
+}
+}
+namespace Symfony\Component\Routing
+{
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
+interface RouterInterface extends UrlMatcherInterface, UrlGeneratorInterface
+{
+public function getRouteCollection();
+}
+}
+namespace Symfony\Component\Routing\Matcher
+{
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+interface RequestMatcherInterface
+{
+public function matchRequest(Request $request);
+}
+}
+namespace Symfony\Component\Routing
+{
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\ConfigCacheInterface;
+use Symfony\Component\Config\ConfigCacheFactoryInterface;
+use Symfony\Component\Config\ConfigCacheFactory;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\Generator\ConfigurableRequirementsInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Generator\Dumper\GeneratorDumperInterface;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
+use Symfony\Component\Routing\Matcher\Dumper\MatcherDumperInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
+class Router implements RouterInterface, RequestMatcherInterface
+{
+protected $matcher;
+protected $generator;
+protected $context;
+protected $loader;
+protected $collection;
+protected $resource;
+protected $options = array();
+protected $logger;
+private $configCacheFactory;
+private $expressionLanguageProviders = array();
+public function __construct(LoaderInterface $loader, $resource, array $options = array(), RequestContext $context = null, LoggerInterface $logger = null)
+{
+$this->loader = $loader;
+$this->resource = $resource;
+$this->logger = $logger;
+$this->context = $context ?: new RequestContext();
+$this->setOptions($options);
+}
+public function setOptions(array $options)
+{
+$this->options = array('cache_dir'=> null,'debug'=> false,'generator_class'=>'Symfony\\Component\\Routing\\Generator\\UrlGenerator','generator_base_class'=>'Symfony\\Component\\Routing\\Generator\\UrlGenerator','generator_dumper_class'=>'Symfony\\Component\\Routing\\Generator\\Dumper\\PhpGeneratorDumper','generator_cache_class'=>'ProjectUrlGenerator','matcher_class'=>'Symfony\\Component\\Routing\\Matcher\\UrlMatcher','matcher_base_class'=>'Symfony\\Component\\Routing\\Matcher\\UrlMatcher','matcher_dumper_class'=>'Symfony\\Component\\Routing\\Matcher\\Dumper\\PhpMatcherDumper','matcher_cache_class'=>'ProjectUrlMatcher','resource_type'=> null,'strict_requirements'=> true,
+);
+$invalid = array();
+foreach ($options as $key => $value) {
+if (array_key_exists($key, $this->options)) {
+$this->options[$key] = $value;
+} else {
+$invalid[] = $key;
+}
+}
+if ($invalid) {
+throw new \InvalidArgumentException(sprintf('The Router does not support the following options: "%s".', implode('", "', $invalid)));
+}
+}
+public function setOption($key, $value)
+{
+if (!array_key_exists($key, $this->options)) {
+throw new \InvalidArgumentException(sprintf('The Router does not support the "%s" option.', $key));
+}
+$this->options[$key] = $value;
+}
+public function getOption($key)
+{
+if (!array_key_exists($key, $this->options)) {
+throw new \InvalidArgumentException(sprintf('The Router does not support the "%s" option.', $key));
+}
+return $this->options[$key];
+}
+public function getRouteCollection()
+{
+if (null === $this->collection) {
+$this->collection = $this->loader->load($this->resource, $this->options['resource_type']);
+}
+return $this->collection;
+}
+public function setContext(RequestContext $context)
+{
+$this->context = $context;
+if (null !== $this->matcher) {
+$this->getMatcher()->setContext($context);
+}
+if (null !== $this->generator) {
+$this->getGenerator()->setContext($context);
+}
+}
+public function getContext()
+{
+return $this->context;
+}
+public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory)
+{
+$this->configCacheFactory = $configCacheFactory;
+}
+public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+{
+return $this->getGenerator()->generate($name, $parameters, $referenceType);
+}
+public function match($pathinfo)
+{
+return $this->getMatcher()->match($pathinfo);
+}
+public function matchRequest(Request $request)
+{
+$matcher = $this->getMatcher();
+if (!$matcher instanceof RequestMatcherInterface) {
+return $matcher->match($request->getPathInfo());
+}
+return $matcher->matchRequest($request);
+}
+public function getMatcher()
+{
+if (null !== $this->matcher) {
+return $this->matcher;
+}
+if (null === $this->options['cache_dir'] || null === $this->options['matcher_cache_class']) {
+$this->matcher = new $this->options['matcher_class']($this->getRouteCollection(), $this->context);
+if (method_exists($this->matcher,'addExpressionLanguageProvider')) {
+foreach ($this->expressionLanguageProviders as $provider) {
+$this->matcher->addExpressionLanguageProvider($provider);
+}
+}
+return $this->matcher;
+}
+$class = $this->options['matcher_cache_class'];
+$baseClass = $this->options['matcher_base_class'];
+$expressionLanguageProviders = $this->expressionLanguageProviders;
+$that = $this;
+$cache = $this->getConfigCacheFactory()->cache($this->options['cache_dir'].'/'.$class.'.php',
+function (ConfigCacheInterface $cache) use ($that, $class, $baseClass, $expressionLanguageProviders) {
+$dumper = $that->getMatcherDumperInstance();
+if (method_exists($dumper,'addExpressionLanguageProvider')) {
+foreach ($expressionLanguageProviders as $provider) {
+$dumper->addExpressionLanguageProvider($provider);
+}
+}
+$options = array('class'=> $class,'base_class'=> $baseClass,
+);
+$cache->write($dumper->dump($options), $that->getRouteCollection()->getResources());
+}
+);
+require_once $cache->getPath();
+return $this->matcher = new $class($this->context);
+}
+public function getGenerator()
+{
+if (null !== $this->generator) {
+return $this->generator;
+}
+if (null === $this->options['cache_dir'] || null === $this->options['generator_cache_class']) {
+$this->generator = new $this->options['generator_class']($this->getRouteCollection(), $this->context, $this->logger);
+} else {
+$class = $this->options['generator_cache_class'];
+$baseClass = $this->options['generator_base_class'];
+$that = $this; $cache = $this->getConfigCacheFactory()->cache($this->options['cache_dir'].'/'.$class.'.php',
+function (ConfigCacheInterface $cache) use ($that, $class, $baseClass) {
+$dumper = $that->getGeneratorDumperInstance();
+$options = array('class'=> $class,'base_class'=> $baseClass,
+);
+$cache->write($dumper->dump($options), $that->getRouteCollection()->getResources());
+}
+);
+require_once $cache->getPath();
+$this->generator = new $class($this->context, $this->logger);
+}
+if ($this->generator instanceof ConfigurableRequirementsInterface) {
+$this->generator->setStrictRequirements($this->options['strict_requirements']);
+}
+return $this->generator;
+}
+public function addExpressionLanguageProvider(ExpressionFunctionProviderInterface $provider)
+{
+$this->expressionLanguageProviders[] = $provider;
+}
+public function getGeneratorDumperInstance()
+{
+return new $this->options['generator_dumper_class']($this->getRouteCollection());
+}
+public function getMatcherDumperInstance()
+{
+return new $this->options['matcher_dumper_class']($this->getRouteCollection());
+}
+private function getConfigCacheFactory()
+{
+if (null === $this->configCacheFactory) {
+$this->configCacheFactory = new ConfigCacheFactory($this->options['debug']);
+}
+return $this->configCacheFactory;
+}
+}
+}
 namespace Symfony\Component\Routing\Matcher
 {
 interface RedirectableUrlMatcherInterface
@@ -1006,6 +1566,565 @@ class RedirectableUrlMatcher extends BaseMatcher
 public function redirect($path, $route, $scheme = null)
 {
 return array('_controller'=>'Symfony\\Bundle\\FrameworkBundle\\Controller\\RedirectController::urlRedirectAction','path'=> $path,'permanent'=> true,'scheme'=> $scheme,'httpPort'=> $this->context->getHttpPort(),'httpsPort'=> $this->context->getHttpsPort(),'_route'=> $route,
+);
+}
+}
+}
+namespace Symfony\Component\HttpKernel\CacheWarmer
+{
+interface WarmableInterface
+{
+public function warmUp($cacheDir);
+}
+}
+namespace Symfony\Bundle\FrameworkBundle\Routing
+{
+use Symfony\Component\Routing\Router as BaseRouter;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
+class Router extends BaseRouter implements WarmableInterface
+{
+private $container;
+public function __construct(ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null)
+{
+$this->container = $container;
+$this->resource = $resource;
+$this->context = $context ?: new RequestContext();
+$this->setOptions($options);
+}
+public function getRouteCollection()
+{
+if (null === $this->collection) {
+$this->collection = $this->container->get('routing.loader')->load($this->resource, $this->options['resource_type']);
+$this->resolveParameters($this->collection);
+}
+return $this->collection;
+}
+public function warmUp($cacheDir)
+{
+$currentDir = $this->getOption('cache_dir');
+$this->setOption('cache_dir', $cacheDir);
+$this->getMatcher();
+$this->getGenerator();
+$this->setOption('cache_dir', $currentDir);
+}
+private function resolveParameters(RouteCollection $collection)
+{
+foreach ($collection as $route) {
+foreach ($route->getDefaults() as $name => $value) {
+$route->setDefault($name, $this->resolve($value));
+}
+foreach ($route->getRequirements() as $name => $value) {
+if ('_scheme'=== $name ||'_method'=== $name) {
+continue; }
+$route->setRequirement($name, $this->resolve($value));
+}
+$route->setPath($this->resolve($route->getPath()));
+$route->setHost($this->resolve($route->getHost()));
+$schemes = array();
+foreach ($route->getSchemes() as $scheme) {
+$schemes = array_merge($schemes, explode('|', $this->resolve($scheme)));
+}
+$route->setSchemes($schemes);
+$methods = array();
+foreach ($route->getMethods() as $method) {
+$methods = array_merge($methods, explode('|', $this->resolve($method)));
+}
+$route->setMethods($methods);
+$route->setCondition($this->resolve($route->getCondition()));
+}
+}
+private function resolve($value)
+{
+if (is_array($value)) {
+foreach ($value as $key => $val) {
+$value[$key] = $this->resolve($val);
+}
+return $value;
+}
+if (!is_string($value)) {
+return $value;
+}
+$container = $this->container;
+$escapedValue = preg_replace_callback('/%%|%([^%\s]++)%/', function ($match) use ($container, $value) {
+if (!isset($match[1])) {
+return'%%';
+}
+$resolved = $container->getParameter($match[1]);
+if (is_string($resolved) || is_numeric($resolved)) {
+return (string) $resolved;
+}
+throw new RuntimeException(sprintf('The container parameter "%s", used in the route configuration value "%s", '.'must be a string or numeric, but it is of type %s.',
+$match[1],
+$value,
+gettype($resolved)
+)
+);
+}, $value);
+return str_replace('%%','%', $escapedValue);
+}
+}
+}
+namespace Symfony\Component\Config
+{
+class FileLocator implements FileLocatorInterface
+{
+protected $paths;
+public function __construct($paths = array())
+{
+$this->paths = (array) $paths;
+}
+public function locate($name, $currentPath = null, $first = true)
+{
+if (''== $name) {
+throw new \InvalidArgumentException('An empty file name is not valid to be located.');
+}
+if ($this->isAbsolutePath($name)) {
+if (!file_exists($name)) {
+throw new \InvalidArgumentException(sprintf('The file "%s" does not exist.', $name));
+}
+return $name;
+}
+$paths = $this->paths;
+if (null !== $currentPath) {
+array_unshift($paths, $currentPath);
+}
+$paths = array_unique($paths);
+$filepaths = array();
+foreach ($paths as $path) {
+if (@file_exists($file = $path.DIRECTORY_SEPARATOR.$name)) {
+if (true === $first) {
+return $file;
+}
+$filepaths[] = $file;
+}
+}
+if (!$filepaths) {
+throw new \InvalidArgumentException(sprintf('The file "%s" does not exist (in: %s).', $name, implode(', ', $paths)));
+}
+return $filepaths;
+}
+private function isAbsolutePath($file)
+{
+if ('/'=== $file[0] ||'\\'=== $file[0]
+|| (strlen($file) > 3 && ctype_alpha($file[0])
+&&':'=== $file[1]
+&& ('\\'=== $file[2] ||'/'=== $file[2])
+)
+|| null !== parse_url($file, PHP_URL_SCHEME)
+) {
+return true;
+}
+return false;
+}
+}
+}
+namespace Symfony\Component\EventDispatcher
+{
+class Event
+{
+private $propagationStopped = false;
+private $dispatcher;
+private $name;
+public function isPropagationStopped()
+{
+return $this->propagationStopped;
+}
+public function stopPropagation()
+{
+$this->propagationStopped = true;
+}
+public function setDispatcher(EventDispatcherInterface $dispatcher)
+{
+$this->dispatcher = $dispatcher;
+}
+public function getDispatcher()
+{
+@trigger_error('The '.__METHOD__.' method is deprecated since version 2.4 and will be removed in 3.0. The event dispatcher instance can be received in the listener call instead.', E_USER_DEPRECATED);
+return $this->dispatcher;
+}
+public function getName()
+{
+@trigger_error('The '.__METHOD__.' method is deprecated since version 2.4 and will be removed in 3.0. The event name can be received in the listener call instead.', E_USER_DEPRECATED);
+return $this->name;
+}
+public function setName($name)
+{
+$this->name = $name;
+}
+}
+}
+namespace Symfony\Component\EventDispatcher
+{
+interface EventDispatcherInterface
+{
+public function dispatch($eventName, Event $event = null);
+public function addListener($eventName, $listener, $priority = 0);
+public function addSubscriber(EventSubscriberInterface $subscriber);
+public function removeListener($eventName, $listener);
+public function removeSubscriber(EventSubscriberInterface $subscriber);
+public function getListeners($eventName = null);
+public function hasListeners($eventName = null);
+}
+}
+namespace Symfony\Component\EventDispatcher
+{
+class EventDispatcher implements EventDispatcherInterface
+{
+private $listeners = array();
+private $sorted = array();
+public function dispatch($eventName, Event $event = null)
+{
+if (null === $event) {
+$event = new Event();
+}
+$event->setDispatcher($this);
+$event->setName($eventName);
+if ($listeners = $this->getListeners($eventName)) {
+$this->doDispatch($listeners, $eventName, $event);
+}
+return $event;
+}
+public function getListeners($eventName = null)
+{
+if (null !== $eventName) {
+if (!isset($this->listeners[$eventName])) {
+return array();
+}
+if (!isset($this->sorted[$eventName])) {
+$this->sortListeners($eventName);
+}
+return $this->sorted[$eventName];
+}
+foreach ($this->listeners as $eventName => $eventListeners) {
+if (!isset($this->sorted[$eventName])) {
+$this->sortListeners($eventName);
+}
+}
+return array_filter($this->sorted);
+}
+public function getListenerPriority($eventName, $listener)
+{
+if (!isset($this->listeners[$eventName])) {
+return;
+}
+foreach ($this->listeners[$eventName] as $priority => $listeners) {
+if (false !== in_array($listener, $listeners, true)) {
+return $priority;
+}
+}
+}
+public function hasListeners($eventName = null)
+{
+return (bool) $this->getListeners($eventName);
+}
+public function addListener($eventName, $listener, $priority = 0)
+{
+$this->listeners[$eventName][$priority][] = $listener;
+unset($this->sorted[$eventName]);
+}
+public function removeListener($eventName, $listener)
+{
+if (!isset($this->listeners[$eventName])) {
+return;
+}
+foreach ($this->listeners[$eventName] as $priority => $listeners) {
+if (false !== ($key = array_search($listener, $listeners, true))) {
+unset($this->listeners[$eventName][$priority][$key], $this->sorted[$eventName]);
+}
+}
+}
+public function addSubscriber(EventSubscriberInterface $subscriber)
+{
+foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
+if (is_string($params)) {
+$this->addListener($eventName, array($subscriber, $params));
+} elseif (is_string($params[0])) {
+$this->addListener($eventName, array($subscriber, $params[0]), isset($params[1]) ? $params[1] : 0);
+} else {
+foreach ($params as $listener) {
+$this->addListener($eventName, array($subscriber, $listener[0]), isset($listener[1]) ? $listener[1] : 0);
+}
+}
+}
+}
+public function removeSubscriber(EventSubscriberInterface $subscriber)
+{
+foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
+if (is_array($params) && is_array($params[0])) {
+foreach ($params as $listener) {
+$this->removeListener($eventName, array($subscriber, $listener[0]));
+}
+} else {
+$this->removeListener($eventName, array($subscriber, is_string($params) ? $params : $params[0]));
+}
+}
+}
+protected function doDispatch($listeners, $eventName, Event $event)
+{
+foreach ($listeners as $listener) {
+if ($event->isPropagationStopped()) {
+break;
+}
+call_user_func($listener, $event, $eventName, $this);
+}
+}
+private function sortListeners($eventName)
+{
+krsort($this->listeners[$eventName]);
+$this->sorted[$eventName] = call_user_func_array('array_merge', $this->listeners[$eventName]);
+}
+}
+}
+namespace Symfony\Component\EventDispatcher
+{
+use Symfony\Component\DependencyInjection\ContainerInterface;
+class ContainerAwareEventDispatcher extends EventDispatcher
+{
+private $container;
+private $listenerIds = array();
+private $listeners = array();
+public function __construct(ContainerInterface $container)
+{
+$this->container = $container;
+}
+public function addListenerService($eventName, $callback, $priority = 0)
+{
+if (!is_array($callback) || 2 !== count($callback)) {
+throw new \InvalidArgumentException('Expected an array("service", "method") argument');
+}
+$this->listenerIds[$eventName][] = array($callback[0], $callback[1], $priority);
+}
+public function removeListener($eventName, $listener)
+{
+$this->lazyLoad($eventName);
+if (isset($this->listenerIds[$eventName])) {
+foreach ($this->listenerIds[$eventName] as $i => $args) {
+list($serviceId, $method, $priority) = $args;
+$key = $serviceId.'.'.$method;
+if (isset($this->listeners[$eventName][$key]) && $listener === array($this->listeners[$eventName][$key], $method)) {
+unset($this->listeners[$eventName][$key]);
+if (empty($this->listeners[$eventName])) {
+unset($this->listeners[$eventName]);
+}
+unset($this->listenerIds[$eventName][$i]);
+if (empty($this->listenerIds[$eventName])) {
+unset($this->listenerIds[$eventName]);
+}
+}
+}
+}
+parent::removeListener($eventName, $listener);
+}
+public function hasListeners($eventName = null)
+{
+if (null === $eventName) {
+return $this->listenerIds || $this->listeners || parent::hasListeners();
+}
+if (isset($this->listenerIds[$eventName])) {
+return true;
+}
+return parent::hasListeners($eventName);
+}
+public function getListeners($eventName = null)
+{
+if (null === $eventName) {
+foreach ($this->listenerIds as $serviceEventName => $args) {
+$this->lazyLoad($serviceEventName);
+}
+} else {
+$this->lazyLoad($eventName);
+}
+return parent::getListeners($eventName);
+}
+public function getListenerPriority($eventName, $listener)
+{
+$this->lazyLoad($eventName);
+return parent::getListenerPriority($eventName, $listener);
+}
+public function addSubscriberService($serviceId, $class)
+{
+foreach ($class::getSubscribedEvents() as $eventName => $params) {
+if (is_string($params)) {
+$this->listenerIds[$eventName][] = array($serviceId, $params, 0);
+} elseif (is_string($params[0])) {
+$this->listenerIds[$eventName][] = array($serviceId, $params[0], isset($params[1]) ? $params[1] : 0);
+} else {
+foreach ($params as $listener) {
+$this->listenerIds[$eventName][] = array($serviceId, $listener[0], isset($listener[1]) ? $listener[1] : 0);
+}
+}
+}
+}
+public function getContainer()
+{
+return $this->container;
+}
+protected function lazyLoad($eventName)
+{
+if (isset($this->listenerIds[$eventName])) {
+foreach ($this->listenerIds[$eventName] as $args) {
+list($serviceId, $method, $priority) = $args;
+$listener = $this->container->get($serviceId);
+$key = $serviceId.'.'.$method;
+if (!isset($this->listeners[$eventName][$key])) {
+$this->addListener($eventName, array($listener, $method), $priority);
+} elseif ($this->listeners[$eventName][$key] !== $listener) {
+parent::removeListener($eventName, array($this->listeners[$eventName][$key], $method));
+$this->addListener($eventName, array($listener, $method), $priority);
+}
+$this->listeners[$eventName][$key] = $listener;
+}
+}
+}
+}
+}
+namespace Symfony\Component\HttpKernel\EventListener
+{
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+class ResponseListener implements EventSubscriberInterface
+{
+private $charset;
+public function __construct($charset)
+{
+$this->charset = $charset;
+}
+public function onKernelResponse(FilterResponseEvent $event)
+{
+if (!$event->isMasterRequest()) {
+return;
+}
+$response = $event->getResponse();
+if (null === $response->getCharset()) {
+$response->setCharset($this->charset);
+}
+$response->prepare($event->getRequest());
+}
+public static function getSubscribedEvents()
+{
+return array(
+KernelEvents::RESPONSE =>'onKernelResponse',
+);
+}
+}
+}
+namespace Symfony\Component\HttpKernel\EventListener
+{
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RequestContextAwareInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
+class RouterListener implements EventSubscriberInterface
+{
+private $matcher;
+private $context;
+private $logger;
+private $request;
+private $requestStack;
+public function __construct($matcher, $requestStack = null, $context = null, $logger = null)
+{
+if ($requestStack instanceof RequestContext || $context instanceof LoggerInterface || $logger instanceof RequestStack) {
+$tmp = $requestStack;
+$requestStack = $logger;
+$logger = $context;
+$context = $tmp;
+@trigger_error('The '.__METHOD__.' method now requires a RequestStack to be given as second argument as '.__CLASS__.'::setRequest method will not be supported anymore in 3.0.', E_USER_DEPRECATED);
+} elseif (!$requestStack instanceof RequestStack) {
+@trigger_error('The '.__METHOD__.' method now requires a RequestStack instance as '.__CLASS__.'::setRequest method will not be supported anymore in 3.0.', E_USER_DEPRECATED);
+}
+if (null !== $requestStack && !$requestStack instanceof RequestStack) {
+throw new \InvalidArgumentException('RequestStack instance expected.');
+}
+if (null !== $context && !$context instanceof RequestContext) {
+throw new \InvalidArgumentException('RequestContext instance expected.');
+}
+if (null !== $logger && !$logger instanceof LoggerInterface) {
+throw new \InvalidArgumentException('Logger must implement LoggerInterface.');
+}
+if (!$matcher instanceof UrlMatcherInterface && !$matcher instanceof RequestMatcherInterface) {
+throw new \InvalidArgumentException('Matcher must either implement UrlMatcherInterface or RequestMatcherInterface.');
+}
+if (null === $context && !$matcher instanceof RequestContextAwareInterface) {
+throw new \InvalidArgumentException('You must either pass a RequestContext or the matcher must implement RequestContextAwareInterface.');
+}
+$this->matcher = $matcher;
+$this->context = $context ?: $matcher->getContext();
+$this->requestStack = $requestStack;
+$this->logger = $logger;
+}
+public function setRequest(Request $request = null)
+{
+@trigger_error('The '.__METHOD__.' method is deprecated since version 2.4 and will be made private in 3.0.', E_USER_DEPRECATED);
+$this->setCurrentRequest($request);
+}
+private function setCurrentRequest(Request $request = null)
+{
+if (null !== $request && $this->request !== $request) {
+$this->context->fromRequest($request);
+}
+$this->request = $request;
+}
+public function onKernelFinishRequest(FinishRequestEvent $event)
+{
+if (null === $this->requestStack) {
+return; }
+$this->setCurrentRequest($this->requestStack->getParentRequest());
+}
+public function onKernelRequest(GetResponseEvent $event)
+{
+$request = $event->getRequest();
+if (null !== $this->requestStack) {
+$this->setCurrentRequest($request);
+}
+if ($request->attributes->has('_controller')) {
+return;
+}
+try {
+if ($this->matcher instanceof RequestMatcherInterface) {
+$parameters = $this->matcher->matchRequest($request);
+} else {
+$parameters = $this->matcher->match($request->getPathInfo());
+}
+if (null !== $this->logger) {
+$this->logger->info(sprintf('Matched route "%s".', isset($parameters['_route']) ? $parameters['_route'] :'n/a'), array('route_parameters'=> $parameters,'request_uri'=> $request->getUri(),
+));
+}
+$request->attributes->add($parameters);
+unset($parameters['_route'], $parameters['_controller']);
+$request->attributes->set('_route_params', $parameters);
+} catch (ResourceNotFoundException $e) {
+$message = sprintf('No route found for "%s %s"', $request->getMethod(), $request->getPathInfo());
+if ($referer = $request->headers->get('referer')) {
+$message .= sprintf(' (from "%s")', $referer);
+}
+throw new NotFoundHttpException($message, $e);
+} catch (MethodNotAllowedException $e) {
+$message = sprintf('No route found for "%s %s": Method Not Allowed (Allow: %s)', $request->getMethod(), $request->getPathInfo(), implode(', ', $e->getAllowedMethods()));
+throw new MethodNotAllowedHttpException($e->getAllowedMethods(), $message, $e);
+}
+}
+public static function getSubscribedEvents()
+{
+return array(
+KernelEvents::REQUEST => array(array('onKernelRequest', 32)),
+KernelEvents::FINISH_REQUEST => array(array('onKernelFinishRequest', 0)),
 );
 }
 }
@@ -1296,6 +2415,45 @@ $this->exception = $exception;
 }
 }
 }
+namespace Symfony\Component\HttpKernel
+{
+final class KernelEvents
+{
+const REQUEST ='kernel.request';
+const EXCEPTION ='kernel.exception';
+const VIEW ='kernel.view';
+const CONTROLLER ='kernel.controller';
+const RESPONSE ='kernel.response';
+const TERMINATE ='kernel.terminate';
+const FINISH_REQUEST ='kernel.finish_request';
+}
+}
+namespace Symfony\Component\HttpKernel\Config
+{
+use Symfony\Component\Config\FileLocator as BaseFileLocator;
+use Symfony\Component\HttpKernel\KernelInterface;
+class FileLocator extends BaseFileLocator
+{
+private $kernel;
+private $path;
+public function __construct(KernelInterface $kernel, $path = null, array $paths = array())
+{
+$this->kernel = $kernel;
+if (null !== $path) {
+$this->path = $path;
+$paths[] = $path;
+}
+parent::__construct($paths);
+}
+public function locate($file, $currentPath = null, $first = true)
+{
+if (isset($file[0]) &&'@'=== $file[0]) {
+return $this->kernel->locateResource($file, $this->path, $first);
+}
+return parent::locate($file, $currentPath, $first);
+}
+}
+}
 namespace Symfony\Bundle\FrameworkBundle\Controller
 {
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -1424,6 +2582,58 @@ return $controller;
 }
 }
 }
+namespace Symfony\Component\Security\Http
+{
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+class Firewall implements EventSubscriberInterface
+{
+private $map;
+private $dispatcher;
+private $exceptionListeners;
+public function __construct(FirewallMapInterface $map, EventDispatcherInterface $dispatcher)
+{
+$this->map = $map;
+$this->dispatcher = $dispatcher;
+$this->exceptionListeners = new \SplObjectStorage();
+}
+public function onKernelRequest(GetResponseEvent $event)
+{
+if (!$event->isMasterRequest()) {
+return;
+}
+list($listeners, $exceptionListener) = $this->map->getListeners($event->getRequest());
+if (null !== $exceptionListener) {
+$this->exceptionListeners[$event->getRequest()] = $exceptionListener;
+$exceptionListener->register($this->dispatcher);
+}
+foreach ($listeners as $listener) {
+$listener->handle($event);
+if ($event->hasResponse()) {
+break;
+}
+}
+}
+public function onKernelFinishRequest(FinishRequestEvent $event)
+{
+$request = $event->getRequest();
+if (isset($this->exceptionListeners[$request])) {
+$this->exceptionListeners[$request]->unregister($this->dispatcher);
+unset($this->exceptionListeners[$request]);
+}
+}
+public static function getSubscribedEvents()
+{
+return array(
+KernelEvents::REQUEST => array('onKernelRequest', 8),
+KernelEvents::FINISH_REQUEST =>'onKernelFinishRequest',
+);
+}
+}
+}
 namespace Symfony\Component\Security\Core\User
 {
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -1539,6 +2749,138 @@ return $this->token;
 public function setToken(TokenInterface $token = null)
 {
 $this->token = $token;
+}
+}
+}
+namespace Symfony\Component\Security\Core\Authorization
+{
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+interface AccessDecisionManagerInterface
+{
+public function decide(TokenInterface $token, array $attributes, $object = null);
+public function supportsAttribute($attribute);
+public function supportsClass($class);
+}
+}
+namespace Symfony\Component\Security\Core\Authorization
+{
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+class AccessDecisionManager implements AccessDecisionManagerInterface
+{
+const STRATEGY_AFFIRMATIVE ='affirmative';
+const STRATEGY_CONSENSUS ='consensus';
+const STRATEGY_UNANIMOUS ='unanimous';
+private $voters;
+private $strategy;
+private $allowIfAllAbstainDecisions;
+private $allowIfEqualGrantedDeniedDecisions;
+public function __construct(array $voters = array(), $strategy = self::STRATEGY_AFFIRMATIVE, $allowIfAllAbstainDecisions = false, $allowIfEqualGrantedDeniedDecisions = true)
+{
+$strategyMethod ='decide'.ucfirst($strategy);
+if (!is_callable(array($this, $strategyMethod))) {
+throw new \InvalidArgumentException(sprintf('The strategy "%s" is not supported.', $strategy));
+}
+$this->voters = $voters;
+$this->strategy = $strategyMethod;
+$this->allowIfAllAbstainDecisions = (bool) $allowIfAllAbstainDecisions;
+$this->allowIfEqualGrantedDeniedDecisions = (bool) $allowIfEqualGrantedDeniedDecisions;
+}
+public function setVoters(array $voters)
+{
+$this->voters = $voters;
+}
+public function decide(TokenInterface $token, array $attributes, $object = null)
+{
+return $this->{$this->strategy}($token, $attributes, $object);
+}
+public function supportsAttribute($attribute)
+{
+@trigger_error('The '.__METHOD__.' is deprecated since version 2.8 and will be removed in version 3.0.', E_USER_DEPRECATED);
+foreach ($this->voters as $voter) {
+if ($voter->supportsAttribute($attribute)) {
+return true;
+}
+}
+return false;
+}
+public function supportsClass($class)
+{
+@trigger_error('The '.__METHOD__.' is deprecated since version 2.8 and will be removed in version 3.0.', E_USER_DEPRECATED);
+foreach ($this->voters as $voter) {
+if ($voter->supportsClass($class)) {
+return true;
+}
+}
+return false;
+}
+private function decideAffirmative(TokenInterface $token, array $attributes, $object = null)
+{
+$deny = 0;
+foreach ($this->voters as $voter) {
+$result = $voter->vote($token, $object, $attributes);
+switch ($result) {
+case VoterInterface::ACCESS_GRANTED:
+return true;
+case VoterInterface::ACCESS_DENIED:
+++$deny;
+break;
+default:
+break;
+}
+}
+if ($deny > 0) {
+return false;
+}
+return $this->allowIfAllAbstainDecisions;
+}
+private function decideConsensus(TokenInterface $token, array $attributes, $object = null)
+{
+$grant = 0;
+$deny = 0;
+foreach ($this->voters as $voter) {
+$result = $voter->vote($token, $object, $attributes);
+switch ($result) {
+case VoterInterface::ACCESS_GRANTED:
+++$grant;
+break;
+case VoterInterface::ACCESS_DENIED:
+++$deny;
+break;
+}
+}
+if ($grant > $deny) {
+return true;
+}
+if ($deny > $grant) {
+return false;
+}
+if ($grant > 0) {
+return $this->allowIfEqualGrantedDeniedDecisions;
+}
+return $this->allowIfAllAbstainDecisions;
+}
+private function decideUnanimous(TokenInterface $token, array $attributes, $object = null)
+{
+$grant = 0;
+foreach ($attributes as $attribute) {
+foreach ($this->voters as $voter) {
+$result = $voter->vote($token, $object, array($attribute));
+switch ($result) {
+case VoterInterface::ACCESS_GRANTED:
+++$grant;
+break;
+case VoterInterface::ACCESS_DENIED:
+return false;
+default:
+break;
+}
+}
+}
+if ($grant > 0) {
+return true;
+}
+return $this->allowIfAllAbstainDecisions;
 }
 }
 }
@@ -1727,6 +3069,486 @@ return true;
 return 0 === count($this->ips);
 }
 }
+}
+namespace
+{
+class Twig_Environment
+{
+const VERSION ='2.4.4';
+const VERSION_ID = 20404;
+const MAJOR_VERSION = 2;
+const MINOR_VERSION = 4;
+const RELEASE_VERSION = 4;
+const EXTRA_VERSION ='';
+private $charset;
+private $loader;
+private $debug;
+private $autoReload;
+private $cache;
+private $lexer;
+private $parser;
+private $compiler;
+private $baseTemplateClass;
+private $globals = array();
+private $resolvedGlobals;
+private $loadedTemplates;
+private $strictVariables;
+private $templateClassPrefix ='__TwigTemplate_';
+private $originalCache;
+private $extensionSet;
+private $runtimeLoaders = array();
+private $runtimes = array();
+private $optionsHash;
+private $loading = array();
+public function __construct(Twig_LoaderInterface $loader, $options = array())
+{
+$this->setLoader($loader);
+$options = array_merge(array('debug'=> false,'charset'=>'UTF-8','base_template_class'=>'Twig_Template','strict_variables'=> false,'autoescape'=>'html','cache'=> false,'auto_reload'=> null,'optimizations'=> -1,
+), $options);
+$this->debug = (bool) $options['debug'];
+$this->setCharset($options['charset']);
+$this->baseTemplateClass = $options['base_template_class'];
+$this->autoReload = null === $options['auto_reload'] ? $this->debug : (bool) $options['auto_reload'];
+$this->strictVariables = (bool) $options['strict_variables'];
+$this->setCache($options['cache']);
+$this->extensionSet = new Twig_ExtensionSet();
+$this->addExtension(new Twig_Extension_Core());
+$this->addExtension(new Twig_Extension_Escaper($options['autoescape']));
+$this->addExtension(new Twig_Extension_Optimizer($options['optimizations']));
+}
+public function getBaseTemplateClass()
+{
+return $this->baseTemplateClass;
+}
+public function setBaseTemplateClass($class)
+{
+$this->baseTemplateClass = $class;
+$this->updateOptionsHash();
+}
+public function enableDebug()
+{
+$this->debug = true;
+$this->updateOptionsHash();
+}
+public function disableDebug()
+{
+$this->debug = false;
+$this->updateOptionsHash();
+}
+public function isDebug()
+{
+return $this->debug;
+}
+public function enableAutoReload()
+{
+$this->autoReload = true;
+}
+public function disableAutoReload()
+{
+$this->autoReload = false;
+}
+public function isAutoReload()
+{
+return $this->autoReload;
+}
+public function enableStrictVariables()
+{
+$this->strictVariables = true;
+$this->updateOptionsHash();
+}
+public function disableStrictVariables()
+{
+$this->strictVariables = false;
+$this->updateOptionsHash();
+}
+public function isStrictVariables()
+{
+return $this->strictVariables;
+}
+public function getCache($original = true)
+{
+return $original ? $this->originalCache : $this->cache;
+}
+public function setCache($cache)
+{
+if (is_string($cache)) {
+$this->originalCache = $cache;
+$this->cache = new Twig_Cache_Filesystem($cache);
+} elseif (false === $cache) {
+$this->originalCache = $cache;
+$this->cache = new Twig_Cache_Null();
+} elseif ($cache instanceof Twig_CacheInterface) {
+$this->originalCache = $this->cache = $cache;
+} else {
+throw new LogicException(sprintf('Cache can only be a string, false, or a Twig_CacheInterface implementation.'));
+}
+}
+public function getTemplateClass($name, $index = null)
+{
+$key = $this->getLoader()->getCacheKey($name).$this->optionsHash;
+return $this->templateClassPrefix.hash('sha256', $key).(null === $index ?'':'_'.$index);
+}
+public function render($name, array $context = array())
+{
+return $this->loadTemplate($name)->render($context);
+}
+public function display($name, array $context = array())
+{
+$this->loadTemplate($name)->display($context);
+}
+public function load($name)
+{
+if ($name instanceof Twig_TemplateWrapper) {
+return $name;
+}
+if ($name instanceof Twig_Template) {
+return new Twig_TemplateWrapper($this, $name);
+}
+return new Twig_TemplateWrapper($this, $this->loadTemplate($name));
+}
+public function loadTemplate($name, $index = null)
+{
+$cls = $mainCls = $this->getTemplateClass($name);
+if (null !== $index) {
+$cls .='_'.$index;
+}
+if (isset($this->loadedTemplates[$cls])) {
+return $this->loadedTemplates[$cls];
+}
+if (!class_exists($cls, false)) {
+$key = $this->cache->generateKey($name, $mainCls);
+if (!$this->isAutoReload() || $this->isTemplateFresh($name, $this->cache->getTimestamp($key))) {
+$this->cache->load($key);
+}
+if (!class_exists($cls, false)) {
+$source = $this->getLoader()->getSourceContext($name);
+$content = $this->compileSource($source);
+$this->cache->write($key, $content);
+$this->cache->load($key);
+if (!class_exists($mainCls, false)) {
+eval('?>'.$content);
+}
+if (!class_exists($cls, false)) {
+throw new Twig_Error_Runtime(sprintf('Failed to load Twig template "%s", index "%s": cache is corrupted.', $name, $index), -1, $source);
+}
+}
+}
+$this->extensionSet->initRuntime($this);
+if (isset($this->loading[$cls])) {
+throw new Twig_Error_Runtime(sprintf('Circular reference detected for Twig template "%s", path: %s.', $name, implode(' -> ', array_merge($this->loading, array($name)))));
+}
+$this->loading[$cls] = $name;
+try {
+$this->loadedTemplates[$cls] = new $cls($this);
+} finally {
+unset($this->loading[$cls]);
+}
+return $this->loadedTemplates[$cls];
+}
+public function createTemplate($template)
+{
+$name = sprintf('__string_template__%s', hash('sha256', $template, false));
+$loader = new Twig_Loader_Chain(array(
+new Twig_Loader_Array(array($name => $template)),
+$current = $this->getLoader(),
+));
+$this->setLoader($loader);
+try {
+$template = $this->loadTemplate($name);
+} finally {
+$this->setLoader($current);
+}
+return $template;
+}
+public function isTemplateFresh($name, $time)
+{
+return $this->extensionSet->getLastModified() <= $time && $this->getLoader()->isFresh($name, $time);
+}
+public function resolveTemplate($names)
+{
+if (!is_array($names)) {
+$names = array($names);
+}
+foreach ($names as $name) {
+if ($name instanceof Twig_Template) {
+return $name;
+}
+try {
+return $this->loadTemplate($name);
+} catch (Twig_Error_Loader $e) {
+}
+}
+if (1 === count($names)) {
+throw $e;
+}
+throw new Twig_Error_Loader(sprintf('Unable to find one of the following templates: "%s".', implode('", "', $names)));
+}
+public function setLexer(Twig_Lexer $lexer)
+{
+$this->lexer = $lexer;
+}
+public function tokenize(Twig_Source $source)
+{
+if (null === $this->lexer) {
+$this->lexer = new Twig_Lexer($this);
+}
+return $this->lexer->tokenize($source);
+}
+public function setParser(Twig_Parser $parser)
+{
+$this->parser = $parser;
+}
+public function parse(Twig_TokenStream $stream)
+{
+if (null === $this->parser) {
+$this->parser = new Twig_Parser($this);
+}
+return $this->parser->parse($stream);
+}
+public function setCompiler(Twig_Compiler $compiler)
+{
+$this->compiler = $compiler;
+}
+public function compile(Twig_Node $node)
+{
+if (null === $this->compiler) {
+$this->compiler = new Twig_Compiler($this);
+}
+return $this->compiler->compile($node)->getSource();
+}
+public function compileSource(Twig_Source $source)
+{
+try {
+return $this->compile($this->parse($this->tokenize($source)));
+} catch (Twig_Error $e) {
+$e->setSourceContext($source);
+throw $e;
+} catch (Exception $e) {
+throw new Twig_Error_Syntax(sprintf('An exception has been thrown during the compilation of a template ("%s").', $e->getMessage()), -1, $source, $e);
+}
+}
+public function setLoader(Twig_LoaderInterface $loader)
+{
+$this->loader = $loader;
+}
+public function getLoader()
+{
+return $this->loader;
+}
+public function setCharset($charset)
+{
+if ('UTF8'=== $charset = strtoupper($charset)) {
+$charset ='UTF-8';
+}
+$this->charset = $charset;
+}
+public function getCharset()
+{
+return $this->charset;
+}
+public function hasExtension($class)
+{
+return $this->extensionSet->hasExtension($class);
+}
+public function addRuntimeLoader(Twig_RuntimeLoaderInterface $loader)
+{
+$this->runtimeLoaders[] = $loader;
+}
+public function getExtension($class)
+{
+return $this->extensionSet->getExtension($class);
+}
+public function getRuntime($class)
+{
+if (isset($this->runtimes[$class])) {
+return $this->runtimes[$class];
+}
+foreach ($this->runtimeLoaders as $loader) {
+if (null !== $runtime = $loader->load($class)) {
+return $this->runtimes[$class] = $runtime;
+}
+}
+throw new Twig_Error_Runtime(sprintf('Unable to load the "%s" runtime.', $class));
+}
+public function addExtension(Twig_ExtensionInterface $extension)
+{
+$this->extensionSet->addExtension($extension);
+$this->updateOptionsHash();
+}
+public function setExtensions(array $extensions)
+{
+$this->extensionSet->setExtensions($extensions);
+}
+public function getExtensions()
+{
+return $this->extensionSet->getExtensions();
+}
+public function addTokenParser(Twig_TokenParserInterface $parser)
+{
+$this->extensionSet->addTokenParser($parser);
+}
+public function getTokenParsers()
+{
+return $this->extensionSet->getTokenParsers();
+}
+public function getTags()
+{
+$tags = array();
+foreach ($this->getTokenParsers() as $parser) {
+$tags[$parser->getTag()] = $parser;
+}
+return $tags;
+}
+public function addNodeVisitor(Twig_NodeVisitorInterface $visitor)
+{
+$this->extensionSet->addNodeVisitor($visitor);
+}
+public function getNodeVisitors()
+{
+return $this->extensionSet->getNodeVisitors();
+}
+public function addFilter(Twig_Filter $filter)
+{
+$this->extensionSet->addFilter($filter);
+}
+public function getFilter($name)
+{
+return $this->extensionSet->getFilter($name);
+}
+public function registerUndefinedFilterCallback(callable $callable)
+{
+$this->extensionSet->registerUndefinedFilterCallback($callable);
+}
+public function getFilters()
+{
+return $this->extensionSet->getFilters();
+}
+public function addTest(Twig_Test $test)
+{
+$this->extensionSet->addTest($test);
+}
+public function getTests()
+{
+return $this->extensionSet->getTests();
+}
+public function getTest($name)
+{
+return $this->extensionSet->getTest($name);
+}
+public function addFunction(Twig_Function $function)
+{
+$this->extensionSet->addFunction($function);
+}
+public function getFunction($name)
+{
+return $this->extensionSet->getFunction($name);
+}
+public function registerUndefinedFunctionCallback(callable $callable)
+{
+$this->extensionSet->registerUndefinedFunctionCallback($callable);
+}
+public function getFunctions()
+{
+return $this->extensionSet->getFunctions();
+}
+public function addGlobal($name, $value)
+{
+if ($this->extensionSet->isInitialized() && !array_key_exists($name, $this->getGlobals())) {
+throw new LogicException(sprintf('Unable to add global "%s" as the runtime or the extensions have already been initialized.', $name));
+}
+if (null !== $this->resolvedGlobals) {
+$this->resolvedGlobals[$name] = $value;
+} else {
+$this->globals[$name] = $value;
+}
+}
+public function getGlobals()
+{
+if ($this->extensionSet->isInitialized()) {
+if (null === $this->resolvedGlobals) {
+$this->resolvedGlobals = array_merge($this->extensionSet->getGlobals(), $this->globals);
+}
+return $this->resolvedGlobals;
+}
+return array_merge($this->extensionSet->getGlobals(), $this->globals);
+}
+public function mergeGlobals(array $context)
+{
+foreach ($this->getGlobals() as $key => $value) {
+if (!array_key_exists($key, $context)) {
+$context[$key] = $value;
+}
+}
+return $context;
+}
+public function getUnaryOperators()
+{
+return $this->extensionSet->getUnaryOperators();
+}
+public function getBinaryOperators()
+{
+return $this->extensionSet->getBinaryOperators();
+}
+private function updateOptionsHash()
+{
+$this->optionsHash = implode(':', array(
+$this->extensionSet->getSignature(),
+PHP_MAJOR_VERSION,
+PHP_MINOR_VERSION,
+self::VERSION,
+(int) $this->debug,
+$this->baseTemplateClass,
+(int) $this->strictVariables,
+));
+}
+}
+class_alias('Twig_Environment','Twig\Environment', false);
+}
+namespace
+{
+interface Twig_ExtensionInterface
+{
+public function getTokenParsers();
+public function getNodeVisitors();
+public function getFilters();
+public function getTests();
+public function getFunctions();
+public function getOperators();
+}
+class_alias('Twig_ExtensionInterface','Twig\Extension\ExtensionInterface', false);
+class_exists('Twig_Environment');
+}
+namespace
+{
+abstract class Twig_Extension implements Twig_ExtensionInterface
+{
+public function getTokenParsers()
+{
+return array();
+}
+public function getNodeVisitors()
+{
+return array();
+}
+public function getFilters()
+{
+return array();
+}
+public function getTests()
+{
+return array();
+}
+public function getFunctions()
+{
+return array();
+}
+public function getOperators()
+{
+return array();
+}
+}
+class_alias('Twig_Extension','Twig\Extension\AbstractExtension', false);
+class_exists('Twig_Environment');
 }
 namespace
 {
