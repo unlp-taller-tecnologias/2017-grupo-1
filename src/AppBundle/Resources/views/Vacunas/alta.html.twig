@@ -1,0 +1,49 @@
+{% extends 'common/layout.html.twig' %}
+
+{% block content %}
+
+<div class="main-container inner">
+	<div class="main-content">
+		<div class="container">
+
+			<form role="form">
+				
+				<div class="form-group">
+					<label for="nombre">Nombre</label>
+					<input type="text" class="form-control" id="nombre" placeholder="Nombre de la vacuna">
+				</div>
+
+				<div class="form-group">
+					<label for="abreviatura">Abreviatura</label>
+					<input type="text" class="form-control" id="abreviatura" placeholder="Abreviatura de la vacuna">
+				</div>
+
+				<div class="form-group">
+					<label for="Docis">Docis requeridas</label>
+
+					<select>
+						<option value="1">1 Docis</option>
+						<option value="2">2 Docis</option>
+						<option value="3">3 Docis</option>
+					</select>
+				</div>
+				
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="Obligatioria"> Pertenece al calendario naciona de vacunacion?
+					</label>
+					<br>
+					<label>
+						<input type="checkbox" id="Obligatioria"> Tiene Vencimiento?
+					</label>
+				</div>
+
+				<button type="submit" class="btn btn-default">Enviar</button>
+
+			</form>
+
+		</div>
+	</div>
+</div>
+
+{% endblock %}
