@@ -25,4 +25,13 @@ class VacunasController extends Controller
         // replace this example code with whatever you need
         return $this->render('AppBundle:vacunas:alta.html.twig');
     }
+
+        /**
+     * @Route("/modificarVacuna", name="modificarVacuna")
+     */
+    public function modificarAction(Request $request)
+    {
+        // replace this example code with whatever you need
+        return $this->render('AppBundle:vacunas:modificar.html.twig');
+    }
 }

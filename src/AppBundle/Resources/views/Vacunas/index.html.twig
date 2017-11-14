@@ -4,141 +4,105 @@
 
 <div class="main-container inner">
    <div class="main-content">
+
       <div class="container">
-         <table class="table table-hover table-striped table-bordered">
+
+          <h2 class="text-center">Vacunas</h2>
+          <table class="table table-hover table-striped table-bordered">
             <thead>
-               <tr>
-                  <th>Nombre</th>
-                  <th>Dosis Requeridas</th>
-                  <th>Vencimiento?</th>
-               </tr>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Dosis Requeridas</th>
+                    <th>Vencimiento?</th>
+                    <th>Acciones</th>
+
+                </tr>
             </thead>
 
             <tbody>
-               <tr class="success">
-                  <td>BCG</td>
-                  <td>1</td>
-                  <td>@mdo</td>
+
+                <tr class="active">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><a href="{{ path('altaVacuna') }}"><button type="button" class="btn btn-success">Agregar</button></a></td>
+                </tr>
+               
+                <tr class="active">
+                    <td>BCG</td>
+                    <td>1</td>
+                    <td>Si</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
+                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
+                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
                </tr>
 
-               <tr class="active">
-                  <td>Hepatitis B</td>
-                  <td>2 y refuerzo</td>
-                  <td>@fat</td>
-               </tr>
+                <tr class="active">
+                    <td>Hepatitis B</td>
+                    <td>2 </td>
+                    <td>No</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
+                        <a href="{{ path('modificarVacuna') }}"><button type="button" class="btn btn-sm btn-warning">Modificar</button></a>
+                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                </tr>
             
-               <tr class="active">
-                  <td>Neumococo Conjugada</td>
-                  <td>3</td>
-                  <td>@twitter</td>
-               </tr>
+                <tr class="active">
+                    <td>Neumococo Conjugada</td>
+                    <td>3</td>
+                    <td>Si</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
+                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
+                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                </tr>
 
-               <tr class="active">
-                  <td>Quintuple Pentavolente</td>
-                  <td>2</td>
-                  <td>@twitter</td>
-               </tr>
+                <tr class="active">
+                    <td>Quintuple Pentavolente</td>
+                    <td>2</td>
+                    <td>No</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
+                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
+                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                </tr>
 
-               <tr class="active">
-                  <td>Polio IPV</td>
-                  <td>2</td>
-                  <td>@twitter</td>
-               </tr>
+                <tr class="active">
+                    <td>Polio IPV</td>
+                    <td>2</td>
+                    <td>Si</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
+                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
+                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                </tr>
 
-               <tr class="active">
-                  <td>Polio OPV</td>
-                  <td>3dosis 2refurzos</td>
-                  <td>@twitter</td>
-               </tr>
+                <tr class="active">
+                    <td>Polio OPV</td>
+                    <td>3</td>
+                    <td>Si</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
+                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
+                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                </tr>
 
                <tr class="active">
                   <td>Rotavirus</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Meningococo</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Gripe</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Hepatitis A</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Triple Viral</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Varicela</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Cuadaruple o Quintuple Pentavolente</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Triple Bacteriana Celular</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Triple Bacteriana Acelular</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Virus Popioma hHmano</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Doble Bacteriana</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Doble o Triple Viral</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Fiebre Amarilla</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Doble Bacteriana</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-               </tr>
-
-               <tr class="active">
-                  <td>Fiebre Hemorragica Argentina</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
+                  <td>2</td>
+                  <td>No</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
+                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
+                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
                </tr>
             </tbody>
          </table>
