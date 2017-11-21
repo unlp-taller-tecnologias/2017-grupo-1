@@ -68,9 +68,6 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
 
     /**
      * Sets the {@link ClassMetadataFactoryInterface} to use.
-     *
-     * @param ClassMetadataFactoryInterface|null $classMetadataFactory
-     * @param NameConverterInterface|null        $nameConverter
      */
     public function __construct(ClassMetadataFactoryInterface $classMetadataFactory = null, NameConverterInterface $nameConverter = null)
     {
@@ -81,7 +78,7 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
     /**
      * Set circular reference limit.
      *
-     * @param int $circularReferenceLimit limit of iterations for the same object
+     * @param int $circularReferenceLimit Limit of iterations for the same object
      *
      * @return self
      */
@@ -115,7 +112,7 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
     /**
      * Set normalization callbacks.
      *
-     * @param callable[] $callbacks help normalize the result
+     * @param callable[] $callbacks Help normalize the result
      *
      * @return self
      *
@@ -138,8 +135,6 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
 
     /**
      * Set ignored attributes for normalization and denormalization.
-     *
-     * @param array $ignoredAttributes
      *
      * @return self
      */
