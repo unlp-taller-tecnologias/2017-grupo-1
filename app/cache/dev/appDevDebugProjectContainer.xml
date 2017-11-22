@@ -143,7 +143,6 @@
     <parameter key="translation.loader.class">Symfony\Bundle\FrameworkBundle\Translation\TranslationLoader</parameter>
     <parameter key="translation.extractor.class">Symfony\Component\Translation\Extractor\ChainExtractor</parameter>
     <parameter key="translation.writer.class">Symfony\Component\Translation\Writer\TranslationWriter</parameter>
-    <parameter key="property_accessor.class">Symfony\Component\PropertyAccess\PropertyAccessor</parameter>
     <parameter key="kernel.secret">c6647b4d7278d3c22b508cc58b95f6dd2dda9bb0</parameter>
     <parameter key="kernel.http_method_override">true</parameter>
     <parameter key="kernel.trusted_hosts" type="collection"/>
@@ -252,6 +251,7 @@
     <parameter key="annotations.reader.class">Doctrine\Common\Annotations\AnnotationReader</parameter>
     <parameter key="annotations.cached_reader.class">Doctrine\Common\Annotations\CachedReader</parameter>
     <parameter key="annotations.file_cache_reader.class">Doctrine\Common\Annotations\FileCacheReader</parameter>
+    <parameter key="property_accessor.class">Symfony\Component\PropertyAccess\PropertyAccessor</parameter>
     <parameter key="debug.debug_handlers_listener.class">Symfony\Component\HttpKernel\EventListener\DebugHandlersListener</parameter>
     <parameter key="debug.stopwatch.class">Symfony\Component\Stopwatch\Stopwatch</parameter>
     <parameter key="debug.error_handler.throw_at">-1</parameter>
@@ -704,7 +704,9 @@
                 <argument>/var/www/html/scv/app/Resources</argument>
               </service>
             </argument>
-            <argument type="collection"/>
+            <argument type="collection">
+              <argument key="/var/www/html/scv/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Resources/views/Form">null</argument>
+            </argument>
           </service>
         </argument>
         <argument type="service">
@@ -715,7 +717,9 @@
               <service class="Symfony\Bundle\TwigBundle\TemplateIterator" public="false">
                 <argument type="service" id="kernel"/>
                 <argument>/var/www/html/scv/app</argument>
-                <argument type="collection"/>
+                <argument type="collection">
+                  <argument key="/var/www/html/scv/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Resources/views/Form">null</argument>
+                </argument>
               </service>
             </argument>
           </service>
@@ -1046,10 +1050,6 @@
         <argument type="service" id="translation.dumper.res"/>
       </call>
     </service>
-    <service id="property_accessor" class="Symfony\Component\PropertyAccess\PropertyAccessor">
-      <argument>false</argument>
-      <argument>false</argument>
-    </service>
     <service id="session" class="Symfony\Component\HttpFoundation\Session\Session">
       <argument type="service" id="session.storage.native"/>
       <argument type="service">
@@ -1348,6 +1348,7 @@
           <argument type="service" id="session"/>
         </service>
       </argument>
+      <argument type="service" id="request_stack" on-invalid="ignore"/>
     </service>
     <service id="assets.packages" class="Symfony\Component\Asset\Packages">
       <argument type="service">
@@ -1681,6 +1682,10 @@
       <argument type="service" id="router.request_context" on-invalid="ignore"/>
       <argument type="service" id="monolog.logger.request" on-invalid="ignore"/>
     </service>
+    <service id="property_accessor" class="Symfony\Component\PropertyAccess\PropertyAccessor">
+      <argument>false</argument>
+      <argument>false</argument>
+    </service>
     <service id="debug.debug_handlers_listener" class="Symfony\Component\HttpKernel\EventListener\DebugHandlersListener">
       <tag name="kernel.event_subscriber"/>
       <tag name="monolog.logger" channel="php"/>
@@ -1833,7 +1838,7 @@
       <argument type="collection">
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>59fe21d30125e9.20551668</argument>
+            <argument>5a14d7f69ae9e0.90863385</argument>
           </service>
         </argument>
       </argument>
@@ -1962,7 +1967,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.token_storage"/>
-            <argument>59fe21d30125e9.20551668</argument>
+            <argument>5a14d7f69ae9e0.90863385</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>
@@ -2508,6 +2513,13 @@
           <call method="setEntityListenerResolver">
             <argument type="service" id="doctrine.orm.default_entity_listener_resolver"/>
           </call>
+          <call method="setRepositoryFactory">
+            <argument type="service">
+              <service class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory" public="false">
+                <argument>null</argument>
+              </service>
+            </argument>
+          </call>
         </service>
       </argument>
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
@@ -2755,18 +2767,6 @@
         <argument type="service" id="monolog.handler.debug"/>
       </call>
     </service>
-    <service id="monolog.logger.router" class="Symfony\Bridge\Monolog\Logger">
-      <argument>router</argument>
-      <call method="pushHandler">
-        <argument type="service" id="monolog.handler.console"/>
-      </call>
-      <call method="pushHandler">
-        <argument type="service" id="monolog.handler.main"/>
-      </call>
-      <call method="pushHandler">
-        <argument type="service" id="monolog.handler.debug"/>
-      </call>
-    </service>
     <service id="monolog.logger.php" class="Symfony\Bridge\Monolog\Logger">
       <argument>php</argument>
       <call method="pushHandler">
@@ -2825,7 +2825,6 @@
       <argument type="service" id="templating.locator"/>
     </service>
     <service id="router" class="Symfony\Bundle\FrameworkBundle\Routing\Router">
-      <tag name="monolog.logger" channel="router"/>
       <argument type="service" id="service_container"/>
       <argument>/var/www/html/scv/app/config/routing_dev.yml</argument>
       <argument type="collection">
@@ -2842,7 +2841,6 @@
         <argument key="strict_requirements">true</argument>
       </argument>
       <argument type="service" id="router.request_context" on-invalid="ignore"/>
-      <argument type="service" id="monolog.logger.router" on-invalid="ignore"/>
       <call method="setConfigCacheFactory">
         <argument type="service" id="config_cache_factory"/>
       </call>
@@ -2969,6 +2967,10 @@
       <call method="addPath">
         <argument>/var/www/html/scv/vendor/doctrine/doctrine-bundle/Resources/views</argument>
         <argument>Doctrine</argument>
+      </call>
+      <call method="addPath">
+        <argument>/var/www/html/scv/src/AppBundle/Resources/views</argument>
+        <argument>App</argument>
       </call>
       <call method="addPath">
         <argument>/var/www/html/scv/vendor/symfony/symfony/src/Symfony/Bundle/DebugBundle/Resources/views</argument>
