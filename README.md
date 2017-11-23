@@ -1,7 +1,4 @@
-SCV - Sistema de Control de Vacunación<br>
-Facultad de Medicina de la UNLP
-========================================
+scv
+===
 
-Grupo 1 - Taller de producción de software
-
-A Symfony project created on October 8, 2017, 10:40 pm.
+A Symfony project created on November 23, 2017, 6:50 pm.
