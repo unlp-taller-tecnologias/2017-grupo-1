@@ -1,8 +1,6 @@
-SCV - Sistema de Control de Vacunación
-
-===
-
+SCV - Sistema de Control de Vacunación <br>
 Facultad de Medicina de la UNLP
+================================================
 
 Grupo 1 - Taller de producción de software
 
