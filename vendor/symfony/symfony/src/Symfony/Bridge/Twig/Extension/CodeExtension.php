@@ -68,9 +68,9 @@ class CodeExtension extends AbstractExtension
             list($class, $method) = explode('::', $method, 2);
             $result = sprintf('%s::%s()', $this->abbrClass($class), $method);
         } elseif ('Closure' === $method) {
-            $result = sprintf('<abbr title="%s">%s</abbr>', $method, $method);
+            $result = sprintf('<abbr title="%s">%1$s</abbr>', $method);
         } else {
-            $result = sprintf('<abbr title="%s">%s</abbr>()', $method, $method);
+            $result = sprintf('<abbr title="%s">%1$s</abbr>()', $method);
         }
 
         return $result;
@@ -193,7 +193,7 @@ class CodeExtension extends AbstractExtension
      * @param string $file An absolute file path
      * @param int    $line The line number
      *
-     * @return string A link of false
+     * @return string|false A link or false
      */
     public function getFileLink($file, $line)
     {

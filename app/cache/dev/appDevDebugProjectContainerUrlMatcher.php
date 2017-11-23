@@ -109,6 +109,56 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
         }
 
+        // login
+        if ('/login' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::loginAction',  '_route' => 'login',);
+        }
+
+        // search
+        if ('/search' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::searchAction',  '_route' => 'search',);
+        }
+
+        // usuarios
+        if ('/usuarios' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::indexAction',  '_route' => 'usuarios',);
+        }
+
+        // altaUsuario
+        if ('/altaUsuario' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::alta',  '_route' => 'altaUsuario',);
+        }
+
+        // reporteCalendarioCompleto
+        if ('/reporteCalendarioCompleto' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::reporteCalendarioCompletoAction',  '_route' => 'reporteCalendarioCompleto',);
+        }
+
+        // vacunas
+        if ('/vacunas' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\VacunasController::indexAction',  '_route' => 'vacunas',);
+        }
+
+        // altaVacuna
+        if ('/altaVacuna' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\VacunasController::altaAction',  '_route' => 'altaVacuna',);
+        }
+
+        // modificarVacuna
+        if ('/modificarVacuna' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\VacunasController::modificarAction',  '_route' => 'modificarVacuna',);
+        }
+
+        // visitantes
+        if ('/visitantes' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::indexAction',  '_route' => 'visitantes',);
+        }
+
+        // altaVisitante
+        if ('/altaVisitante' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::alta',  '_route' => 'altaVisitante',);
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

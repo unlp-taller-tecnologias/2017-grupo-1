@@ -25,4 +25,13 @@ class UsuarioController extends Controller
         // replace this example code with whatever you need
         return $this->render('AppBundle:Usuarios:alta.html.twig');
     }
+
+    /**
+     * @Route("/reporteCalendarioCompleto", name="reporteCalendarioCompleto")
+     */
+    public function reporteCalendarioCompletoAction(Request $request)
+    {
+        // replace this example code with whatever you need
+        return $this->render('AppBundle:Reportes:reporteCalendarioCompleto.html.twig');
+    }
 }

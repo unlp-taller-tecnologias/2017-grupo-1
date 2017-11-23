@@ -74,11 +74,15 @@
             {% endblock %}
             <!-- end: PAGESLIDE LEFT -->
 
+            <script src="{{ asset('assets/vendor/rapido/plugins/highcharts.js')}}"></script>
+            <script src="{{ asset('assets/vendor/rapido/plugins/exporting.js')}}"></script>
+
             <!-- start: MAIN CONTAINER -->
             {% block content %}
 
             {% endblock %}
             <!-- end: MAIN CONTAINER -->
+
 
             <!-- start: FOOTER -->
             {% block footer %}
@@ -142,6 +146,8 @@
         <script src="{{ asset('assets/vendor/rapido/js/main.js') }}"></script>
         <!-- end: CORE JAVASCRIPTS  -->
 
+
+
         <script>
                 $(document).ready(function () {
                     Main.init();
@@ -156,6 +162,8 @@
             {% endblock %}
         </script>
         <!-- end: OTHER JAVASCRIPT -->
+
+
     </body>
     <!-- end: BODY -->
 </html>
