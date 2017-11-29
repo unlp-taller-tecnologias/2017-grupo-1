@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Enfermedad</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ enfermedad.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ enfermedad.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ enfermedad.descripcion }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('enfermedad_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

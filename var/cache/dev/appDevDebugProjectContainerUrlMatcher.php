@@ -112,6 +112,68 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
         }
 
+        if (0 === strpos($pathinfo, '/enfermedad')) {
+            // enfermedad_index
+            if ('/enfermedad' === $trimmedPathinfo) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_enfermedad_index;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'enfermedad_index');
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\EnfermedadController::indexAction',  '_route' => 'enfermedad_index',);
+            }
+            not_enfermedad_index:
+
+            // enfermedad_new
+            if ('/enfermedad/new' === $pathinfo) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_enfermedad_new;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\EnfermedadController::newAction',  '_route' => 'enfermedad_new',);
+            }
+            not_enfermedad_new:
+
+            // enfermedad_show
+            if (preg_match('#^/enfermedad/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_enfermedad_show;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'enfermedad_show')), array (  '_controller' => 'AppBundle\\Controller\\EnfermedadController::showAction',));
+            }
+            not_enfermedad_show:
+
+            // enfermedad_edit
+            if (preg_match('#^/enfermedad/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_enfermedad_edit;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'enfermedad_edit')), array (  '_controller' => 'AppBundle\\Controller\\EnfermedadController::editAction',));
+            }
+            not_enfermedad_edit:
+
+            // enfermedad_delete
+            if (preg_match('#^/enfermedad/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('DELETE' !== $canonicalMethod) {
+                    $allow[] = 'DELETE';
+                    goto not_enfermedad_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'enfermedad_delete')), array (  '_controller' => 'AppBundle\\Controller\\EnfermedadController::deleteAction',));
+            }
+            not_enfermedad_delete:
+
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

@@ -94,9 +94,9 @@
     <parameter key="kernel.container_class">appDevDebugProjectContainer</parameter>
     <parameter key="database_host">127.0.0.1</parameter>
     <parameter key="database_port">null</parameter>
-    <parameter key="database_name">symfony</parameter>
+    <parameter key="database_name">scv_unlp</parameter>
     <parameter key="database_user">root</parameter>
-    <parameter key="database_password">null</parameter>
+    <parameter key="database_password">toor</parameter>
     <parameter key="mailer_transport">smtp</parameter>
     <parameter key="mailer_host">127.0.0.1</parameter>
     <parameter key="mailer_user">null</parameter>
@@ -441,6 +441,12 @@
     <service id="AppBundle\Controller\DefaultController" class="AppBundle\Controller\DefaultController" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
     </service>
+    <service id="AppBundle\Controller\EnfermedadController" class="AppBundle\Controller\EnfermedadController" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+    </service>
+    <service id="AppBundle\Form\EnfermedadType" class="AppBundle\Form\EnfermedadType" public="false" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
     <service id="controller_name_converter" class="Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser" public="false">
       <tag name="monolog.logger" channel="request"/>
       <argument type="service" id="kernel"/>
@@ -457,7 +463,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
       <tag name="controller.argument_value_resolver" priority="-50"/>
-      <argument type="service" id="service_locator.ebdaf59977bc26dc6a191d4f5f8254cb"/>
+      <argument type="service" id="service_locator.9a295d45a3a14a868bff53420f2cc70a"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false">
       <tag name="controller.argument_value_resolver" priority="-100"/>
@@ -620,7 +626,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>NK1dqutd3edVKQKH6LI29j</argument>
+      <argument>7JOqa39LqbWztTMrGu+91H</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -630,7 +636,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>NK1dqutd3edVKQKH6LI29j</argument>
+      <argument>7JOqa39LqbWztTMrGu+91H</argument>
       <call method="setLogger">
         <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
@@ -749,7 +755,7 @@
       <argument type="service" id="form.resolved_type_factory"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension" public="false">
-      <argument type="service" id="service_locator.ceb8bbb9f48e8bfd1c8ec2d209eabdca"/>
+      <argument type="service" id="service_locator.69e641bd7dd9ce88e5bd42a877658e5c"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.http_foundation"/>
@@ -2176,12 +2182,12 @@
     </service>
     <service id="security.authentication.listener.anonymous.main" class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
       <argument type="service" id="security.token_storage"/>
-      <argument>5a1e17881732c3.66820926</argument>
+      <argument>5a1e54080e6726.37668607</argument>
       <argument type="service" id="monolog.logger.security" on-invalid="null"/>
       <argument type="service" id="security.authentication.manager"/>
     </service>
     <service id="security.authentication.provider.anonymous.main" class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-      <argument>5a1e17881732c3.66820926</argument>
+      <argument>5a1e54080e6726.37668607</argument>
     </service>
     <service id="security.exception_listener.main" class="Symfony\Component\Security\Http\Firewall\ExceptionListener" public="false">
       <argument type="service" id="security.token_storage"/>
@@ -2806,9 +2812,9 @@
         <argument key="driver">pdo_mysql</argument>
         <argument key="host">127.0.0.1</argument>
         <argument key="port">null</argument>
-        <argument key="dbname">symfony</argument>
+        <argument key="dbname">scv_unlp</argument>
         <argument key="user">root</argument>
-        <argument key="password">null</argument>
+        <argument key="password">toor</argument>
         <argument key="charset">UTF8</argument>
         <argument key="driverOptions" type="collection"/>
         <argument key="defaultTableOptions" type="collection"/>
@@ -2907,7 +2913,9 @@
     </service>
     <service id="doctrine.orm.default_configuration" class="Doctrine\ORM\Configuration" public="false">
       <call method="setEntityNamespaces">
-        <argument type="collection"/>
+        <argument type="collection">
+          <argument key="AppBundle">AppBundle\Entity</argument>
+        </argument>
       </call>
       <call method="setMetadataCacheImpl">
         <argument type="service" id="doctrine_cache.providers.doctrine.orm.default_metadata_cache"/>
@@ -2949,7 +2957,18 @@
         <argument type="service" id="doctrine.orm.container_repository_factory"/>
       </call>
     </service>
-    <service id="doctrine.orm.default_metadata_driver" class="Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain" public="false"/>
+    <service id="doctrine.orm.default_annotation_metadata_driver" class="Doctrine\ORM\Mapping\Driver\AnnotationDriver" public="false">
+      <argument type="service" id="annotations.cached_reader"/>
+      <argument type="collection">
+        <argument>/var/www/html/scv/src/AppBundle/Entity</argument>
+      </argument>
+    </service>
+    <service id="doctrine.orm.default_metadata_driver" class="Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain" public="false">
+      <call method="addDriver">
+        <argument type="service" id="doctrine.orm.default_annotation_metadata_driver"/>
+        <argument>AppBundle\Entity</argument>
+      </call>
+    </service>
     <service id="doctrine_cache.providers.doctrine.orm.default_metadata_cache" class="Doctrine\Common\Cache\ArrayCache">
       <call method="setNamespace">
         <argument>sf_orm_default_a1aa1822a71256d64e8cb57ba1048dcbec95f6141b1510d3137eb59e9a7d4151</argument>
@@ -3228,17 +3247,45 @@
     </service>
     <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\DefaultController" class="AppBundle\Controller\DefaultController" autowire="true" abstract="true"/>
     <service id="abstract.instanceof.AppBundle\Controller\DefaultController" class="AppBundle\Controller\DefaultController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\EnfermedadController" class="AppBundle\Controller\EnfermedadController" autowire="true" abstract="true"/>
+    <service id="abstract.instanceof.AppBundle\Controller\EnfermedadController" class="AppBundle\Controller\EnfermedadController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id="instanceof.Symfony\Component\Form\FormTypeInterface.0.AppBundle\Form\EnfermedadType" class="AppBundle\Form\EnfermedadType" public="false" autowire="true" abstract="true"/>
+    <service id="abstract.instanceof.AppBundle\Form\EnfermedadType" class="AppBundle\Form\EnfermedadType" public="false" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="service_locator.4f8384c8862c511eefe34301cff90111" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection"/>
     </service>
-    <service id="service_locator.ebdaf59977bc26dc6a191d4f5f8254cb" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id="service_locator.b8bf47d36a1507ef3f0f765adc104a60" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection"/>
     </service>
-    <service id="service_locator.ceb8bbb9f48e8bfd1c8ec2d209eabdca" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id="service_locator.db57d51af1607aadb292ba9e9d52eea4" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="enfermedad" type="service" id="autowired.AppBundle\Entity\Enfermedad"/>
+      </argument>
+    </service>
+    <service id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="enfermedad" type="service" id="autowired.AppBundle\Entity\Enfermedad"/>
+      </argument>
+    </service>
+    <service id="service_locator.9a295d45a3a14a868bff53420f2cc70a" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="AppBundle\Controller\EnfermedadController:deleteAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
+        <argument key="AppBundle\Controller\EnfermedadController:editAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
+        <argument key="AppBundle\Controller\EnfermedadController:showAction" type="service" id="service_locator.db57d51af1607aadb292ba9e9d52eea4"/>
+        <argument key="AppBundle\Controller\EnfermedadController::deleteAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
+        <argument key="AppBundle\Controller\EnfermedadController::editAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
+        <argument key="AppBundle\Controller\EnfermedadController::showAction" type="service" id="service_locator.db57d51af1607aadb292ba9e9d52eea4"/>
+      </argument>
+    </service>
+    <service id="service_locator.69e641bd7dd9ce88e5bd42a877658e5c" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="AppBundle\Form\EnfermedadType" type="service" id="AppBundle\Form\EnfermedadType"/>
         <argument key="Symfony\Bridge\Doctrine\Form\Type\EntityType" type="service" id="form.type.entity"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ChoiceType" type="service" id="form.type.choice"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="service" id="form.type.form"/>
@@ -3408,6 +3455,7 @@
         <argument key="twig" type="service" id="twig"/>
       </argument>
     </service>
+    <service id="autowired.AppBundle\Entity\Enfermedad" class="AppBundle\Entity\Enfermedad" public="false" autowire="true"/>
     <service id="service_locator.39e66930232432ca5ba91e98fdd8a17b" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -3437,7 +3485,7 @@
     <service id="cache.system.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>UToUhiYDoc</argument>
       <argument>0</argument>
-      <argument>NK1dqutd3edVKQKH6LI29j</argument>
+      <argument>7JOqa39LqbWztTMrGu+91H</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -3445,7 +3493,7 @@
     <service id="cache.validator.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>uLHLu7T-R-</argument>
       <argument>0</argument>
-      <argument>NK1dqutd3edVKQKH6LI29j</argument>
+      <argument>7JOqa39LqbWztTMrGu+91H</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -3453,7 +3501,7 @@
     <service id="cache.serializer.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>J5T5UUKlCI</argument>
       <argument>0</argument>
-      <argument>NK1dqutd3edVKQKH6LI29j</argument>
+      <argument>7JOqa39LqbWztTMrGu+91H</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -3461,7 +3509,7 @@
     <service id="cache.annotations.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>bDWMtqHw8N</argument>
       <argument>0</argument>
-      <argument>NK1dqutd3edVKQKH6LI29j</argument>
+      <argument>7JOqa39LqbWztTMrGu+91H</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
