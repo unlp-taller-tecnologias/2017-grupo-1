@@ -1,41 +1,49 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h1>Enfermedads list</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Descripcion</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for enfermedad in enfermedads %}
-            <tr>
-                <td><a href="{{ path('enfermedad_show', { 'id': enfermedad.id }) }}">{{ enfermedad.id }}</a></td>
-                <td>{{ enfermedad.nombre }}</td>
-                <td>{{ enfermedad.descripcion }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('enfermedad_show', { 'id': enfermedad.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="side-body">
+            <h1>Enfermedads list</h1>
 
-    <ul>
-        <li>
-            <a href="{{ path('enfermedad_new') }}">Create a new enfermedad</a>
-        </li>
-    </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for enfermedad in enfermedads %}
+                    <tr>
+                        <td><a href="{{ path('enfermedad_show', { 'id': enfermedad.id }) }}">{{ enfermedad.id }}</a></td>
+                        <td>{{ enfermedad.nombre }}</td>
+                        <td>{{ enfermedad.descripcion }}</td>
+                        <td>
+                            <ul>
+                                <li>
+                                    <a href="{{ path('enfermedad_show', { 'id': enfermedad.id }) }}">show</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}">edit</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <ul>
+                <li>
+                    <a href="{{ path('enfermedad_new') }}">Create a new enfermedad</a>
+                </li>
+            </ul>
+
+                </div>
+            </div>
+        </div>
 {% endblock %}
