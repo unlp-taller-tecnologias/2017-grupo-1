@@ -174,6 +174,47 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        // vacuna
+        if ('/vacuna' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\VacunaController::indexAction',  '_route' => 'vacuna',);
+        }
+
+        // visitante
+        if ('/visitante' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::indexAction',  '_route' => 'visitante',);
+        }
+
+        if (0 === strpos($pathinfo, '/alta')) {
+            // altaVacuna
+            if ('/altaVacuna' === $pathinfo) {
+                return array (  '_controller' => 'AppBundle\\Controller\\VacunaController::altaAction',  '_route' => 'altaVacuna',);
+            }
+
+            // altaVisitante
+            if ('/altaVisitante' === $pathinfo) {
+                return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::alta',  '_route' => 'altaVisitante',);
+            }
+
+            if (0 === strpos($pathinfo, '/altaExcel')) {
+                // altaExcelView
+                if ('/altaExcelView' === $pathinfo) {
+                    return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::altaExcel',  '_route' => 'altaExcelView',);
+                }
+
+                // altaExcel
+                if ('/altaExcel' === $pathinfo) {
+                    return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::altaExcelAction',  '_route' => 'altaExcel',);
+                }
+
+            }
+
+        }
+
+        // modificarVacuna
+        if ('/modificarVacuna' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\VacunaController::modificarAction',  '_route' => 'modificarVacuna',);
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }
