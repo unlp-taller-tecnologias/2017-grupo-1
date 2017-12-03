@@ -31,7 +31,7 @@ class VisitanteController extends Controller
      */
     public function altaExcel(Request $request)
     {
-        return $this->render('AppBundle:Excel:index.html.twig');
+        return $this->render('visitante/index.html.twig');
     }
 
     /**
