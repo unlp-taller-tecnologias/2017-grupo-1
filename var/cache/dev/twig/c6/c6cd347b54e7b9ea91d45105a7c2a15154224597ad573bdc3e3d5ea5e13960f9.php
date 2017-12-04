@@ -1,6 +1,6 @@
 <?php
 
-/* ::navbar.html.twig */
+/* navbar.html.twig */
 class __TwigTemplate_8fbd91eb93690c7ab036e15545f110d47e83d51547aa0f584d2f7e14f05850c6 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
@@ -15,11 +15,11 @@ class __TwigTemplate_8fbd91eb93690c7ab036e15545f110d47e83d51547aa0f584d2f7e14f05
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_5784966b677956e0c098500656c4f469ca2c9355e9a94f6bac90a1ed478b7b69 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_5784966b677956e0c098500656c4f469ca2c9355e9a94f6bac90a1ed478b7b69->enter($__internal_5784966b677956e0c098500656c4f469ca2c9355e9a94f6bac90a1ed478b7b69_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::navbar.html.twig"));
+        $__internal_a81e07069d8edba9fd5897deb9e559a96cc6270e4358e3169eaaf2ba8158d924 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_a81e07069d8edba9fd5897deb9e559a96cc6270e4358e3169eaaf2ba8158d924->enter($__internal_a81e07069d8edba9fd5897deb9e559a96cc6270e4358e3169eaaf2ba8158d924_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "navbar.html.twig"));
 
-        $__internal_73f280814cdf5543926aab2bcc4fd63a1a4c44682a02558c6f398c0a43f2fcb2 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_73f280814cdf5543926aab2bcc4fd63a1a4c44682a02558c6f398c0a43f2fcb2->enter($__internal_73f280814cdf5543926aab2bcc4fd63a1a4c44682a02558c6f398c0a43f2fcb2_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "::navbar.html.twig"));
+        $__internal_bb64a7d2c8073f7885a7048c6567f8e58d041a41e9f074195e81ed16f3d0b379 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_bb64a7d2c8073f7885a7048c6567f8e58d041a41e9f074195e81ed16f3d0b379->enter($__internal_bb64a7d2c8073f7885a7048c6567f8e58d041a41e9f074195e81ed16f3d0b379_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "navbar.html.twig"));
 
         // line 1
         echo "<nav class=\"navbar navbar-default\">
@@ -39,16 +39,16 @@ class __TwigTemplate_8fbd91eb93690c7ab036e15545f110d47e83d51547aa0f584d2f7e14f05
     </div>
 </nav>";
         
-        $__internal_5784966b677956e0c098500656c4f469ca2c9355e9a94f6bac90a1ed478b7b69->leave($__internal_5784966b677956e0c098500656c4f469ca2c9355e9a94f6bac90a1ed478b7b69_prof);
+        $__internal_a81e07069d8edba9fd5897deb9e559a96cc6270e4358e3169eaaf2ba8158d924->leave($__internal_a81e07069d8edba9fd5897deb9e559a96cc6270e4358e3169eaaf2ba8158d924_prof);
 
         
-        $__internal_73f280814cdf5543926aab2bcc4fd63a1a4c44682a02558c6f398c0a43f2fcb2->leave($__internal_73f280814cdf5543926aab2bcc4fd63a1a4c44682a02558c6f398c0a43f2fcb2_prof);
+        $__internal_bb64a7d2c8073f7885a7048c6567f8e58d041a41e9f074195e81ed16f3d0b379->leave($__internal_bb64a7d2c8073f7885a7048c6567f8e58d041a41e9f074195e81ed16f3d0b379_prof);
 
     }
 
     public function getTemplateName()
     {
-        return "::navbar.html.twig";
+        return "navbar.html.twig";
     }
 
     public function getDebugInfo()
@@ -81,6 +81,6 @@ class __TwigTemplate_8fbd91eb93690c7ab036e15545f110d47e83d51547aa0f584d2f7e14f05
             </li>
         </ul>
     </div>
-</nav>", "::navbar.html.twig", "/var/www/html/scv/app/Resources/views/navbar.html.twig");
+</nav>", "navbar.html.twig", "/var/www/html/scv/app/Resources/views/navbar.html.twig");
     }
 }

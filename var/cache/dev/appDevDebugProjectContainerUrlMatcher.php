@@ -174,6 +174,35 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        elseif (0 === strpos($pathinfo, '/usuario')) {
+            // usuario_index
+            if ('/usuario' === $trimmedPathinfo) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_usuario_index;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'usuario_index');
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::indexAction',  '_route' => 'usuario_index',);
+            }
+            not_usuario_index:
+
+            // usuario_show
+            if (preg_match('#^/usuario/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_usuario_show;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'usuario_show')), array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::showAction',));
+            }
+            not_usuario_show:
+
+        }
+
         // vacuna
         if ('/vacuna' === $pathinfo) {
             return array (  '_controller' => 'AppBundle\\Controller\\VacunaController::indexAction',  '_route' => 'vacuna',);

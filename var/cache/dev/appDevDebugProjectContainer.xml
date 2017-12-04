@@ -20,6 +20,7 @@
       <parameter key="DebugBundle">Symfony\Bundle\DebugBundle\DebugBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
+      <parameter key="DoctrineFixturesBundle">Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle</parameter>
       <parameter key="SensioGeneratorBundle">Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle</parameter>
       <parameter key="WebServerBundle">Symfony\Bundle\WebServerBundle\WebServerBundle</parameter>
     </parameter>
@@ -78,6 +79,11 @@
         <parameter key="parent">null</parameter>
         <parameter key="path">/var/www/html/scv/vendor/sensio/distribution-bundle</parameter>
         <parameter key="namespace">Sensio\Bundle\DistributionBundle</parameter>
+      </parameter>
+      <parameter key="DoctrineFixturesBundle" type="collection">
+        <parameter key="parent">null</parameter>
+        <parameter key="path">/var/www/html/scv/vendor/doctrine/doctrine-fixtures-bundle</parameter>
+        <parameter key="namespace">Doctrine\Bundle\FixturesBundle</parameter>
       </parameter>
       <parameter key="SensioGeneratorBundle" type="collection">
         <parameter key="parent">null</parameter>
@@ -429,6 +435,7 @@
       <parameter key="console.command.doctrine_bundle_doctrinebundle_command_proxy_updateschemadoctrinecommand">doctrine.schema_update_command</parameter>
       <parameter key="console.command.doctrine_bundle_doctrinebundle_command_proxy_validateschemacommand">doctrine.schema_validate_command</parameter>
       <parameter key="console.command.sensiolabs_security_command_securitycheckercommand">sensio_distribution.security_checker.command</parameter>
+      <parameter key="console.command.doctrine_bundle_fixturesbundle_command_loaddatafixturesdoctrinecommand">doctrine.fixtures_load_command</parameter>
       <parameter key="console.command.symfony_bundle_webserverbundle_command_serverruncommand">console.command.symfony_bundle_webserverbundle_command_serverruncommand</parameter>
       <parameter key="console.command.symfony_bundle_webserverbundle_command_serverstartcommand">console.command.symfony_bundle_webserverbundle_command_serverstartcommand</parameter>
       <parameter key="console.command.symfony_bundle_webserverbundle_command_serverstopcommand">console.command.symfony_bundle_webserverbundle_command_serverstopcommand</parameter>
@@ -444,13 +451,22 @@
     <service id="AppBundle\Controller\EnfermedadController" class="AppBundle\Controller\EnfermedadController" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
     </service>
+    <service id="AppBundle\Controller\UsuarioController" class="AppBundle\Controller\UsuarioController" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+    </service>
     <service id="AppBundle\Controller\VacunaController" class="AppBundle\Controller\VacunaController" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
     </service>
     <service id="AppBundle\Controller\VisitanteController" class="AppBundle\Controller\VisitanteController" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
     </service>
+    <service id="AppBundle\DataFixtures\AppFixtures" class="AppBundle\DataFixtures\AppFixtures" public="false" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+    </service>
     <service id="AppBundle\Form\EnfermedadType" class="AppBundle\Form\EnfermedadType" public="false" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
+    <service id="AppBundle\Form\UsuarioType" class="AppBundle\Form\UsuarioType" public="false" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
     <service id="controller_name_converter" class="Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser" public="false">
@@ -469,7 +485,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
       <tag name="controller.argument_value_resolver" priority="-50"/>
-      <argument type="service" id="service_locator.09bd915c5859af45a8b7c6dc355684b7"/>
+      <argument type="service" id="service_locator.b0c50a4399dfefb532f5804fa58c7547"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false">
       <tag name="controller.argument_value_resolver" priority="-100"/>
@@ -632,7 +648,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>SCN2+BQULav6CIiSgW-zBt</argument>
+      <argument>x0tNKNdinaEiv3UWjo8Z-Z</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -642,7 +658,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>SCN2+BQULav6CIiSgW-zBt</argument>
+      <argument>x0tNKNdinaEiv3UWjo8Z-Z</argument>
       <call method="setLogger">
         <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
@@ -761,7 +777,7 @@
       <argument type="service" id="form.resolved_type_factory"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension" public="false">
-      <argument type="service" id="service_locator.69e641bd7dd9ce88e5bd42a877658e5c"/>
+      <argument type="service" id="service_locator.7ac91705b0337382c032cf2d209bdbe5"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.http_foundation"/>
@@ -1400,14 +1416,6 @@
       </call>
       <call method="addListener">
         <argument>kernel.request</argument>
-        <argument type="collection">
-          <argument type="service" id="debug.debug_handlers_listener"/>
-          <argument>configure</argument>
-        </argument>
-        <argument>2048</argument>
-      </call>
-      <call method="addListener">
-        <argument>console.command</argument>
         <argument type="collection">
           <argument type="service" id="debug.debug_handlers_listener"/>
           <argument>configure</argument>
@@ -2196,12 +2204,12 @@
     </service>
     <service id="security.authentication.listener.anonymous.main" class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
       <argument type="service" id="security.token_storage"/>
-      <argument>5a246b2f77a8a3.95635767</argument>
+      <argument>5a24c202319828.52683298</argument>
       <argument type="service" id="monolog.logger.security" on-invalid="null"/>
       <argument type="service" id="security.authentication.manager"/>
     </service>
     <service id="security.authentication.provider.anonymous.main" class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-      <argument>5a246b2f77a8a3.95635767</argument>
+      <argument>5a24c202319828.52683298</argument>
     </service>
     <service id="security.exception_listener.main" class="Symfony\Component\Security\Http\Firewall\ExceptionListener" public="false">
       <argument type="service" id="security.token_storage"/>
@@ -3243,6 +3251,18 @@
       <tag name="console.command"/>
       <argument type="service" id="sensio_distribution.security_checker"/>
     </service>
+    <service id="doctrine.fixtures_load_command" class="Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand">
+      <tag name="console.command" command="doctrine:fixtures:load"/>
+      <argument type="service" id="doctrine.fixtures.loader"/>
+    </service>
+    <service id="doctrine.fixtures.loader" class="Doctrine\Bundle\FixturesBundle\Loader\SymfonyFixturesLoader" public="false">
+      <argument type="service" id="service_container"/>
+      <call method="addFixtures">
+        <argument type="collection">
+          <argument type="service" id="AppBundle\DataFixtures\AppFixtures"/>
+        </argument>
+      </call>
+    </service>
     <service id="web_server.command.server_run" class="Symfony\Bundle\WebServerBundle\Command\ServerRunCommand" public="false">
       <tag name="console.command"/>
       <argument>/var/www/html/scv/public</argument>
@@ -3263,12 +3283,18 @@
     <service id="abstract.instanceof.AppBundle\Controller\DefaultController" class="AppBundle\Controller\DefaultController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\EnfermedadController" class="AppBundle\Controller\EnfermedadController" autowire="true" abstract="true"/>
     <service id="abstract.instanceof.AppBundle\Controller\EnfermedadController" class="AppBundle\Controller\EnfermedadController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\UsuarioController" class="AppBundle\Controller\UsuarioController" autowire="true" abstract="true"/>
+    <service id="abstract.instanceof.AppBundle\Controller\UsuarioController" class="AppBundle\Controller\UsuarioController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\VacunaController" class="AppBundle\Controller\VacunaController" autowire="true" abstract="true"/>
     <service id="abstract.instanceof.AppBundle\Controller\VacunaController" class="AppBundle\Controller\VacunaController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\VisitanteController" class="AppBundle\Controller\VisitanteController" autowire="true" abstract="true"/>
     <service id="abstract.instanceof.AppBundle\Controller\VisitanteController" class="AppBundle\Controller\VisitanteController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id="instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.AppBundle\DataFixtures\AppFixtures" class="AppBundle\DataFixtures\AppFixtures" public="false" autowire="true" abstract="true"/>
+    <service id="abstract.instanceof.AppBundle\DataFixtures\AppFixtures" class="AppBundle\DataFixtures\AppFixtures" public="false" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Component\Form\FormTypeInterface.0.AppBundle\Form\EnfermedadType" class="AppBundle\Form\EnfermedadType" public="false" autowire="true" abstract="true"/>
     <service id="abstract.instanceof.AppBundle\Form\EnfermedadType" class="AppBundle\Form\EnfermedadType" public="false" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id="instanceof.Symfony\Component\Form\FormTypeInterface.0.AppBundle\Form\UsuarioType" class="AppBundle\Form\UsuarioType" public="false" autowire="true" abstract="true"/>
+    <service id="abstract.instanceof.AppBundle\Form\UsuarioType" class="AppBundle\Form\UsuarioType" public="false" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="service_locator.4f8384c8862c511eefe34301cff90111" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection"/>
@@ -3289,6 +3315,12 @@
         <argument key="enfermedad" type="service" id="autowired.AppBundle\Entity\Enfermedad"/>
       </argument>
     </service>
+    <service id="service_locator.e079ef8661c6ed513e34f2472c739dc3" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="usuario" type="service" id="autowired.AppBundle\Entity\Usuario"/>
+      </argument>
+    </service>
     <service id="service_locator.043023bc05f4a9b6e5491ba4cbd6bbad" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection"/>
@@ -3297,21 +3329,24 @@
       <tag name="container.service_locator"/>
       <argument type="collection"/>
     </service>
-    <service id="service_locator.09bd915c5859af45a8b7c6dc355684b7" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id="service_locator.b0c50a4399dfefb532f5804fa58c7547" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="AppBundle\Controller\EnfermedadController:deleteAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
         <argument key="AppBundle\Controller\EnfermedadController:editAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
         <argument key="AppBundle\Controller\EnfermedadController:showAction" type="service" id="service_locator.db57d51af1607aadb292ba9e9d52eea4"/>
+        <argument key="AppBundle\Controller\UsuarioController:showAction" type="service" id="service_locator.e079ef8661c6ed513e34f2472c739dc3"/>
         <argument key="AppBundle\Controller\EnfermedadController::deleteAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
         <argument key="AppBundle\Controller\EnfermedadController::editAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
         <argument key="AppBundle\Controller\EnfermedadController::showAction" type="service" id="service_locator.db57d51af1607aadb292ba9e9d52eea4"/>
+        <argument key="AppBundle\Controller\UsuarioController::showAction" type="service" id="service_locator.e079ef8661c6ed513e34f2472c739dc3"/>
       </argument>
     </service>
-    <service id="service_locator.69e641bd7dd9ce88e5bd42a877658e5c" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id="service_locator.7ac91705b0337382c032cf2d209bdbe5" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="AppBundle\Form\EnfermedadType" type="service" id="AppBundle\Form\EnfermedadType"/>
+        <argument key="AppBundle\Form\UsuarioType" type="service" id="AppBundle\Form\UsuarioType"/>
         <argument key="Symfony\Bridge\Doctrine\Form\Type\EntityType" type="service" id="form.type.entity"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ChoiceType" type="service" id="form.type.choice"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="service" id="form.type.form"/>
@@ -3482,6 +3517,7 @@
       </argument>
     </service>
     <service id="autowired.AppBundle\Entity\Enfermedad" class="AppBundle\Entity\Enfermedad" public="false" autowire="true"/>
+    <service id="autowired.AppBundle\Entity\Usuario" class="AppBundle\Entity\Usuario" public="false" autowire="true"/>
     <service id="service_locator.39e66930232432ca5ba91e98fdd8a17b" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -3511,7 +3547,7 @@
     <service id="cache.system.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>UToUhiYDoc</argument>
       <argument>0</argument>
-      <argument>SCN2+BQULav6CIiSgW-zBt</argument>
+      <argument>x0tNKNdinaEiv3UWjo8Z-Z</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -3519,7 +3555,7 @@
     <service id="cache.validator.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>uLHLu7T-R-</argument>
       <argument>0</argument>
-      <argument>SCN2+BQULav6CIiSgW-zBt</argument>
+      <argument>x0tNKNdinaEiv3UWjo8Z-Z</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -3527,7 +3563,7 @@
     <service id="cache.serializer.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>J5T5UUKlCI</argument>
       <argument>0</argument>
-      <argument>SCN2+BQULav6CIiSgW-zBt</argument>
+      <argument>x0tNKNdinaEiv3UWjo8Z-Z</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -3535,7 +3571,7 @@
     <service id="cache.annotations.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>bDWMtqHw8N</argument>
       <argument>0</argument>
-      <argument>SCN2+BQULav6CIiSgW-zBt</argument>
+      <argument>x0tNKNdinaEiv3UWjo8Z-Z</argument>
       <argument>/var/www/html/scv/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
