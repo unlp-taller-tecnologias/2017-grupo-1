@@ -17,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for enfermedad in enfermedads %}
+                {% for enfermedad in enfermedades %}
                     <tr>
                         <td><a href="{{ path('enfermedad_show', { 'id': enfermedad.id }) }}">{{ enfermedad.id }}</a></td>
                         <td>{{ enfermedad.nombre }}</td>

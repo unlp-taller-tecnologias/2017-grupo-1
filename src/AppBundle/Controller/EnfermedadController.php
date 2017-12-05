@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Enfermedad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Enfermedad controller.
@@ -24,10 +25,10 @@ class EnfermedadController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $enfermedads = $em->getRepository('AppBundle:Enfermedad')->findAll();
+        $enfermedades = $em->getRepository('AppBundle:Enfermedad')->findAll();
 
         return $this->render('enfermedad/index.html.twig', array(
-            'enfermedads' => $enfermedads,
+            'enfermedads' => $enfermedades,
         ));
     }
 
