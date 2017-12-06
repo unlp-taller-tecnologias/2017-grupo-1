@@ -1,0 +1,25 @@
+{% set flashbag_success = app.session.flashbag.get('success') %}
+{% if flashbag_success is not empty %}
+    {% for success in flashbag_success %}
+        <div class="alert alert-block alert-success fade in">
+            <i class="icon-ok green"></i>
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ success }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% set flashbag_error = app.session.flashbag.get('error') %}
+{% if flashbag_error is not empty %}
+    {% for error in flashbag_error %}
+        <div class="alert alert-block alert-danger fade in">
+            <i class=" icon-exclamation-sign red"></i>
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ error }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div id="ajaxAlerts" class="alert alert-block alert-danger fade in hidden">
+    <i class=" icon-exclamation-sign red"></i>
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+</div>

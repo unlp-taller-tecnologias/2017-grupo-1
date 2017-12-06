@@ -11,8 +11,13 @@
             {% include 'sidebar.html.twig' %}
         {% endblock %}
 
-        {% block content %} {% endblock %}
-
+        <div class="container-fluid">
+            <div class="side-body">
+                {% include 'alerts.html.twig' %}
+                {% block content %} {% endblock %}
+            </div>
+        </div>
+        
         {% block javascripts %}
             {% include 'scripts.html.twig' %}
         {% endblock %}

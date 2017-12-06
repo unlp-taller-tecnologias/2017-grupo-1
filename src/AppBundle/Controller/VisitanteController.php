@@ -76,15 +76,13 @@ class VisitanteController extends Controller
             $phpExcelObject = $reader->load($filename);
             // read some data
             $sheet = $phpExcelObject->getActiveSheet();
-            
-            set_time_limit(300); //Maximum execution time of each script, in seconds (I CHANGED THIS VALUE)
-            //ini_set('max_input_time', 120); //Maximum amount of time each script may spend parsing request data
-            //ini_set('memory_limit', 128M); //Maximum amount of memory a script may consume (128MB by default)
+                
+            set_time_limit(300); // Maximum execution time of each script, in seconds 
 
             // Recorro el excel dando de alta 1 por 1 
             $continuar = 1;
             $i = 2;
-            while ($continuar != 0){
+            while ($i != 10){
                 if ($sheet->getCell('A'.$i)->getValue() != ''){
                     $ficha = $sheet->getCell('A'.$i)->getValue();
                     
@@ -124,8 +122,8 @@ class VisitanteController extends Controller
                     $continuar = 0;
                 }
             }
-
         }
-        return $this->render('visitante/altaExcel.html.twig');
+        $this->get('session')->getFlashBag()->add('success', 'El excel se importo correctamente.');
+        return ($this->indexAction($request));
     }
 }

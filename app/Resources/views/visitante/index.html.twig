@@ -3,9 +3,6 @@
 {% block content %}
 
     <!-- Main Content -->
-    <div class="container-fluid">
-        <div class="side-body">
-
          <h2 class="text-center"> Visitantes </h2>
 
          <form class="navbar-form navbar-right" role="search">
@@ -22,8 +19,8 @@
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Documento</th>
+                <th>Pais</th>
                 <th>Provincia</th>
-                <th>Partido</th>
                 <th>Acciones</th>
 
             </tr>
@@ -48,8 +45,8 @@
                         <td>{{ visitante.nombre }}</td>
                         <td>{{ visitante.apellido }}</td>
                         <td>{{ visitante.tipoDocumento }} {{ visitante.nroDocumento }}</td>
+                        <td>{{ visitante.pais }}</td>
                         <td>{{ visitante.provincia }}</td>
-                        <td>{{ visitante.partido }}</td>
                         <td class="text-center" style="width: 400px;">
                             <button type="button" class="btn btn-sm btn-success">Alta Registro</button>
                             <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
@@ -58,9 +55,6 @@
                         </td>
                     </tr>
                 {% endfor %}
-         </table>
+         </table>         
 
-         
-      </div>
-   </div>
 {% endblock %}

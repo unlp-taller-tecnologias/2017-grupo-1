@@ -2,14 +2,11 @@
 
 {% block content %}
 
-    <!-- Main Content -->
-    <div class="container-fluid">
-        <div class="side-body">
 			<div class="row">
 
 				<h2 class="text-center">Alta Vacuna</h2>
 										
-				<form role="form" class="col-md-6 col-md-offset-3" style="background: white; padding: 50px;">
+				<form role="form" class="col-md-6 col-md-offset-3" action="{{ path('altaVacuna') }}" method="POST">
 					
 					<div class="form-group">
 						<label for="nombre">Nombre</label>
@@ -40,9 +37,6 @@
 
 				</form>
 			</div>
-
-		</div>
-	</div>
 
 
 {% endblock %}
