@@ -174,6 +174,68 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        elseif (0 === strpos($pathinfo, '/factorriesgo')) {
+            // factorriesgo_index
+            if ('/factorriesgo' === $trimmedPathinfo) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_factorriesgo_index;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'factorriesgo_index');
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\FactorRiesgoController::indexAction',  '_route' => 'factorriesgo_index',);
+            }
+            not_factorriesgo_index:
+
+            // factorriesgo_new
+            if ('/factorriesgo/new' === $pathinfo) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_factorriesgo_new;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\FactorRiesgoController::newAction',  '_route' => 'factorriesgo_new',);
+            }
+            not_factorriesgo_new:
+
+            // factorriesgo_show
+            if (preg_match('#^/factorriesgo/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_factorriesgo_show;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'factorriesgo_show')), array (  '_controller' => 'AppBundle\\Controller\\FactorRiesgoController::showAction',));
+            }
+            not_factorriesgo_show:
+
+            // factorriesgo_edit
+            if (preg_match('#^/factorriesgo/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_factorriesgo_edit;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'factorriesgo_edit')), array (  '_controller' => 'AppBundle\\Controller\\FactorRiesgoController::editAction',));
+            }
+            not_factorriesgo_edit:
+
+            // factorriesgo_delete
+            if (preg_match('#^/factorriesgo/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('DELETE' !== $canonicalMethod) {
+                    $allow[] = 'DELETE';
+                    goto not_factorriesgo_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'factorriesgo_delete')), array (  '_controller' => 'AppBundle\\Controller\\FactorRiesgoController::deleteAction',));
+            }
+            not_factorriesgo_delete:
+
+        }
+
         elseif (0 === strpos($pathinfo, '/usuario')) {
             // usuario_index
             if ('/usuario' === $trimmedPathinfo) {
@@ -203,45 +265,133 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
-        // vacuna
-        if ('/vacuna' === $pathinfo) {
-            return array (  '_controller' => 'AppBundle\\Controller\\VacunaController::indexAction',  '_route' => 'vacuna',);
-        }
-
-        // visitante
-        if ('/visitante' === $pathinfo) {
-            return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::indexAction',  '_route' => 'visitante',);
-        }
-
-        if (0 === strpos($pathinfo, '/alta')) {
-            // altaVacuna
-            if ('/altaVacuna' === $pathinfo) {
-                return array (  '_controller' => 'AppBundle\\Controller\\VacunaController::altaAction',  '_route' => 'altaVacuna',);
-            }
-
-            // altaVisitante
-            if ('/altaVisitante' === $pathinfo) {
-                return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::alta',  '_route' => 'altaVisitante',);
-            }
-
-            if (0 === strpos($pathinfo, '/altaExcel')) {
-                // altaExcelView
-                if ('/altaExcelView' === $pathinfo) {
-                    return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::altaExcel',  '_route' => 'altaExcelView',);
+        elseif (0 === strpos($pathinfo, '/vacuna')) {
+            // vacuna_index
+            if ('/vacuna' === $trimmedPathinfo) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_vacuna_index;
                 }
 
-                // altaExcel
-                if ('/altaExcel' === $pathinfo) {
-                    return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::altaExcelAction',  '_route' => 'altaExcel',);
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'vacuna_index');
                 }
 
+                return array (  '_controller' => 'AppBundle\\Controller\\VacunaController::indexAction',  '_route' => 'vacuna_index',);
             }
+            not_vacuna_index:
+
+            // vacuna_new
+            if ('/vacuna/new' === $pathinfo) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_vacuna_new;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\VacunaController::newAction',  '_route' => 'vacuna_new',);
+            }
+            not_vacuna_new:
+
+            // vacuna_show
+            if (preg_match('#^/vacuna/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_vacuna_show;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'vacuna_show')), array (  '_controller' => 'AppBundle\\Controller\\VacunaController::showAction',));
+            }
+            not_vacuna_show:
+
+            // vacuna_edit
+            if (preg_match('#^/vacuna/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_vacuna_edit;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'vacuna_edit')), array (  '_controller' => 'AppBundle\\Controller\\VacunaController::editAction',));
+            }
+            not_vacuna_edit:
+
+            // vacuna_delete
+            if (preg_match('#^/vacuna/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('DELETE' !== $canonicalMethod) {
+                    $allow[] = 'DELETE';
+                    goto not_vacuna_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'vacuna_delete')), array (  '_controller' => 'AppBundle\\Controller\\VacunaController::deleteAction',));
+            }
+            not_vacuna_delete:
 
         }
 
-        // modificarVacuna
-        if ('/modificarVacuna' === $pathinfo) {
-            return array (  '_controller' => 'AppBundle\\Controller\\VacunaController::modificarAction',  '_route' => 'modificarVacuna',);
+        elseif (0 === strpos($pathinfo, '/visitante')) {
+            // visitante_index
+            if ('/visitante' === $trimmedPathinfo) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_visitante_index;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'visitante_index');
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::indexAction',  '_route' => 'visitante_index',);
+            }
+            not_visitante_index:
+
+            // visitante_new
+            if ('/visitante/new' === $pathinfo) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_visitante_new;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::newAction',  '_route' => 'visitante_new',);
+            }
+            not_visitante_new:
+
+            // visitante_show
+            if (preg_match('#^/visitante/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_visitante_show;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'visitante_show')), array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::showAction',));
+            }
+            not_visitante_show:
+
+            // visitante_edit
+            if (preg_match('#^/visitante/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_visitante_edit;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'visitante_edit')), array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::editAction',));
+            }
+            not_visitante_edit:
+
+            // visitante_delete
+            if (preg_match('#^/visitante/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('DELETE' !== $canonicalMethod) {
+                    $allow[] = 'DELETE';
+                    goto not_visitante_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'visitante_delete')), array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::deleteAction',));
+            }
+            not_visitante_delete:
+
+            // altaExcel
+            if ('/visitante/altaExcel' === $pathinfo) {
+                return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::altaExcelAction',  '_route' => 'altaExcel',);
+            }
+
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
