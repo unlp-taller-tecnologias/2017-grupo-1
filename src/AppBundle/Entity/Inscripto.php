@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="inscripto")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\InscriptoRepository")
  */
-class Inscripto
+class Inscripto extends Visitante
 {
     /**
      * @var int
@@ -19,28 +19,28 @@ class Inscripto
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="nroFicha", type="string", length=255)
      */
-    private $nroFicha;
+    protected $nroFicha;
 
     /**
      * @var string
      *
      * @ORM\Column(name="legajo", type="string", length=255)
      */
-    private $legajo;
+    protected $legajo;
 
     /**
      * @var date
      *
      * @ORM\Column(name="fechaInscripcion", type="date")
      */
-    private $fechaInscripcion;
+    protected $fechaInscripcion;
 
 
     /**

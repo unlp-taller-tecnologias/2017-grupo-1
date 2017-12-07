@@ -30,7 +30,25 @@
                 <ul class="nav navbar-nav">
                     <li><a href="{{ path('homepage') }}"><span class="glyphicon glyphicon-home"></span>Inicio</a></li>
                     <li><a href="{{ path('usuario_index') }}"><span class="glyphicon glyphicon-user"></span>Usuarios</a></li>
-                    <li><a href="{{ path('visitante_index') }}"><span class="glyphicon glyphicon-user"></span>Visitantes</a></li>
+
+                     <!-- Dropdown-->
+                    <li class="panel panel-default" id="dropdown">
+                        <a data-toggle="collapse" href="#dropdown-lvl1">
+                            <span class="glyphicon glyphicon-user"></span>Personas<span class="caret"></span>
+                        </a>
+                        <!-- Dropdown level 1 -->
+                        <div id="dropdown-lvl1" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="{{ path('inscripto_index') }}"><span class="glyphicon glyphicon-user"></span>Inscriptos</a></li>
+                                    <li><a href="{{ path('nodocente_index') }}"><span class="glyphicon glyphicon-user"></span>No docentes</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+
+
+                    
                     <li><a href="{{ path('vacuna_index') }}"><span class="glyphicon glyphicon-plus-sign"></span>Vacunas</a></li>
                     <li><a href="{{ path('enfermedad_index') }}"><span class="glyphicon glyphicon-plus"></span>Enfermedades</a></li>
                     <li><a href="{{ path('factorriesgo_index') }}"><span class="glyphicon glyphicon-plus-sign"></span>Grupos de Riesgo</a></li>
@@ -52,6 +70,7 @@
                             </div>
                         </div>
                     </li>
+
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>

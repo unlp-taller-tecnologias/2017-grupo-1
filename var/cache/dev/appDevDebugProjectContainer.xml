@@ -461,6 +461,12 @@
     <service id="AppBundle\Controller\FactorRiesgoController" class="AppBundle\Controller\FactorRiesgoController" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
     </service>
+    <service id="AppBundle\Controller\InscriptoController" class="AppBundle\Controller\InscriptoController" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+    </service>
+    <service id="AppBundle\Controller\NoDocenteController" class="AppBundle\Controller\NoDocenteController" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+    </service>
     <service id="AppBundle\Controller\UsuarioController" class="AppBundle\Controller\UsuarioController" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
     </service>
@@ -477,6 +483,12 @@
       <tag name="form.type"/>
     </service>
     <service id="AppBundle\Form\FactorRiesgoType" class="AppBundle\Form\FactorRiesgoType" public="false" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
+    <service id="AppBundle\Form\InscriptoType" class="AppBundle\Form\InscriptoType" public="false" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
+    <service id="AppBundle\Form\NoDocenteType" class="AppBundle\Form\NoDocenteType" public="false" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
     <service id="AppBundle\Form\UsuarioType" class="AppBundle\Form\UsuarioType" public="false" autowire="true" autoconfigure="true">
@@ -504,7 +516,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
       <tag name="controller.argument_value_resolver" priority="-50"/>
-      <argument type="service" id="service_locator.a212725a07467d6ac1b1b8e343b9f1ba"/>
+      <argument type="service" id="service_locator.c41a0dc2d2d841fa26c960a6a3e2dbb9"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false">
       <tag name="controller.argument_value_resolver" priority="-100"/>
@@ -668,7 +680,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>gM6-lsC6PVutVTNqKVB5dZ</argument>
+      <argument>KvlfzHGAyoSapKEpNLu3ES</argument>
       <argument>C:\xampp\htdocs\2017-grupo-1\var\cache\dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -678,7 +690,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>gM6-lsC6PVutVTNqKVB5dZ</argument>
+      <argument>KvlfzHGAyoSapKEpNLu3ES</argument>
       <call method="setLogger">
         <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
@@ -797,7 +809,7 @@
       <argument type="service" id="form.resolved_type_factory"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension" public="false">
-      <argument type="service" id="service_locator.9a88fcee218511752f73dfe69ef605a3"/>
+      <argument type="service" id="service_locator.71b827288f1a4c459170dc5e9395953e"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.http_foundation"/>
@@ -2224,12 +2236,12 @@
     </service>
     <service id="security.authentication.listener.anonymous.main" class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
       <argument type="service" id="security.token_storage"/>
-      <argument>5a291ab939a957.41735464</argument>
+      <argument>5a292801660455.52344400</argument>
       <argument type="service" id="monolog.logger.security" on-invalid="null"/>
       <argument type="service" id="security.authentication.manager"/>
     </service>
     <service id="security.authentication.provider.anonymous.main" class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-      <argument>5a291ab939a957.41735464</argument>
+      <argument>5a292801660455.52344400</argument>
     </service>
     <service id="security.exception_listener.main" class="Symfony\Component\Security\Http\Firewall\ExceptionListener" public="false">
       <argument type="service" id="security.token_storage"/>
@@ -3306,6 +3318,10 @@
     <service id="abstract.instanceof.AppBundle\Controller\EnfermedadController" class="AppBundle\Controller\EnfermedadController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\FactorRiesgoController" class="AppBundle\Controller\FactorRiesgoController" autowire="true" abstract="true"/>
     <service id="abstract.instanceof.AppBundle\Controller\FactorRiesgoController" class="AppBundle\Controller\FactorRiesgoController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\InscriptoController" class="AppBundle\Controller\InscriptoController" autowire="true" abstract="true"/>
+    <service id="abstract.instanceof.AppBundle\Controller\InscriptoController" class="AppBundle\Controller\InscriptoController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\NoDocenteController" class="AppBundle\Controller\NoDocenteController" autowire="true" abstract="true"/>
+    <service id="abstract.instanceof.AppBundle\Controller\NoDocenteController" class="AppBundle\Controller\NoDocenteController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\UsuarioController" class="AppBundle\Controller\UsuarioController" autowire="true" abstract="true"/>
     <service id="abstract.instanceof.AppBundle\Controller\UsuarioController" class="AppBundle\Controller\UsuarioController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Bundle\FrameworkBundle\Controller\Controller.0.AppBundle\Controller\VacunaController" class="AppBundle\Controller\VacunaController" autowire="true" abstract="true"/>
@@ -3318,6 +3334,10 @@
     <service id="abstract.instanceof.AppBundle\Form\EnfermedadType" class="AppBundle\Form\EnfermedadType" public="false" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Component\Form\FormTypeInterface.0.AppBundle\Form\FactorRiesgoType" class="AppBundle\Form\FactorRiesgoType" public="false" autowire="true" abstract="true"/>
     <service id="abstract.instanceof.AppBundle\Form\FactorRiesgoType" class="AppBundle\Form\FactorRiesgoType" public="false" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id="instanceof.Symfony\Component\Form\FormTypeInterface.0.AppBundle\Form\InscriptoType" class="AppBundle\Form\InscriptoType" public="false" autowire="true" abstract="true"/>
+    <service id="abstract.instanceof.AppBundle\Form\InscriptoType" class="AppBundle\Form\InscriptoType" public="false" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id="instanceof.Symfony\Component\Form\FormTypeInterface.0.AppBundle\Form\NoDocenteType" class="AppBundle\Form\NoDocenteType" public="false" autowire="true" abstract="true"/>
+    <service id="abstract.instanceof.AppBundle\Form\NoDocenteType" class="AppBundle\Form\NoDocenteType" public="false" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Component\Form\FormTypeInterface.0.AppBundle\Form\UsuarioType" class="AppBundle\Form\UsuarioType" public="false" autowire="true" abstract="true"/>
     <service id="abstract.instanceof.AppBundle\Form\UsuarioType" class="AppBundle\Form\UsuarioType" public="false" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="instanceof.Symfony\Component\Form\FormTypeInterface.0.AppBundle\Form\VacunaType" class="AppBundle\Form\VacunaType" public="false" autowire="true" abstract="true"/>
@@ -3360,6 +3380,38 @@
         <argument key="factorRiesgo" type="service" id="autowired.AppBundle\Entity\FactorRiesgo"/>
       </argument>
     </service>
+    <service id="service_locator.372779e2ab4011aa26e30f9325143d72" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection"/>
+    </service>
+    <service id="service_locator.0fb87b4fb2ae403e13f7892e2a2b85ee" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="inscripto" type="service" id="autowired.AppBundle\Entity\Inscripto"/>
+      </argument>
+    </service>
+    <service id="service_locator.c4498b27ae1f7a39b46dde0dc8469098" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="inscripto" type="service" id="autowired.AppBundle\Entity\Inscripto"/>
+      </argument>
+    </service>
+    <service id="service_locator.07904f7421cd9460af2b15e6844a5d33" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection"/>
+    </service>
+    <service id="service_locator.99a1cb87a0bbc9a584e605725c2c4d82" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="noDocente" type="service" id="autowired.AppBundle\Entity\NoDocente"/>
+      </argument>
+    </service>
+    <service id="service_locator.64e2def01269cc2658f8c4bd4b7bf3f4" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="noDocente" type="service" id="autowired.AppBundle\Entity\NoDocente"/>
+      </argument>
+    </service>
     <service id="service_locator.e079ef8661c6ed513e34f2472c739dc3" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -3388,17 +3440,13 @@
     </service>
     <service id="service_locator.6b68b75ec9a9e29cab366aac32419ec2" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="visitante" type="service" id="autowired.AppBundle\Entity\Visitante"/>
-      </argument>
+      <argument type="collection"/>
     </service>
     <service id="service_locator.d5c1cdab8bb2aa472ea18e5de6003302" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="visitante" type="service" id="autowired.AppBundle\Entity\Visitante"/>
-      </argument>
+      <argument type="collection"/>
     </service>
-    <service id="service_locator.a212725a07467d6ac1b1b8e343b9f1ba" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id="service_locator.c41a0dc2d2d841fa26c960a6a3e2dbb9" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="AppBundle\Controller\EnfermedadController:deleteAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
@@ -3407,33 +3455,41 @@
         <argument key="AppBundle\Controller\FactorRiesgoController:deleteAction" type="service" id="service_locator.f8b8a555a37b8983a170ec29e5a00951"/>
         <argument key="AppBundle\Controller\FactorRiesgoController:editAction" type="service" id="service_locator.f8b8a555a37b8983a170ec29e5a00951"/>
         <argument key="AppBundle\Controller\FactorRiesgoController:showAction" type="service" id="service_locator.7927d79245bcbe7c68c103a5c8525e0b"/>
+        <argument key="AppBundle\Controller\InscriptoController:deleteAction" type="service" id="service_locator.c4498b27ae1f7a39b46dde0dc8469098"/>
+        <argument key="AppBundle\Controller\InscriptoController:editAction" type="service" id="service_locator.c4498b27ae1f7a39b46dde0dc8469098"/>
+        <argument key="AppBundle\Controller\InscriptoController:showAction" type="service" id="service_locator.0fb87b4fb2ae403e13f7892e2a2b85ee"/>
+        <argument key="AppBundle\Controller\NoDocenteController:deleteAction" type="service" id="service_locator.64e2def01269cc2658f8c4bd4b7bf3f4"/>
+        <argument key="AppBundle\Controller\NoDocenteController:editAction" type="service" id="service_locator.64e2def01269cc2658f8c4bd4b7bf3f4"/>
+        <argument key="AppBundle\Controller\NoDocenteController:showAction" type="service" id="service_locator.99a1cb87a0bbc9a584e605725c2c4d82"/>
         <argument key="AppBundle\Controller\UsuarioController:showAction" type="service" id="service_locator.e079ef8661c6ed513e34f2472c739dc3"/>
         <argument key="AppBundle\Controller\VacunaController:deleteAction" type="service" id="service_locator.d32a550fa2022910171c93ac032d455e"/>
         <argument key="AppBundle\Controller\VacunaController:editAction" type="service" id="service_locator.d32a550fa2022910171c93ac032d455e"/>
         <argument key="AppBundle\Controller\VacunaController:showAction" type="service" id="service_locator.fab9486018117e37cf2c204cc1504450"/>
-        <argument key="AppBundle\Controller\VisitanteController:deleteAction" type="service" id="service_locator.d5c1cdab8bb2aa472ea18e5de6003302"/>
-        <argument key="AppBundle\Controller\VisitanteController:editAction" type="service" id="service_locator.d5c1cdab8bb2aa472ea18e5de6003302"/>
-        <argument key="AppBundle\Controller\VisitanteController:showAction" type="service" id="service_locator.6b68b75ec9a9e29cab366aac32419ec2"/>
         <argument key="AppBundle\Controller\EnfermedadController::deleteAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
         <argument key="AppBundle\Controller\EnfermedadController::editAction" type="service" id="service_locator.8e952e693a2dbc66f2ba3b4f968dbb34"/>
         <argument key="AppBundle\Controller\EnfermedadController::showAction" type="service" id="service_locator.db57d51af1607aadb292ba9e9d52eea4"/>
         <argument key="AppBundle\Controller\FactorRiesgoController::deleteAction" type="service" id="service_locator.f8b8a555a37b8983a170ec29e5a00951"/>
         <argument key="AppBundle\Controller\FactorRiesgoController::editAction" type="service" id="service_locator.f8b8a555a37b8983a170ec29e5a00951"/>
         <argument key="AppBundle\Controller\FactorRiesgoController::showAction" type="service" id="service_locator.7927d79245bcbe7c68c103a5c8525e0b"/>
+        <argument key="AppBundle\Controller\InscriptoController::deleteAction" type="service" id="service_locator.c4498b27ae1f7a39b46dde0dc8469098"/>
+        <argument key="AppBundle\Controller\InscriptoController::editAction" type="service" id="service_locator.c4498b27ae1f7a39b46dde0dc8469098"/>
+        <argument key="AppBundle\Controller\InscriptoController::showAction" type="service" id="service_locator.0fb87b4fb2ae403e13f7892e2a2b85ee"/>
+        <argument key="AppBundle\Controller\NoDocenteController::deleteAction" type="service" id="service_locator.64e2def01269cc2658f8c4bd4b7bf3f4"/>
+        <argument key="AppBundle\Controller\NoDocenteController::editAction" type="service" id="service_locator.64e2def01269cc2658f8c4bd4b7bf3f4"/>
+        <argument key="AppBundle\Controller\NoDocenteController::showAction" type="service" id="service_locator.99a1cb87a0bbc9a584e605725c2c4d82"/>
         <argument key="AppBundle\Controller\UsuarioController::showAction" type="service" id="service_locator.e079ef8661c6ed513e34f2472c739dc3"/>
         <argument key="AppBundle\Controller\VacunaController::deleteAction" type="service" id="service_locator.d32a550fa2022910171c93ac032d455e"/>
         <argument key="AppBundle\Controller\VacunaController::editAction" type="service" id="service_locator.d32a550fa2022910171c93ac032d455e"/>
         <argument key="AppBundle\Controller\VacunaController::showAction" type="service" id="service_locator.fab9486018117e37cf2c204cc1504450"/>
-        <argument key="AppBundle\Controller\VisitanteController::deleteAction" type="service" id="service_locator.d5c1cdab8bb2aa472ea18e5de6003302"/>
-        <argument key="AppBundle\Controller\VisitanteController::editAction" type="service" id="service_locator.d5c1cdab8bb2aa472ea18e5de6003302"/>
-        <argument key="AppBundle\Controller\VisitanteController::showAction" type="service" id="service_locator.6b68b75ec9a9e29cab366aac32419ec2"/>
       </argument>
     </service>
-    <service id="service_locator.9a88fcee218511752f73dfe69ef605a3" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id="service_locator.71b827288f1a4c459170dc5e9395953e" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="AppBundle\Form\EnfermedadType" type="service" id="AppBundle\Form\EnfermedadType"/>
         <argument key="AppBundle\Form\FactorRiesgoType" type="service" id="AppBundle\Form\FactorRiesgoType"/>
+        <argument key="AppBundle\Form\InscriptoType" type="service" id="AppBundle\Form\InscriptoType"/>
+        <argument key="AppBundle\Form\NoDocenteType" type="service" id="AppBundle\Form\NoDocenteType"/>
         <argument key="AppBundle\Form\UsuarioType" type="service" id="AppBundle\Form\UsuarioType"/>
         <argument key="AppBundle\Form\VacunaType" type="service" id="AppBundle\Form\VacunaType"/>
         <argument key="AppBundle\Form\VisitanteType" type="service" id="AppBundle\Form\VisitanteType"/>
@@ -3608,9 +3664,10 @@
     </service>
     <service id="autowired.AppBundle\Entity\Enfermedad" class="AppBundle\Entity\Enfermedad" public="false" autowire="true"/>
     <service id="autowired.AppBundle\Entity\FactorRiesgo" class="AppBundle\Entity\FactorRiesgo" public="false" autowire="true"/>
+    <service id="autowired.AppBundle\Entity\Inscripto" class="AppBundle\Entity\Inscripto" public="false" autowire="true"/>
+    <service id="autowired.AppBundle\Entity\NoDocente" class="AppBundle\Entity\NoDocente" public="false" autowire="true"/>
     <service id="autowired.AppBundle\Entity\Usuario" class="AppBundle\Entity\Usuario" public="false" autowire="true"/>
     <service id="autowired.AppBundle\Entity\Vacuna" class="AppBundle\Entity\Vacuna" public="false" autowire="true"/>
-    <service id="autowired.AppBundle\Entity\Visitante" class="AppBundle\Entity\Visitante" public="false" autowire="true"/>
     <service id="service_locator.39e66930232432ca5ba91e98fdd8a17b" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -3640,7 +3697,7 @@
     <service id="cache.system.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>zCIVm5tYnv</argument>
       <argument>0</argument>
-      <argument>gM6-lsC6PVutVTNqKVB5dZ</argument>
+      <argument>KvlfzHGAyoSapKEpNLu3ES</argument>
       <argument>C:\xampp\htdocs\2017-grupo-1\var\cache\dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -3648,7 +3705,7 @@
     <service id="cache.validator.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>EghRgpsueE</argument>
       <argument>0</argument>
-      <argument>gM6-lsC6PVutVTNqKVB5dZ</argument>
+      <argument>KvlfzHGAyoSapKEpNLu3ES</argument>
       <argument>C:\xampp\htdocs\2017-grupo-1\var\cache\dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -3656,7 +3713,7 @@
     <service id="cache.serializer.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>DLGhCoIkRp</argument>
       <argument>0</argument>
-      <argument>gM6-lsC6PVutVTNqKVB5dZ</argument>
+      <argument>KvlfzHGAyoSapKEpNLu3ES</argument>
       <argument>C:\xampp\htdocs\2017-grupo-1\var\cache\dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -3664,7 +3721,7 @@
     <service id="cache.annotations.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface" public="false" lazy="true">
       <argument>l9DqD-AxYm</argument>
       <argument>0</argument>
-      <argument>gM6-lsC6PVutVTNqKVB5dZ</argument>
+      <argument>KvlfzHGAyoSapKEpNLu3ES</argument>
       <argument>C:\xampp\htdocs\2017-grupo-1\var\cache\dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>

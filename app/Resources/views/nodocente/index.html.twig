@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Nodocentes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Departamento</th>
+                <th>Oficina</th>
+                <th>Telefono</th>
+                <th>Funcion</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Pais</th>
+                <th>Provincia</th>
+                <th>Partido</th>
+                <th>Localidad</th>
+                <th>Codigopostal</th>
+                <th>Tipodocumento</th>
+                <th>Nrodocumento</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for noDocente in noDocentes %}
+            <tr>
+                <td><a href="{{ path('nodocente_show', { 'id': noDocente.id }) }}">{{ noDocente.id }}</a></td>
+                <td>{{ noDocente.departamento }}</td>
+                <td>{{ noDocente.oficina }}</td>
+                <td>{{ noDocente.telefono }}</td>
+                <td>{{ noDocente.funcion }}</td>
+                <td>{{ noDocente.nombre }}</td>
+                <td>{{ noDocente.apellido }}</td>
+                <td>{{ noDocente.email }}</td>
+                <td>{{ noDocente.pais }}</td>
+                <td>{{ noDocente.provincia }}</td>
+                <td>{{ noDocente.partido }}</td>
+                <td>{{ noDocente.localidad }}</td>
+                <td>{{ noDocente.codigoPostal }}</td>
+                <td>{{ noDocente.tipoDocumento }}</td>
+                <td>{{ noDocente.nroDocumento }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('nodocente_show', { 'id': noDocente.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('nodocente_new') }}">Create a new noDocente</a>
+        </li>
+    </ul>
+{% endblock %}

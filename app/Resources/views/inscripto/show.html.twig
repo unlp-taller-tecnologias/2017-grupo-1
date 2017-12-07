@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Inscripto</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ inscripto.id }}</td>
+            </tr>
+            <tr>
+                <th>Nroficha</th>
+                <td>{{ inscripto.nroFicha }}</td>
+            </tr>
+            <tr>
+                <th>Legajo</th>
+                <td>{{ inscripto.legajo }}</td>
+            </tr>
+            <tr>
+                <th>Fechainscripcion</th>
+                <td>{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ inscripto.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Apellido</th>
+                <td>{{ inscripto.apellido }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ inscripto.email }}</td>
+            </tr>
+            <tr>
+                <th>Pais</th>
+                <td>{{ inscripto.pais }}</td>
+            </tr>
+            <tr>
+                <th>Provincia</th>
+                <td>{{ inscripto.provincia }}</td>
+            </tr>
+            <tr>
+                <th>Partido</th>
+                <td>{{ inscripto.partido }}</td>
+            </tr>
+            <tr>
+                <th>Localidad</th>
+                <td>{{ inscripto.localidad }}</td>
+            </tr>
+            <tr>
+                <th>Codigopostal</th>
+                <td>{{ inscripto.codigoPostal }}</td>
+            </tr>
+            <tr>
+                <th>Tipodocumento</th>
+                <td>{{ inscripto.tipoDocumento }}</td>
+            </tr>
+            <tr>
+                <th>Nrodocumento</th>
+                <td>{{ inscripto.nroDocumento }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('inscripto_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

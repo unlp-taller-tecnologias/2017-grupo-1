@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Inscriptos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nroficha</th>
+                <th>Legajo</th>
+                <th>Fechainscripcion</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Pais</th>
+                <th>Provincia</th>
+                <th>Partido</th>
+                <th>Localidad</th>
+                <th>Codigopostal</th>
+                <th>Tipodocumento</th>
+                <th>Nrodocumento</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for inscripto in inscriptos %}
+            <tr>
+                <td><a href="{{ path('inscripto_show', { 'id': inscripto.id }) }}">{{ inscripto.id }}</a></td>
+                <td>{{ inscripto.nroFicha }}</td>
+                <td>{{ inscripto.legajo }}</td>
+                <td>{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ inscripto.nombre }}</td>
+                <td>{{ inscripto.apellido }}</td>
+                <td>{{ inscripto.email }}</td>
+                <td>{{ inscripto.pais }}</td>
+                <td>{{ inscripto.provincia }}</td>
+                <td>{{ inscripto.partido }}</td>
+                <td>{{ inscripto.localidad }}</td>
+                <td>{{ inscripto.codigoPostal }}</td>
+                <td>{{ inscripto.tipoDocumento }}</td>
+                <td>{{ inscripto.nroDocumento }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('inscripto_show', { 'id': inscripto.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('inscripto_new') }}">Create a new inscripto</a>
+        </li>
+    </ul>
+{% endblock %}

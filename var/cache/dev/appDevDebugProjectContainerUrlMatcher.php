@@ -236,6 +236,130 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        elseif (0 === strpos($pathinfo, '/inscripto')) {
+            // inscripto_index
+            if ('/inscripto' === $trimmedPathinfo) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_inscripto_index;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'inscripto_index');
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\InscriptoController::indexAction',  '_route' => 'inscripto_index',);
+            }
+            not_inscripto_index:
+
+            // inscripto_new
+            if ('/inscripto/new' === $pathinfo) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_inscripto_new;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\InscriptoController::newAction',  '_route' => 'inscripto_new',);
+            }
+            not_inscripto_new:
+
+            // inscripto_show
+            if (preg_match('#^/inscripto/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_inscripto_show;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'inscripto_show')), array (  '_controller' => 'AppBundle\\Controller\\InscriptoController::showAction',));
+            }
+            not_inscripto_show:
+
+            // inscripto_edit
+            if (preg_match('#^/inscripto/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_inscripto_edit;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'inscripto_edit')), array (  '_controller' => 'AppBundle\\Controller\\InscriptoController::editAction',));
+            }
+            not_inscripto_edit:
+
+            // inscripto_delete
+            if (preg_match('#^/inscripto/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('DELETE' !== $canonicalMethod) {
+                    $allow[] = 'DELETE';
+                    goto not_inscripto_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'inscripto_delete')), array (  '_controller' => 'AppBundle\\Controller\\InscriptoController::deleteAction',));
+            }
+            not_inscripto_delete:
+
+        }
+
+        elseif (0 === strpos($pathinfo, '/nodocente')) {
+            // nodocente_index
+            if ('/nodocente' === $trimmedPathinfo) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_nodocente_index;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'nodocente_index');
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\NoDocenteController::indexAction',  '_route' => 'nodocente_index',);
+            }
+            not_nodocente_index:
+
+            // nodocente_new
+            if ('/nodocente/new' === $pathinfo) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_nodocente_new;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\NoDocenteController::newAction',  '_route' => 'nodocente_new',);
+            }
+            not_nodocente_new:
+
+            // nodocente_show
+            if (preg_match('#^/nodocente/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('GET' !== $canonicalMethod) {
+                    $allow[] = 'GET';
+                    goto not_nodocente_show;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'nodocente_show')), array (  '_controller' => 'AppBundle\\Controller\\NoDocenteController::showAction',));
+            }
+            not_nodocente_show:
+
+            // nodocente_edit
+            if (preg_match('#^/nodocente/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_nodocente_edit;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'nodocente_edit')), array (  '_controller' => 'AppBundle\\Controller\\NoDocenteController::editAction',));
+            }
+            not_nodocente_edit:
+
+            // nodocente_delete
+            if (preg_match('#^/nodocente/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ('DELETE' !== $canonicalMethod) {
+                    $allow[] = 'DELETE';
+                    goto not_nodocente_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'nodocente_delete')), array (  '_controller' => 'AppBundle\\Controller\\NoDocenteController::deleteAction',));
+            }
+            not_nodocente_delete:
+
+        }
+
         elseif (0 === strpos($pathinfo, '/usuario')) {
             // usuario_index
             if ('/usuario' === $trimmedPathinfo) {
