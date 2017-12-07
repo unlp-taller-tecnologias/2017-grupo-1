@@ -69,6 +69,20 @@ class Visitante {
     /**
      * @var string
      *
+     * @ORM\Column(name="localidad", type="string", length=255)
+     */
+    private $localidad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="codigoPostal", type="string", length=255)
+     */
+    private $codigoPostal;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="tipoDocumento", type="string", length=255)
      */
     private $tipoDocumento;
@@ -197,6 +211,50 @@ class Visitante {
      */
     public function getProvincia() {
         return $this->provincia;
+    }
+
+    /**
+     * Set localidad
+     *
+     * @param string $localidad
+     *
+     * @return localidad
+     */
+    public function setLocalidad($localidad) {
+        $this->localidad = $localidad;
+
+        return $this;
+    }
+
+    /**
+     * Get localidad
+     *
+     * @return string
+     */
+    public function getLocalidad() {
+        return $this->localidad;
+    }
+
+    /**
+     * Set codigoPostal
+     *
+     * @param string $codigoPostal
+     *
+     * @return localidad
+     */
+    public function setCodigoPostal($codigoPostal) {
+        $this->codigoPostal = $codigoPostal;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPostal
+     *
+     * @return string
+     */
+    public function getCodigoPostal() {
+        return $this->codigoPostal;
     }
 
     /**

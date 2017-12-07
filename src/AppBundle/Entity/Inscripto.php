@@ -35,6 +35,13 @@ class Inscripto
      */
     private $legajo;
 
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="fechaInscripcion", type="date")
+     */
+    private $fechaInscripcion;
+
 
     /**
      * Get id
@@ -92,6 +99,30 @@ class Inscripto
     public function getLegajo()
     {
         return $this->legajo;
+    }
+
+    /**
+     * Set fechaInscripcion
+     *
+     * @param string $fechaInscripcion
+     *
+     * @return fechaInscripcion
+     */
+    public function setFechaInscripcion($fechaInscripcion)
+    {
+        $this->fechaInscripcion = $fechaInscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInscripcion
+     *
+     * @return string
+     */
+    public function getFechaInscripcion()
+    {
+        return $this->fechaInscripcion;
     }
 }
 
