@@ -1,10 +1,8 @@
 {% extends 'base.html.twig' %}
 
 
-{% block content %}
+{% block body %}
 
-    <div class="main-container inner">
-        <div class="main-content">
             <div class="container">
                  <form class="form-horizontal" enctype="multipart/form-data" name="formHosp" action="{{path ("altaExcel") }}" method="POST">
                     <input type="file" name="excel" />
@@ -12,7 +10,5 @@
                     <input type="hidden" value="upload" name="action" />
                 </form>
             </div>
-        </div>
-    </div>
 
 {% endblock %}

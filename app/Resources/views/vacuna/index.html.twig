@@ -1,106 +1,47 @@
 {% extends 'base.html.twig' %}
 
+{% block body %}
+    <h1>Vacunas list</h1>
 
-{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Abreviatura</th>
+                <th>Dosis</th>
+                <th>Vencimiento</th>
+                <th>Observacion</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vacuna in vacunas %}
+            <tr>
+                <td><a href="{{ path('vacuna_show', { 'id': vacuna.id }) }}">{{ vacuna.id }}</a></td>
+                <td>{{ vacuna.nombre }}</td>
+                <td>{{ vacuna.abreviatura }}</td>
+                <td>{{ vacuna.dosis }}</td>
+                <td>{{ vacuna.vencimiento }}</td>
+                <td>{{ vacuna.observacion }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vacuna_show', { 'id': vacuna.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-          <h2 class="text-center">Vacunas</h2>
-          <table class="table table-hover table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Dosis Requeridas</th>
-                    <th>Vencimiento?</th>
-                    <th>Acciones</th>
-
-                </tr>
-            </thead>
-
-            <tbody>
-
-                <tr class="active">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><a href="{{ path('altaVacuna') }}"><button type="button" class="btn btn-success">Agregar</button></a></td>
-                </tr>
-               
-                <tr class="active">
-                    <td>BCG</td>
-                    <td>1</td>
-                    <td>Si</td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
-                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
-                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-               </tr>
-
-                <tr class="active">
-                    <td>Hepatitis B</td>
-                    <td>2 </td>
-                    <td>No</td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
-                        <a href="{{ path('modificarVacuna') }}"><button type="button" class="btn btn-sm btn-warning">Modificar</button></a>
-                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                </tr>
-            
-                <tr class="active">
-                    <td>Neumococo Conjugada</td>
-                    <td>3</td>
-                    <td>Si</td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
-                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
-                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                </tr>
-
-                <tr class="active">
-                    <td>Quintuple Pentavolente</td>
-                    <td>2</td>
-                    <td>No</td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
-                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
-                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                </tr>
-
-                <tr class="active">
-                    <td>Polio IPV</td>
-                    <td>2</td>
-                    <td>Si</td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
-                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
-                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                </tr>
-
-                <tr class="active">
-                    <td>Polio OPV</td>
-                    <td>3</td>
-                    <td>Si</td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
-                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
-                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-                </tr>
-
-               <tr class="active">
-                  <td>Rotavirus</td>
-                  <td>2</td>
-                  <td>No</td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
-                        <button type="button" class="btn btn-sm btn-warning">Modificar</button>
-                        <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
-                    </td>
-               </tr>
-            </tbody>
-         </table>
-
+    <ul>
+        <li>
+            <a href="{{ path('vacuna_new') }}">Create a new vacuna</a>
+        </li>
+    </ul>
 {% endblock %}

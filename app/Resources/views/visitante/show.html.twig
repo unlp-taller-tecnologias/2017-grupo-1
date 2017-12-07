@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Visitante</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ visitante.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ visitante.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Apellido</th>
+                <td>{{ visitante.apellido }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ visitante.email }}</td>
+            </tr>
+            <tr>
+                <th>Pais</th>
+                <td>{{ visitante.pais }}</td>
+            </tr>
+            <tr>
+                <th>Provincia</th>
+                <td>{{ visitante.provincia }}</td>
+            </tr>
+            <tr>
+                <th>Partido</th>
+                <td>{{ visitante.partido }}</td>
+            </tr>
+            <tr>
+                <th>Tipodocumento</th>
+                <td>{{ visitante.tipoDocumento }}</td>
+            </tr>
+            <tr>
+                <th>Nrodocumento</th>
+                <td>{{ visitante.nroDocumento }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('visitante_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('visitante_edit', { 'id': visitante.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

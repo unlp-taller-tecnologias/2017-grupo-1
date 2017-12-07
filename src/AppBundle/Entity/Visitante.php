@@ -69,14 +69,14 @@ class Visitante {
     /**
      * @var string
      *
-     * @ORM\Column(name="tipoDocumento", type="string", length=255, unique=true)
+     * @ORM\Column(name="tipoDocumento", type="string", length=255)
      */
     private $tipoDocumento;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nroDocumento", type="integer")
+     * @ORM\Column(name="nroDocumento", type="string", length=255, unique=true)
      */
     private $nroDocumento;
 
