@@ -237,6 +237,11 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
         }
 
         elseif (0 === strpos($pathinfo, '/inscripto')) {
+            // altaExcelView
+            if ('/inscripto/altaExcelView' === $pathinfo) {
+                return array (  '_controller' => 'AppBundle\\Controller\\InscriptoController::altaExcel',  '_route' => 'altaExcelView',);
+            }
+
             // inscripto_index
             if ('/inscripto' === $trimmedPathinfo) {
                 if ('GET' !== $canonicalMethod) {
@@ -295,6 +300,11 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'inscripto_delete')), array (  '_controller' => 'AppBundle\\Controller\\InscriptoController::deleteAction',));
             }
             not_inscripto_delete:
+
+            // altaExcel
+            if ('/inscripto/altaExcel' === $pathinfo) {
+                return array (  '_controller' => 'AppBundle\\Controller\\InscriptoController::altaExcelAction',  '_route' => 'altaExcel',);
+            }
 
         }
 
@@ -510,11 +520,6 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'visitante_delete')), array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::deleteAction',));
             }
             not_visitante_delete:
-
-            // altaExcel
-            if ('/visitante/altaExcel' === $pathinfo) {
-                return array (  '_controller' => 'AppBundle\\Controller\\VisitanteController::altaExcelAction',  '_route' => 'altaExcel',);
-            }
 
         }
 

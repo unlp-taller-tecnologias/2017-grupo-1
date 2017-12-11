@@ -1,23 +1,40 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Inscriptos list</h1>
+    <h1 class="text-center">Lista de Inscriptos</h1>
 
-    <table>
+    <a href="{{ path('inscripto_new') }}"><button type="button" class="btn btn-success">Agregar un nuevo inscripto</button></a>
+
+    <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Importar Excel de Inscriptos</button>
+    
+    <div class="collapse" id="collapseExample">
+        <br>
+        <div class="card card-body">
+            <div class="container">
+                <form class="form-inline" enctype="multipart/form-data" name="formHosp" action="{{path ("altaExcel") }}" method="POST">
+
+                    <div class="form-group">
+                        <input type="file" class="form-control" id="file">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-default">Importar</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+
+    <table class="table table-hover table-striped table-bordered">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nroficha</th>
-                <th>Legajo</th>
                 <th>Fechainscripcion</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Email</th>
                 <th>Pais</th>
                 <th>Provincia</th>
-                <th>Partido</th>
-                <th>Localidad</th>
-                <th>Codigopostal</th>
                 <th>Tipodocumento</th>
                 <th>Nrodocumento</th>
                 <th>Actions</th>
@@ -26,38 +43,21 @@
         <tbody>
         {% for inscripto in inscriptos %}
             <tr>
-                <td><a href="{{ path('inscripto_show', { 'id': inscripto.id }) }}">{{ inscripto.id }}</a></td>
                 <td>{{ inscripto.nroFicha }}</td>
-                <td>{{ inscripto.legajo }}</td>
                 <td>{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</td>
                 <td>{{ inscripto.nombre }}</td>
                 <td>{{ inscripto.apellido }}</td>
-                <td>{{ inscripto.email }}</td>
                 <td>{{ inscripto.pais }}</td>
                 <td>{{ inscripto.provincia }}</td>
-                <td>{{ inscripto.partido }}</td>
-                <td>{{ inscripto.localidad }}</td>
-                <td>{{ inscripto.codigoPostal }}</td>
                 <td>{{ inscripto.tipoDocumento }}</td>
                 <td>{{ inscripto.nroDocumento }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('inscripto_show', { 'id': inscripto.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <a href="{{ path('inscripto_show', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-sm btn-primary">Ver Detalle</button></a>
+                    <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-sm btn-warning">Modificar</button></a>           
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('inscripto_new') }}">Create a new inscripto</a>
-        </li>
-    </ul>
 {% endblock %}

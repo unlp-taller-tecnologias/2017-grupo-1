@@ -31,7 +31,7 @@ class Inscripto extends Visitante
     /**
      * @var string
      *
-     * @ORM\Column(name="legajo", type="string", length=255)
+     * @ORM\Column(name="legajo", type="string", length=255, nullable=true)
      */
     protected $legajo;
 
