@@ -52,7 +52,59 @@
                 <td>{{ inscripto.tipoDocumento }}</td>
                 <td>{{ inscripto.nroDocumento }}</td>
                 <td>
-                    <a href="{{ path('inscripto_show', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-sm btn-primary">Ver Detalle</button></a>
+
+                    <!-- Trigger the modal with a button -->
+                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">Ver Detalle</button>
+
+                    <!-- Modal -->
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content col-md-12 col-md-offset-3">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title text-center">Datelle de Inscripto</h4>
+                                </div>
+                                <div class="modal-body col-md-12 col-md-offset-2">
+                                    <dl class="dl-horizontal">
+                                        <dt>Nroficha</dt>
+                                        <dd>{{ inscripto.nroFicha }}</dd>
+                                        <dt>Legajo</dt>
+                                        <dd>{{ inscripto.legajo }}</dd>
+                                        <dt>Fecha de inscripcion</dt>
+                                        <dd>{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</dd>
+                                        <dt>Nombre</dt>
+                                        <dd>{{ inscripto.nombre }}</dd>
+                                        <dt>Apellido</dt>
+                                        <dd>{{ inscripto.apellido }}</dd>
+                                        <dt>Email</dt>
+                                        <dd>{{ inscripto.email }}</dd>
+                                        <dt>Pais</dt>
+                                        <dd>{{ inscripto.pais }}</dd>
+                                        <dt>Provincia</dt>
+                                        <dd>{{ inscripto.provincia }}</dd>
+                                        <dt>Partido</dt>
+                                        <dd>{{ inscripto.partido }}</dd>
+                                        <dt>Localidad</dt>
+                                        <dd>{{ inscripto.localidad }}</dd>
+                                        <dt>Codigo postal</dt>
+                                        <dd>{{ inscripto.codigoPostal }}</dd>
+                                        <dt>Tipodo cumento</dt>
+                                        <dd>{{ inscripto.tipoDocumento }}</dd>
+                                        <dt>Nro documento</dt>
+                                        <dd>{{ inscripto.nroDocumento }}</dd>
+                                    </dl>                 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- End modal -->
+                  
                     <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-sm btn-warning">Modificar</button></a>           
                 </td>
             </tr>
