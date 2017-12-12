@@ -63,14 +63,20 @@ class FactorRiesgoController extends Controller
      * @Route("/{id}", name="factorriesgo_show")
      * @Method("GET")
      */
-    public function showAction(FactorRiesgo $factorRiesgo)
+    public function showAction($id)
     {
-        $deleteForm = $this->createDeleteForm($factorRiesgo);
+        try{
+            $factorRiesgo = $this->getDoctrine()->getRepository(FactorRiesgo::class)->find($id);
+            $deleteForm = $this->createDeleteForm($factorRiesgo);
 
-        return $this->render('factorriesgo/show.html.twig', array(
-            'factorRiesgo' => $factorRiesgo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+            return $this->render('factorriesgo/show.html.twig', array(
+                'factorRiesgo' => $factorRiesgo,
+                'delete_form' => $deleteForm->createView(),
+            ));
+
+        }catch (NotFoundHttpException $e){
+            exit("Nada");
+        }
     }
 
     /**
@@ -108,13 +114,11 @@ class FactorRiesgoController extends Controller
     {
         $form = $this->createDeleteForm($factorRiesgo);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($factorRiesgo);
             $em->flush();
         }
-
         return $this->redirectToRoute('factorriesgo_index');
     }
 
