@@ -1,16 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Vacunas list</h1>
+    <h1 class="text-center">Listado de Vacunas</h1>
 
-    <table>
+    <a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-success">Agregar una nueva vacuna</button></a>
+
+    <br><br>
+
+    <table class="table table-hover table-striped table-bordered">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nombre</th>
                 <th>Abreviatura</th>
-                <th>Dosis</th>
-                <th>Vencimiento</th>
+                <th>Dosisrequeridas</th>
+                <th>Tienevencimiento</th>
+                <th>Esobligatoria</th>
                 <th>Observacion</th>
                 <th>Actions</th>
             </tr>
@@ -18,30 +22,17 @@
         <tbody>
         {% for vacuna in vacunas %}
             <tr>
-                <td><a href="{{ path('vacuna_show', { 'id': vacuna.id }) }}">{{ vacuna.id }}</a></td>
                 <td>{{ vacuna.nombre }}</td>
                 <td>{{ vacuna.abreviatura }}</td>
-                <td>{{ vacuna.dosis }}</td>
-                <td>{{ vacuna.vencimiento }}</td>
+                <td>{{ vacuna.dosisRequeridas }}</td>
+                <td>{% if vacuna.tieneVencimiento %}Yes{% else %}No{% endif %}</td>
+                <td>{% if vacuna.esObligatoria %}Yes{% else %}No{% endif %}</td>
                 <td>{{ vacuna.observacion }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('vacuna_show', { 'id': vacuna.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-sm btn-warning">Modificar</button></a>            
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('vacuna_new') }}">Create a new vacuna</a>
-        </li>
-    </ul>
 {% endblock %}

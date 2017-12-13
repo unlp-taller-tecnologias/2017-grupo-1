@@ -38,21 +38,28 @@ class Vacuna
     /**
      * @var string
      *
-     * @ORM\Column(name="dosis", type="string", length=1)
+     * @ORM\Column(name="dosisRequeridas", type="integer", length=1)
      */
-    private $dosis;
+    private $dosisRequeridas;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="tieneVencimiento", type="boolean", length=1)
+     */
+    private $tieneVencimiento;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="esObligatoria", type="boolean", length=1)
+     */
+    private $esObligatoria;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="vencimiento", type="string", length=1)
-     */
-    private $vencimiento;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="observacion", type="string", length=255)
+     * @ORM\Column(name="observacion", type="string", length=255, nullable=true)
      */
     private $observacion;
 
@@ -116,51 +123,75 @@ class Vacuna
     }
 
     /**
-     * Set dosis
+     * Set dosisRequeridas
      *
-     * @param string $dosis
+     * @param string $dosisRequeridas
      *
      * @return Vacuna
      */
-    public function setDosis($dosis)
+    public function setDosisRequeridas($dosisRequeridas)
     {
-        $this->dosis = $dosis;
+        $this->dosisRequeridas = $dosisRequeridas;
     
         return $this;
     }
 
     /**
-     * Get dosis
+     * Get dosisRequeridas
      *
      * @return string
      */
-    public function getDosis()
+    public function getDosisRequeridas()
     {
-        return $this->dosis;
+        return $this->dosisRequeridas;
     }
 
     /**
-     * Set vencimiento
+     * Set tieneVencimiento
      *
-     * @param string $vencimiento
+     * @param boolean $tieneVencimiento
      *
      * @return Vacuna
      */
-    public function setVencimiento($vencimiento)
+    public function setTieneVencimiento($tieneVencimiento)
     {
-        $this->vencimiento = $vencimiento;
+        $this->tieneVencimiento = $tieneVencimiento;
     
         return $this;
     }
 
     /**
-     * Get vencimiento
+     * Get tieneVencimiento
+     *
+     * @return boolean
+     */
+    public function getTieneVencimiento()
+    {
+        return $this->tieneVencimiento;
+    }
+
+    /**
+     * Set esObligatoria
+     *
+     * @param string $esObligatoria
+     *
+     * @return Vacuna
+     */
+    public function setEsObligatoria($esObligatoria)
+    {
+        $this->esObligatoria = $esObligatoria;
+    
+        return $this;
+    }
+
+    /**
+     * Get esObligatoria
      *
      * @return string
      */
-    public function getVencimiento()
+    public function getEsObligatoria()
     {
-        return $this->vencimiento;
+        return $this->esObligatoria;
     }
 
     /**

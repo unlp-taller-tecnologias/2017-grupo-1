@@ -13,7 +13,7 @@ class VacunaType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('abreviatura')->add('dosis')->add('vencimiento')->add('observacion');
+        $builder->add('nombre')->add('abreviatura')->add('dosisRequeridas')->add('tieneVencimiento')->add('esObligatoria')->add('observacion');
     }
     
     /**

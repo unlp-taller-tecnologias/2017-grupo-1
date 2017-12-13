@@ -18,12 +18,16 @@
                 <td>{{ vacuna.abreviatura }}</td>
             </tr>
             <tr>
-                <th>Dosis</th>
-                <td>{{ vacuna.dosis }}</td>
+                <th>Dosisrequeridas</th>
+                <td>{{ vacuna.dosisRequeridas }}</td>
             </tr>
             <tr>
-                <th>Vencimiento</th>
-                <td>{{ vacuna.vencimiento }}</td>
+                <th>Tienevencimiento</th>
+                <td>{% if vacuna.tieneVencimiento %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Esobligatoria</th>
+                <td>{% if vacuna.esObligatoria %}Yes{% else %}No{% endif %}</td>
             </tr>
             <tr>
                 <th>Observacion</th>
