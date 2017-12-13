@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Nodocente</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ noDocente.id }}</td>
+            </tr>
+            <tr>
+                <th>Departamento</th>
+                <td>{{ noDocente.departamento }}</td>
+            </tr>
+            <tr>
+                <th>Oficina</th>
+                <td>{{ noDocente.oficina }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ noDocente.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Funcion</th>
+                <td>{{ noDocente.funcion }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ noDocente.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Apellido</th>
+                <td>{{ noDocente.apellido }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ noDocente.email }}</td>
+            </tr>
+            <tr>
+                <th>Pais</th>
+                <td>{{ noDocente.pais }}</td>
+            </tr>
+            <tr>
+                <th>Provincia</th>
+                <td>{{ noDocente.provincia }}</td>
+            </tr>
+            <tr>
+                <th>Partido</th>
+                <td>{{ noDocente.partido }}</td>
+            </tr>
+            <tr>
+                <th>Localidad</th>
+                <td>{{ noDocente.localidad }}</td>
+            </tr>
+            <tr>
+                <th>Codigopostal</th>
+                <td>{{ noDocente.codigoPostal }}</td>
+            </tr>
+            <tr>
+                <th>Tipodocumento</th>
+                <td>{{ noDocente.tipoDocumento }}</td>
+            </tr>
+            <tr>
+                <th>Nrodocumento</th>
+                <td>{{ noDocente.nroDocumento }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('nodocente_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

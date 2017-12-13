@@ -1,66 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block content %}
+{% block body %}
+    <h1>Visitantes list</h1>
 
-    <!-- Main Content -->
-    <div class="container-fluid">
-        <div class="side-body">
-
-         <h2 class="text-center"> Visitantes </h2>
-
-         <form class="navbar-form navbar-right" role="search">
-            <div class="form-group">
-               <input type="text" class="form-control" placeholder="Buscar">
-            </div>
-            <button type="submit" class="btn btn-default">Aceptar</button>
-         </form>
-
-         <table class="table table-hover table-striped table-bordered">
-            <thead>
+    <table>
+        <thead>
             <tr>
-                <th>N° Ficha</th> 
+                <th>Id</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Documento</th>
+                <th>Email</th>
+                <th>Pais</th>
                 <th>Provincia</th>
                 <th>Partido</th>
-                <th>Acciones</th>
-
+                <th>Tipodocumento</th>
+                <th>Nrodocumento</th>
+                <th>Actions</th>
             </tr>
-            </thead>
+        </thead>
+        <tbody>
+        {% for visitante in visitantes %}
+            <tr>
+                <td><a href="{{ path('visitante_show', { 'id': visitante.id }) }}">{{ visitante.id }}</a></td>
+                <td>{{ visitante.nombre }}</td>
+                <td>{{ visitante.apellido }}</td>
+                <td>{{ visitante.email }}</td>
+                <td>{{ visitante.pais }}</td>
+                <td>{{ visitante.provincia }}</td>
+                <td>{{ visitante.partido }}</td>
+                <td>{{ visitante.tipoDocumento }}</td>
+                <td>{{ visitante.nroDocumento }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('visitante_show', { 'id': visitante.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('visitante_edit', { 'id': visitante.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-            <tbody>
-                <tr class="active">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <a href="{{ path('altaExcelView') }}"><button type="button" class="btn btn-success">Improtar excel</button></a>
-                        <a href="{{ path('altaVisitante') }}"><button type="button" class="btn btn-success">Agregar un visitante</button></a>
-                    </td>
-                </tr>
-                {% for visitante in visitantes %}
-                    <tr class="active">
-                        <td width="75px"> visitante.ficha </td>
-                        <td>{{ visitante.nombre }}</td>
-                        <td>{{ visitante.apellido }}</td>
-                        <td>{{ visitante.tipoDocumento }} {{ visitante.nroDocumento }}</td>
-                        <td>{{ visitante.provincia }}</td>
-                        <td>{{ visitante.partido }}</td>
-                        <td class="text-center" style="width: 400px;">
-                            <button type="button" class="btn btn-sm btn-success">Alta Registro</button>
-                            <button type="button" class="btn btn-sm btn-primary">Ver Detalle</button>
-                            <button type="button" class="btn btn-sm btn-warning">Modificar</button>
-                            <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
-                        </td>
-                    </tr>
-                {% endfor %}
-         </table>
-
-         
-      </div>
-   </div>
+    <ul>
+        <li>
+            <a href="{{ path('visitante_new') }}">Create a new visitante</a>
+        </li>
+    </ul>
 {% endblock %}

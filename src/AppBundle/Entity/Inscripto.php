@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="inscripto")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\InscriptoRepository")
  */
-class Inscripto
+class Inscripto extends Visitante
 {
     /**
      * @var int
@@ -19,21 +19,28 @@ class Inscripto
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="nroFicha", type="string", length=255)
      */
-    private $nroFicha;
+    protected $nroFicha;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="legajo", type="string", length=255)
+     * @ORM\Column(name="legajo", type="string", length=255, nullable=true)
      */
-    private $legajo;
+    protected $legajo;
+
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="fechaInscripcion", type="date")
+     */
+    protected $fechaInscripcion;
 
 
     /**
@@ -92,6 +99,30 @@ class Inscripto
     public function getLegajo()
     {
         return $this->legajo;
+    }
+
+    /**
+     * Set fechaInscripcion
+     *
+     * @param string $fechaInscripcion
+     *
+     * @return fechaInscripcion
+     */
+    public function setFechaInscripcion($fechaInscripcion)
+    {
+        $this->fechaInscripcion = $fechaInscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInscripcion
+     *
+     * @return string
+     */
+    public function getFechaInscripcion()
+    {
+        return $this->fechaInscripcion;
     }
 }
 

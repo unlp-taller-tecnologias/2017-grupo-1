@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="text-center">Factores de riesgo</h1>
+    <table class="table tabla-hover table-stripped table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="active">
+                <td></td>
+                <td><a href="{{ path('factorriesgo_new') }}"><button type="button" class="btn btn-success">Agregar nuevo factor de riesgo</button></a></td>
+            </tr>
+        {% for factorRiesgo in factorRiesgos %}
+            <tr>
+                <td>{{ factorRiesgo.nombre }}</td>
+                <td>
+                    <a href="{{ path('factorriesgo_show', { 'id': factorRiesgo.id }) }}"><button class="btn btn-sm btn-primary">Ver detalle</button></a>
+                    <a href="{{ path('factorriesgo_edit', { 'id': factorRiesgo.id }) }}"><button class="btn btn-sm btn-warning">Modificar</button></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

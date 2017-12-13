@@ -11,9 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VisitanteRepository")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="tipoVisitante", type="string")
- * @ORM\DiscriminatorMap({"visitante" = "Visitante" , "inscripto" = "Inscripto", "noDocente" = "NoDocente"})
+ * @ORM\DiscriminatorMap({"inscripto" = "Inscripto", "noDocente" = "NoDocente"})
  */
-class Visitante {
+abstract class Visitante {
 
     /**
      * @var int
@@ -22,63 +22,77 @@ class Visitante {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombre;
+    protected $nombre;
 
     /**
      * @var string
      *
      * @ORM\Column(name="apellido", type="string", length=255)
      */
-    private $apellido;
+    protected $apellido;
 
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
-    private $email;
+    protected $email;
 
     /**
      * @var string
      *
      * @ORM\Column(name="pais", type="string", length=255)
      */
-    private $pais;
+    protected $pais;
 
     /**
      * @var string
      *
      * @ORM\Column(name="provincia", type="string", length=255)
      */
-    private $provincia;
+    protected $provincia;
 
     /**
      * @var string
      *
      * @ORM\Column(name="partido", type="string", length=255)
      */
-    private $partido;
+    protected $partido;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tipoDocumento", type="string", length=255, unique=true)
+     * @ORM\Column(name="localidad", type="string", length=255)
      */
-    private $tipoDocumento;
+    protected $localidad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="codigoPostal", type="string", length=255)
+     */
+    protected $codigoPostal;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipoDocumento", type="string", length=255)
+     */
+    protected $tipoDocumento;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nroDocumento", type="integer")
+     * @ORM\Column(name="nroDocumento", type="string", length=255, unique=true)
      */
-    private $nroDocumento;
+    protected $nroDocumento;
 
     /**
      * Get id
@@ -197,6 +211,50 @@ class Visitante {
      */
     public function getProvincia() {
         return $this->provincia;
+    }
+
+    /**
+     * Set localidad
+     *
+     * @param string $localidad
+     *
+     * @return localidad
+     */
+    public function setLocalidad($localidad) {
+        $this->localidad = $localidad;
+
+        return $this;
+    }
+
+    /**
+     * Get localidad
+     *
+     * @return string
+     */
+    public function getLocalidad() {
+        return $this->localidad;
+    }
+
+    /**
+     * Set codigoPostal
+     *
+     * @param string $codigoPostal
+     *
+     * @return localidad
+     */
+    public function setCodigoPostal($codigoPostal) {
+        $this->codigoPostal = $codigoPostal;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPostal
+     *
+     * @return string
+     */
+    public function getCodigoPostal() {
+        return $this->codigoPostal;
     }
 
     /**

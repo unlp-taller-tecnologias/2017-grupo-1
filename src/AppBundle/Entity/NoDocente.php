@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="nodocente")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\NoDocenteRepository")
  */
-class NoDocente
+class NoDocente extends Visitante
 {
     /**
      * @var int
@@ -19,35 +19,35 @@ class NoDocente
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="departamento", type="string", length=255)
      */
-    private $departamento;
+    protected $departamento;
 
     /**
      * @var string
      *
      * @ORM\Column(name="oficina", type="string", length=255)
      */
-    private $oficina;
+    protected $oficina;
 
     /**
      * @var int
      *
      * @ORM\Column(name="telefono", type="integer")
      */
-    private $telefono;
+    protected $telefono;
 
     /**
      * @var string
      *
      * @ORM\Column(name="funcion", type="string", length=255)
      */
-    private $funcion;
+    protected $funcion;
 
 
     /**

@@ -28,7 +28,7 @@ class EnfermedadController extends Controller
         $enfermedades = $em->getRepository('AppBundle:Enfermedad')->findAll();
 
         return $this->render('enfermedad/index.html.twig', array(
-            'enfermedads' => $enfermedades,
+            'enfermedades' => $enfermedades,
         ));
     }
 
