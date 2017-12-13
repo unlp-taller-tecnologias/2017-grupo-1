@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,14 +20,10 @@ class UsuarioType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('username')
                 ->add('password')
-                ->add('roles');
-        /*
                 ->add('rol', EntityType::class, array(
                     'class' => 'AppBundle:Rol',
-                    //'label' => 'Roles del Sistema',
-                    //'placeholder' => 'Seleccione un Rol...',
                     'multiple' => false,
-        ));*/
+        ));
     }
 
     /**

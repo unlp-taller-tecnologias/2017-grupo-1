@@ -2,7 +2,6 @@
 <html>
     {% include 'head.html.twig' %}
     <body>
-
         {% block navbar %} 
             {% include 'navbar.html.twig' %}
         {% endblock %}
@@ -14,10 +13,19 @@
         <div class="container-fluid">
             <div class="side-body">
                 {% include 'alerts.html.twig' %}
-                {% block body %} {% endblock %}
+                {% block breadcrumbs %}
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="#"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a>
+                        </li>
+                        <li class="active">Usuarios</li>
+                    </ol>
+                {% endblock %}
+                {% block body %} 
+                {% endblock %}
             </div>
         </div>
-        
+
         {% block javascripts %}
             {% include 'scripts.html.twig' %}
         {% endblock %}

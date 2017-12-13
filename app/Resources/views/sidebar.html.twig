@@ -29,9 +29,27 @@
             <div class="side-menu-container">
                 <ul class="nav navbar-nav">
                     <li><a href="{{ path('homepage') }}"><span class="glyphicon glyphicon-home"></span>Inicio</a></li>
-                    <li><a href="{{ path('usuario_index') }}"><span class="glyphicon glyphicon-user"></span>Usuarios</a></li>
+                    <li class="panel panel-default" id="dropdown">
+                        <a data-toggle="collapse" href="#dropdown-lvl1">
+                            <i class="fa fa-users" aria-hidden="true"></i> Usuarios<span class="caret"></span>
+                        </a>
+                        <!-- Dropdown level 1 -->
+                        <div id="dropdown-lvl1" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="nav navbar-nav">
+                                    <li>
+                                        <a href="{{ path('usuario_index') }}"><i class="fa fa-list" aria-hidden="true"></i> Listado</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('usuario_new') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
-                     <!-- Dropdown-->
+                    </li>
+
+                    <!-- Dropdown-->
                     <li class="panel panel-default" id="dropdown">
                         <a data-toggle="collapse" href="#dropdown-lvl1">
                             <span class="glyphicon glyphicon-user"></span>Personas<span class="caret"></span>
@@ -46,9 +64,6 @@
                             </div>
                         </div>
                     </li>
-
-
-                    
                     <li><a href="{{ path('vacuna_index') }}"><span class="glyphicon glyphicon-plus-sign"></span>Vacunas</a></li>
                     <li><a href="{{ path('enfermedad_index') }}"><span class="glyphicon glyphicon-plus"></span>Enfermedades</a></li>
                     <li><a href="{{ path('factorriesgo_index') }}"><span class="glyphicon glyphicon-plus-sign"></span>Grupos de Riesgo</a></li>

@@ -86,4 +86,8 @@ class Rol {
         $this->descripcion = $descripcion;
     }
 
+    public function __toString() {
+        return $this->nombre;
+    }
+
 }

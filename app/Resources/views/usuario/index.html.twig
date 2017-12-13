@@ -1,43 +1,51 @@
 {% extends 'base.html.twig' %}
-{% block sidebar %}
-
+{% block breadcrumbs %}
+    <ol class="breadcrumb breadcrumb-scv">
+        <li>
+            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
+        </li>
+        <li class="active">Usuarios</li>
+    </ol>
 {% endblock %}
-{% block content %}
-
-    <h1>Listado de Usuarios del Sistema</h1>
-    <a class="btn btn-primary" href="{{path('usuario_new')}}">Nuevo</a>
-    <table class="table table-condensed table-bordered table-striped table-hover">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Id</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th>Rol</th>
-                <th>Isactive</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for usuario in usuarios %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td><a href="{{ path('usuario_show', { 'id': usuario.id }) }}">{{ usuario.id }}</a></td>
-                    <td>{{ usuario.username }}</td>
-                    <td>{{ usuario.password }}</td>
-                    <td>{{ usuario.rol }}</td>
-                    <td>{% if usuario.isActive %}Yes{% else %}No{% endif %}</td>
-                    <td>
-                        <ul>
-                            <li>
-                                <a href="{{ path('usuario_show', { 'id': usuario.id }) }}">show</a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Listado de Usuarios</h3>
+        </div>
+        <div class="panel-body">
+            <a class="btn btn-primary" href="{{path('usuario_new')}}">Nuevo</a>
+            <table class="table table-condensed table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Id</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Rol</th>
+                        <th>Isactive</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td><a href="{{ path('usuario_show', { 'id': usuario.id }) }}">{{ usuario.id }}</a></td>
+                            <td>{{ usuario.username }}</td>
+                            <td>{{ usuario.password }}</td>
+                            <td>{{ usuario.rol }}</td>
+                            <td>{% if usuario.isActive %}Yes{% else %}No{% endif %}</td>
+                            <td>
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('usuario_show', { 'id': usuario.id }) }}">show</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
