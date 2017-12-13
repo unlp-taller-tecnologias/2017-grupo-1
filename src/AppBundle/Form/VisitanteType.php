@@ -13,7 +13,14 @@ class VisitanteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('apellido')->add('email')->add('pais')->add('provincia')->add('partido')->add('tipoDocumento')->add('nroDocumento');
+        $builder->add('nombre')
+                ->add('apellido')
+                ->add('email')
+                ->add('pais')
+                ->add('provincia')
+                ->add('partido')
+                ->add('tipoDocumento')
+                ->add('nroDocumento');
     }
     
     /**

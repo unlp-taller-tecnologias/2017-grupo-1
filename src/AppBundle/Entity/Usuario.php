@@ -11,7 +11,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="usuario")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UsuarioRepository")
  */
-class Usuario implements UserInterface, \Serializable {
+class Usuario implements UserInterface, \Serializable
+ {
 
     /**
      * @var int
@@ -131,7 +132,7 @@ class Usuario implements UserInterface, \Serializable {
     }
 
     public function hasRole($role = '') {
-        return in_array($role, $this->getRoles());
+        return $this->rol == $role;
     }
 
     function getRol() {

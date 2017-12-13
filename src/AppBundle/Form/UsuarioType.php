@@ -19,13 +19,14 @@ class UsuarioType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('username')
                 ->add('password')
-                ->add('roles')
+                ->add('roles');
+        /*
                 ->add('rol', EntityType::class, array(
                     'class' => 'AppBundle:Rol',
                     //'label' => 'Roles del Sistema',
                     //'placeholder' => 'Seleccione un Rol...',
                     'multiple' => false,
-        ));
+        ));*/
     }
 
     /**
@@ -41,7 +42,7 @@ class UsuarioType extends AbstractType {
      * {@inheritdoc}
      */
     public function getBlockPrefix() {
-        return 'appbundle_enfermedad';
+        return 'appbundle_usuario';
     }
 
 }
