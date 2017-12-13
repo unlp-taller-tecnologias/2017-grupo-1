@@ -49,12 +49,16 @@ class UsuarioController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request) {
-        //$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $entity = new Usuario();
         $form = $this->createForm('AppBundle\Form\UsuarioType', $entity);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-            
+        if ($form->isSubmitted() && $form->isValid()) {
+             $user = $form->getData();
+             $em->persist($user);
+             $em->flush();
+             echo var_dump($user->getRol()); die();
+             $this->redirectToRoute("usuario_index");
         }
         return $this->render('usuario/new.html.twig', array(
                     'form' => $form->createView(),

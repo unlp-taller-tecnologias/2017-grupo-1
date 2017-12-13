@@ -33,7 +33,7 @@
                             <td><a href="{{ path('usuario_show', { 'id': usuario.id }) }}">{{ usuario.id }}</a></td>
                             <td>{{ usuario.username }}</td>
                             <td>{{ usuario.password }}</td>
-                            <td>{{ usuario.rol }}</td>
+                            <td>{{ usuario.getRol().getNombre() }}</td>
                             <td>{% if usuario.isActive %}Yes{% else %}No{% endif %}</td>
                             <td>
                                 <ul>

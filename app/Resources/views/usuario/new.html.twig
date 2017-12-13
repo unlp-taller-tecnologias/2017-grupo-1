@@ -16,9 +16,73 @@
             <h3 class="panel-title">Nuevo Usuario del Sistema</h3>
         </div>
         <div class="panel-body">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <input type="submit" value="Create" />
+            {{ form_start(form, {'attr':{'class':'form-horizontal'} } ) }}
+            {{ form_errors(form)}}
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Usuario</label>
+                        <div class="col-md-9">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.username,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                        {{ form_errors(form.username)}}
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Contraseña</label>
+                        <div class="col-md-9">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.password,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                        {{ form_errors(form.password)}}
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Confirmar</label>
+                        <div class="col-md-9">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.passwordConfirm,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                        {{ form_errors(form.passwordConfirm)}}
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Rol</label>
+                        <div class="col-md-9">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.rol,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                        {{ form_errors(form.rol)}}
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+                <a href="#" class="btn btn-default" >Descartar</a>
+                <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
+            </div>
+            <div class="hiddens">
+                {{ form_rest(form) }}
+            </div>
             {{ form_end(form) }}
         </div>
     </div>

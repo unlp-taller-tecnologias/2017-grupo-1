@@ -1,3 +1,18 @@
+body{
+    background-color: #DDDDDD !important;
+}
 .breadcrumb-scv{
+    background-color: #DDDDDD;
+    margin-bottom: 3px;
+    padding-left: 0px;
+    font-size: 0.8em;
+}
+.navbar_scv{
+    margin-bottom: 0px;
+}
+
+.panel-default > .panel-heading{
+    background: none;
     background-color: white;
+    border: none;
 }

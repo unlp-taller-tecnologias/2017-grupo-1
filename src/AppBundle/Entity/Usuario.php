@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use AppBundle\Entity\Rol;
 
 /**
  * Usuario
@@ -11,8 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="usuario")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UsuarioRepository")
  */
-class Usuario implements UserInterface, \Serializable
- {
+class Usuario implements UserInterface, \Serializable {
 
     /**
      * @var int
@@ -36,7 +36,7 @@ class Usuario implements UserInterface, \Serializable
     /* @var Rol  $rol
      * 
      * @ORM\ManyToOne(targetEntity="Rol")
-     * @ORM\JoinColumn(name="rol", referencedColumnName="id")
+     * @ORM\JoinColumn(name="rol_id", referencedColumnName="id")
      */
     private $rol;
 
