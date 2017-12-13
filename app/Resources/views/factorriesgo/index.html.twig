@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 class="text-center">Factores de riesgo</h1>
+    <h1 class="text-center">Listado de factores de riesgo</h1>
+    <a href="{{ path('factorriesgo_new') }}"><button type="button" class="btn btn-success">Agregar nuevo factor de riesgo</button></a>
+
+    <br><br>
+
     <table class="table tabla-hover table-stripped table-bordered">
         <thead>
             <tr>
@@ -10,15 +14,38 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="active">
-                <td></td>
-                <td><a href="{{ path('factorriesgo_new') }}"><button type="button" class="btn btn-success">Agregar nuevo factor de riesgo</button></a></td>
-            </tr>
         {% for factorRiesgo in factorRiesgos %}
             <tr>
                 <td>{{ factorRiesgo.nombre }}</td>
                 <td>
-                    <a href="{{ path('factorriesgo_show', { 'id': factorRiesgo.id }) }}"><button class="btn btn-sm btn-primary">Ver detalle</button></a>
+                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">Ver Detalle</button>
+
+                    <!-- Modal -->
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content col-md-12 col-md-offset-3">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title text-center">Detalle de factor de riesgo</h4>
+                                </div>
+                                <div class="modal-body col-md-12 col-md-offset-2">
+                                    <dl class="dl-horizontal">
+                                        <dt>Nombre</dt>
+                                        <dd>{{ factorRiesgo.nombre }}</dd>
+                                        <dt>Descripcion</dt>
+                                        <dd>{{ factorRiesgo.descripcion }}</dd>
+                                    </dl>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- End modal -->
                     <a href="{{ path('factorriesgo_edit', { 'id': factorRiesgo.id }) }}"><button class="btn btn-sm btn-warning">Modificar</button></a>
                 </td>
             </tr>
