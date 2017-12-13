@@ -25,7 +25,6 @@ class FactorRiesgoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $factorRiesgos = $em->getRepository('AppBundle:FactorRiesgo')->findAll();
-
         return $this->render('factorriesgo/index.html.twig', array(
             'factorRiesgos' => $factorRiesgos,
         ));
