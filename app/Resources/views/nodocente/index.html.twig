@@ -1,12 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Nodocentes list</h1>
+    <h1 class="text-center">Listado de No docentes</h1>
 
-    <table>
+    <a href="{{ path('nodocente_new') }}"><button type="button" class="btn btn-success">Agregar un nuevo No docente</button></a>
+
+    <br><br>
+
+    <table class="table table-hover table-striped table-bordered">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Departamento</th>
                 <th>Oficina</th>
                 <th>Telefono</th>
@@ -27,7 +30,6 @@
         <tbody>
         {% for noDocente in noDocentes %}
             <tr>
-                <td><a href="{{ path('nodocente_show', { 'id': noDocente.id }) }}">{{ noDocente.id }}</a></td>
                 <td>{{ noDocente.departamento }}</td>
                 <td>{{ noDocente.oficina }}</td>
                 <td>{{ noDocente.telefono }}</td>
@@ -43,23 +45,65 @@
                 <td>{{ noDocente.tipoDocumento }}</td>
                 <td>{{ noDocente.nroDocumento }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('nodocente_show', { 'id': noDocente.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}">edit</a>
-                        </li>
-                    </ul>
+
+                    <!-- Trigger the modal with a button -->
+                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">Ver Detalle</button>
+
+                    <!-- Modal -->
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content col-md-12 col-md-offset-3">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title text-center">Datelle de Inscripto</h4>
+                                </div>
+                                <div class="modal-body col-md-12 col-md-offset-2">
+                                    <dl class="dl-horizontal">
+                                        <dt>Departamento</dt>
+                                        <dd>{{ noDocente.Departamento }}</dd>
+                                        <dt>Oficina</dt>
+                                        <dd>{{ noDocente.Oficina }}</dd>
+                                        <dt>Telefono</dt>
+                                        <dd>{{ noDocente.Telefono }}</dd>
+                                        <dt>Funcion</dt>
+                                        <dd>{{ noDocente.Funcion }}</dd>
+                                        <dt>Nombre</dt>
+                                        <dd>{{ noDocente.Nombre }}</dd>
+                                        <dt>Apellido</dt>
+                                        <dd>{{ noDocente.Apellido }}</dd>
+                                        <dt>Email</dt>
+                                        <dd>{{ noDocente.Email }}</dd>
+                                        <dt>Pais</dt>
+                                        <dd>{{ noDocente.Pais }}</dd>
+                                        <dt>Provincia</dt>
+                                        <dd>{{ noDocente.Provincia }}</dd>
+                                        <dt>Partido</dt>
+                                        <dd>{{ noDocente.Partido }}</dd>
+                                        <dt>Localidad</dt>
+                                        <dd>{{ noDocente.Localidad }}</dd>
+                                        <dt>Codigo postal</dt>
+                                        <dd>{{ noDocente.Codigopostal }}</dd>
+                                        <dt>Tipo documento</dt>
+                                        <dd>{{ noDocente.tipoDocumento }}</dd>
+                                        <dt>Nro Documento</dt>
+                                        <dd>{{ noDocente.nroDocumento }}</dd>
+                                    </dl>                 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- End modal -->
+                  
+                    <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-sm btn-warning">Modificar</button></a>           
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('nodocente_new') }}">Create a new noDocente</a>
-        </li>
-    </ul>
 {% endblock %}
