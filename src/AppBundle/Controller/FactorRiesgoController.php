@@ -86,20 +86,29 @@ class FactorRiesgoController extends Controller
      */
     public function editAction(Request $request, FactorRiesgo $factorRiesgo)
     {
-        $deleteForm = $this->createDeleteForm($factorRiesgo);
-        $editForm = $this->createForm('AppBundle\Form\FactorRiesgoType', $factorRiesgo);
-        $editForm->handleRequest($request);
+        $form = $this->createForm('AppBundle\Form\FactorRiesgoType', $factorRiesgo);
+        $form->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('factorriesgo_edit', array('id' => $factorRiesgo->getId()));
-        }
-
+        if ($form->isSubmitted() && $editForm->isValid()) {
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($usuario);
+          try {
+              $em->flush();
+              $this->get('session')->getFlashBag()->add('success', 'El factor de riesgo se editó correctamente.');
+              return $this->redirectToRoute("factorriesgo_index");
+          } catch (\Exception $e) {
+              $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el factor de riesgo. Detalle: ' . $e->getMessage());
+          }}
+          if ($form->isSubmitted() && !$form->isValid()) {
+              $validator = $this->get('validator');
+              $errors = $validator->validate($usuario);
+              foreach ($errors as $error) {
+                  $this->get('session')->getFlashBag()->add('error', $error->getMessage());
+              }
+          }
         return $this->render('factorriesgo/edit.html.twig', array(
-            'factorRiesgo' => $factorRiesgo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $form->createView(),
+            'entity'=>$factorRiesgo
         ));
     }
 

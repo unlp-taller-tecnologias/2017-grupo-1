@@ -15,7 +15,7 @@ class FactorRiesgoType extends AbstractType
     {
         $builder->add('nombre')->add('descripcion');
     }
-    
+
     /**
      * {@inheritdoc}
      */
