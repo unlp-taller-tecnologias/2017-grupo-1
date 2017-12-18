@@ -1,4 +1,235 @@
 {% extends 'base.html.twig' %}
+{% block breadcrumbs %}
+    <ol class="breadcrumb breadcrumb-scv">
+        <li>
+            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
+        </li>
+        <li>
+            <a href="{{path('usuario_index')}}">Inscripto</a>
+        </li>
+        <li class="active">Nuevo</li>
+    </ol>
+{% endblock %}
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Nuevo <strong>Inscripto</strong></h3>
+        </div>
+        <div class="panel-body">
+            {{ form_start(form, {'attr':{'class':'form-horizontal'} } ) }}
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Nro Ficha</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.nroFicha,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Nombre</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.nombre,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Apellido</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.apellido,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Email</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-envelope"></i>
+                                </span>
+                            {{ form_widget(form.email,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Legajo</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.legajo,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Fecha Inscripcion</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                                {{ form_widget(form.fechaInscripcion,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Pais</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.pais,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Provincia</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.provincia,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Partido</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.partido,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Localidad</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.localidad,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Codigo Postal</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.codigoPostal,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Tipo Documento</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.tipoDocumento,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Nro Documento</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.nroDocumento,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 text-right">
+                <a href="{{ path("usuario_index") }}" class="btn btn-default" >Descartar</a>
+                <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
+            </div>
+            <div class="hidden">
+                {{ form_rest(form) }}
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+{% block otherjavascripts %}
+    <script>
+        $(document).ready(function () {
+            $('form').on('submit', function (e) {
+                if ($('#appbundle_usuario_password').val() !== $('#appbundle_usuario_passwordConfirm').val()) {
+                    e.preventDefault();
+                    toastr['error']('Las contraseñas no coiciden', 'Error');
+                }
+            });
+            $('#usuarios_tabla').DataTable({
+                "dom": '<".col-md-2">frtip',
+                fnInitComplete: function () {
+                    $('div.col-md-2').html('<a class="btn btn-xs btn-primary" href="{{path('usuario_new')}}"><i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo</a>');
+                },
+                "autoWidth": false,
+                "language": {
+                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                },
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": [0, 4]
+                    }],
+                "order": [[1, 'asc']],
+                "iDisplayLength": 10,
+            });
+        });
+    </script>
+{% endblock %}
+
+{# extends 'base.html.twig' %}
 
 {% block body %}
     <h1>Inscripto creation</h1>
@@ -13,4 +244,4 @@
             <a href="{{ path('inscripto_index') }}">Back to the list</a>
         </li>
     </ul>
-{% endblock %}
+{% endblock #}
