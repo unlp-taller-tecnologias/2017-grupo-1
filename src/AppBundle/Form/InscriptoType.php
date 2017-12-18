@@ -5,6 +5,9 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class InscriptoType extends AbstractType
 {
@@ -13,19 +16,21 @@ class InscriptoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nroFicha')
-        ->add('legajo')
-        ->add('fechaInscripcion')
-        ->add('nombre')
-        ->add('apellido')
-        ->add('email')
-        ->add('pais')
-        ->add('provincia')
-        ->add('partido')
-        ->add('localidad')
-        ->add('codigoPostal')
-        ->add('tipoDocumento')
-        ->add('nroDocumento');
+        $builder->add('nroFicha', TextType::class)
+        ->add('legajo', TextType::class, array(
+                    'required' => false,
+                ))
+        ->add('fechaInscripcion', DateType::class)
+        ->add('nombre', TextType::class)
+        ->add('apellido', TextType::class)
+        ->add('email', TextType::class)
+        ->add('pais', TextType::class)
+        ->add('provincia', TextType::class)
+        ->add('partido', TextType::class)
+        ->add('localidad', TextType::class)
+        ->add('codigoPostal', TextType::class)
+        ->add('tipoDocumento', TextType::class)
+        ->add('nroDocumento', TextType::class);
     }
     
     /**

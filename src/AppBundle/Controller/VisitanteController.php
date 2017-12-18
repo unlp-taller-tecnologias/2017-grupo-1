@@ -98,6 +98,8 @@ class VisitanteController extends Controller
         ));
     }
 
+    
+
     /**
      * Deletes a visitante entity.
      *

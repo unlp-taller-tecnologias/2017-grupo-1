@@ -35,7 +35,7 @@
                     {% for usuario in usuarios %}
                         <tr   {% if not usuario.isActive %} class="danger" {% endif %}>
                             <td class="text-center">{{ loop.index }}</td>
-                            <td>{{ usuario.username }}</td>
+                            <td class="text-center">{{ usuario.username }}</td>
                             <td class="text-center"><strong>{{ usuario.getRol().getNombre() }}</strong></td>
                             <td class="text-center">
                                 {% if usuario.isActive %}

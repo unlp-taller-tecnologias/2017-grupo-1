@@ -188,7 +188,7 @@ class InscriptoController extends Controller
             // Recorro el excel dando de alta 1 por 1 
             $continuar = 1;
             $i = 2;
-            while ($i != 10){
+            while ($i != 30){
                 if ($sheet->getCell('A'.$i)->getValue() != ''){
                     $ficha = $sheet->getCell('A'.$i)->getValue();
                     
