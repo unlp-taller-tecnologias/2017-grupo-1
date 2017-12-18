@@ -12,6 +12,7 @@ body{
 }
 
 .panel-default > .panel-heading{
+    color: #8B91A0;
     background: none;
     background-color: white;
     border: none;

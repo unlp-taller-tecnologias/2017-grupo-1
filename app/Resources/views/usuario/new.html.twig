@@ -13,16 +13,15 @@
 {% block body %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Nuevo Usuario del Sistema</h3>
+            <h3 class="panel-title">Nuevo <strong>Usuario del Sistema</strong></h3>
         </div>
         <div class="panel-body">
             {{ form_start(form, {'attr':{'class':'form-horizontal'} } ) }}
-            {{ form_errors(form)}}
             <div class="form-group">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="" class="col-md-3 control-label">Usuario</label>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <div class="input-group margin-bottom-sm">
                                 <span class="input-group-addon">
                                     <i class="fa fa-keyboard-o"></i>
@@ -30,13 +29,12 @@
                                 {{ form_widget(form.username,{'attr':{'class':'form-control'} }) }}
                             </div>
                         </div>
-                        {{ form_errors(form.username)}}
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="" class="col-md-3 control-label">Contraseña</label>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <div class="input-group margin-bottom-sm">
                                 <span class="input-group-addon">
                                     <i class="fa fa-keyboard-o"></i>
@@ -44,13 +42,12 @@
                                 {{ form_widget(form.password,{'attr':{'class':'form-control'} }) }}
                             </div>
                         </div>
-                        {{ form_errors(form.password)}}
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="" class="col-md-3 control-label">Confirmar</label>
-                        <div class="col-md-9">
+                        <label for="" class="col-md-3 control-label">Confirmar contraseña</label>
+                        <div class="col-md-6">
                             <div class="input-group margin-bottom-sm">
                                 <span class="input-group-addon">
                                     <i class="fa fa-keyboard-o"></i>
@@ -58,13 +55,12 @@
                                 {{ form_widget(form.passwordConfirm,{'attr':{'class':'form-control'} }) }}
                             </div>
                         </div>
-                        {{ form_errors(form.passwordConfirm)}}
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="" class="col-md-3 control-label">Rol</label>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <div class="input-group margin-bottom-sm">
                                 <span class="input-group-addon">
                                     <i class="fa fa-keyboard-o"></i>
@@ -72,12 +68,11 @@
                                 {{ form_widget(form.rol,{'attr':{'class':'form-control'} }) }}
                             </div>
                         </div>
-                        {{ form_errors(form.rol)}}
                     </div>
                 </div>
             </div>
-            <div class="text-right">
-                <a href="#" class="btn btn-default" >Descartar</a>
+            <div class="col-md-9 text-right">
+                <a href="{{ path("usuario_index") }}" class="btn btn-default" >Descartar</a>
                 <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
             </div>
             <div class="hiddens">
@@ -86,4 +81,33 @@
             {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+{% block otherjavascripts %}
+    <script>
+        $(document).ready(function () {
+            $('form').on('submit', function (e) {
+                if ($('#appbundle_usuario_password').val() !== $('#appbundle_usuario_passwordConfirm').val()) {
+                    e.preventDefault();
+                    toastr['error']('Las contraseñas no coiciden', 'Error');
+                }
+            });
+            $('#usuarios_tabla').DataTable({
+                "dom": '<".col-md-2">frtip',
+                fnInitComplete: function () {
+                    $('div.col-md-2').html('<a class="btn btn-xs btn-primary" href="{{path('usuario_new')}}"><i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo</a>');
+                },
+                "autoWidth": false,
+                "language": {
+                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                },
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": [0, 4]
+                    }],
+                "order": [[1, 'asc']],
+                "iDisplayLength": 10,
+            });
+        });
+    </script>
 {% endblock %}

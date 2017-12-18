@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use AppBundle\Entity\Rol;
 
 /**
@@ -11,6 +13,11 @@ use AppBundle\Entity\Rol;
  *
  * @ORM\Table(name="usuario")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UsuarioRepository")
+ * @UniqueEntity(
+ *     fields={"username"},
+ *     errorPath="username",
+ *     message="El nombre de usuario ya se encuentra registrado en el sistema"
+ * )
  */
 class Usuario implements UserInterface, \Serializable {
 
@@ -24,24 +31,45 @@ class Usuario implements UserInterface, \Serializable {
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(type="string", length=25)
+     * @Assert\NotBlank(message="El campo nombre de usuario no puede estar en blanco")
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 30,
+     *      minMessage = "El nombre de usuario deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El nombre de usuario no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/\W/",
+     *     match=false,
+     *     message="El nombre de usuario no debe contener espacios ni caracteres especiales"
+     * )
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 30,
+     *      minMessage = "La contraseña deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "La contraseña no puede tener más de {{ limit }} caracteres"
+     * )
      */
     private $password;
 
-    /* @var Rol  $rol
+    /**
+     * @var Rol $rol
      * 
      * @ORM\ManyToOne(targetEntity="Rol")
      * @ORM\JoinColumn(name="rol_id", referencedColumnName="id")
+     * @Assert\NotNull(message="El rol no puede estar sin asignar")
      */
     private $rol;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
+     * @Assert\Type("bool")
      */
     private $isActive;
 
@@ -142,5 +170,7 @@ class Usuario implements UserInterface, \Serializable {
     function setRol($rol) {
         $this->rol = $rol;
     }
+
+    
 
 }

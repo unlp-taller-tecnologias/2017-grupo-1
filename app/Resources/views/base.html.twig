@@ -2,6 +2,7 @@
 <html>
     {% include 'head.html.twig' %}
     <body>
+
         {% block navbar %} 
             {% include 'navbar.html.twig' %}
         {% endblock %}
@@ -12,7 +13,6 @@
 
         <div class="container-fluid">
             <div class="side-body">
-                {% include 'alerts.html.twig' %}
                 {% block breadcrumbs %}
                     <ol class="breadcrumb">
                         <li>
@@ -25,9 +25,15 @@
                 {% endblock %}
             </div>
         </div>
-
         {% block javascripts %}
             {% include 'scripts.html.twig' %}
+        {% endblock %}
+        {% block otherjavascripts %}
+        {% endblock %}
+        {% block otherstyles %}
+        {% endblock %}
+        {% block flashMessages %}
+            {% include 'flash.messages.html.twig' %}
         {% endblock %}
     </body>
 </html>

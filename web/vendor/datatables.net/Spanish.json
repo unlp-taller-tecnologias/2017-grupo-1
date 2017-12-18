@@ -1,0 +1,23 @@
+{
+    "emptyTable":     "No hay datos para mostrar",
+    "info":           "Viendo : _START_ a _END_ de _TOTAL_ filas",
+    "infoEmpty":      "0 a 0 de 0 filas",
+    "infoFiltered":   "(filtradas de las _MAX_ totales)",
+    "infoPostFix":    "",
+    "thousands":      ",",
+    "lengthMenu":     "Mostrar _MENU_ filas",
+    "loadingRecords": "Cargando...",
+    "processing":     "Procesando...",
+    "search":         "Buscar:  ",
+    "zeroRecords":    "No hay filas para mostrar",
+    "paginate": {
+        "first":      "Primero",
+        "last":       "Ultimo",
+        "next":       "Sig",
+        "previous":   "Ant"
+    },
+    "aria": {
+        "sortAscending":  ": activate to sort column ascending",
+        "sortDescending": ": activate to sort column descending"
+    }
+}
