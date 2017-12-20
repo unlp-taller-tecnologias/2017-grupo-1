@@ -1,38 +1,108 @@
 {% extends 'base.html.twig' %}
+{% block otherstyles %}
+    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb breadcrumb-scv">
+        <li>
+            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
+        </li>
+        <li class="active">Vacunas</li>
+    </ol>
+{% endblock %}
 
 {% block body %}
-    <h1 class="text-center">Listado de Vacunas</h1>
 
-    <a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-success">Agregar una nueva vacuna</button></a>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Listado <strong>de Vacuna</strong></h3>
+        </div>
+        
 
-    <br><br>
+        <div class="panel-body">
 
-    <table class="table table-hover table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Abreviatura</th>
-                <th>Dosisrequeridas</th>
-                <th>Tienevencimiento</th>
-                <th>Esobligatoria</th>
-                <th>Observacion</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for vacuna in vacunas %}
-            <tr>
-                <td>{{ vacuna.nombre }}</td>
-                <td>{{ vacuna.abreviatura }}</td>
-                <td>{{ vacuna.dosisRequeridas }}</td>
-                <td>{% if vacuna.tieneVencimiento %}Yes{% else %}No{% endif %}</td>
-                <td>{% if vacuna.esObligatoria %}Yes{% else %}No{% endif %}</td>
-                <td>{{ vacuna.observacion }}</td>
-                <td>
-                    <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-sm btn-warning">Modificar</button></a>            
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <table id="usuarios_tabla" class="table table-condensed table-bordered table-striped table-hover">
+
+                <thead>
+                    <tr>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Abreviatura</th>
+                        <th class="text-center">Dosisrequeridas</th>
+                        <th class="text-center">Tiene vencimiento</th>
+                        <th class="text-center">Esobligatoria</th>
+                        <th class="text-center">Observacion</th>
+                        <th class="text-center">
+                            <i class="fa fa-cogs" aria-hidden="true"></i>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for vacuna in vacunas %}
+                    <tr>
+                        <td class="text-center">{{ vacuna.nombre }}</td>
+                        <td class="text-center">{{ vacuna.abreviatura }}</td>
+                        <td class="text-center">{{ vacuna.dosisRequeridas }}</td>
+                        <td class="text-center">{% if vacuna.tieneVencimiento %}Si{% else %}No{% endif %}</td>
+                        <td class="text-center">{% if vacuna.esObligatoria %}Si{% else %}No{% endif %}</td>
+                        <td class="text-center">{{ vacuna.observacion }}</td>
+                        <td class="text-center">                           
+                            <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>           
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block otherjavascripts %}
+    <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script>
+        function usuarioDelete(idUsuario) {
+            swal({
+                title: '¿Estas seguro?',
+                text: "Estas por eliminar un usuario del sistema!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, Eliminarlo'
+            }).then((result) => {
+                if (result.value) {
+                    swal(
+                            'Eliminado!',
+                            'El usuario ha sido eliminado del Sistema.',
+                            'success'
+                            );
+                }
+            });
+        }
+        $(document).ready(function () {
+            $('#usuarios_tabla').DataTable({
+                "dom": '<".col-md-4">frtip',
+                "autoWidth": false,
+                fnInitComplete: function () {
+                    $('div.col-md-4').html('<a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-xs btn-primary">Agregar una nueva vacuna</button></a>');
+                },
+                "language": {
+                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                },
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": [0, 4]
+                    }],
+                "order": [[1, 'asc']],
+                "iDisplayLength": 10,
+            });
+        });
+    </script>
 {% endblock %}

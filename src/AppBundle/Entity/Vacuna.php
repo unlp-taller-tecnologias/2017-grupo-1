@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Vacuna
@@ -25,13 +26,37 @@ class Vacuna
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="El campo nombre de vacuna no puede estar en blanco")
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 30,
+     *      minMessage = "El nombre de vacuna deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El nombre de vacuna no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/\W/",
+     *     match=false,
+     *     message="El nombre de vacuna no debe contener espacios ni caracteres especiales"
+     * )
      */
     private $nombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="abreviatura", type="string", length=20, unique=true)
+     * @ORM\Column(name="abreviatura", type="string", length=10, unique=true)
+     * @Assert\NotBlank(message="El campo obreviatura de vacuna no puede estar en blanco")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 10,
+     *      minMessage = "La abreviatura de vacuna deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "La abreviatura de vacuna no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/\W/",
+     *     match=false,
+     *     message="La abreviatura de vacuna no debe contener espacios ni caracteres especiales"
+     * )
      */
     private $abreviatura;
 
