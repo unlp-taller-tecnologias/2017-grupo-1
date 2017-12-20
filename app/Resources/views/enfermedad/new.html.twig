@@ -1,16 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Enfermedad creation</h1>
-
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
-    <ul>
+{% block breadcrumbs %}
+    <ol class="breadcrumb breadcrumb-scv">
         <li>
-            <a href="{{ path('enfermedad_index') }}">Back to the list</a>
+            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
         </li>
-    </ul>
+        <li>
+            <a href="{{path('enfermedad_index')}}">Enfermedad</a>
+        </li>
+        <li class="active">Nuevo</li>
+    </ol>
 {% endblock %}
+
+{% block body %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Nueva enfermedad</h1>
+  </div>
+  <div class="panel-body">
+    {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
+    <div class="form-group">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="" class="col-md-3 control-label">Nombre</label>
+          <div class="col-md-6">
+            <div class="input-group margin-bottom-sm">
+              <span class="input-group-addon">
+                <i class="fa fa-keyboard-o"></i>
+              </span>
+              {{ form_widget(form.nombre,{'attr':{'class':'form-control'}}) }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="" class="col-md-3 control-label">Descripcion</label>
+          <div class="col-md-6">
+            <div class="input-group margin-bottom-sm">
+              <span class="input-group-addon">
+                <i class="fa fa-keyboard-o"></i>
+              </span>
+              {{ form_widget(form.descripcion,{'attr':{'class':'form-control'}}) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9 text-right">
+      <a href="{{ path('enfermedad_index') }}" class="btn btn-default">Descartar</a>
+      <input type="submit" class="btn btn-primary" name="submit" value="Guardar">
+    </div>
+    <div class="hidden">
+        {{form_rest(form)}}
+    </div>
+    {{form_end(form)}}
+  </div>
+</div>{% endblock %}

@@ -1,43 +1,131 @@
 {% extends 'base.html.twig' %}
 
+{% block otherstyles %}
+    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb breadcrumb-scv">
+        <li>
+            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
+        </li>
+        <li class="active">Enfermedades</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Listado de enfermedades</h1>
+  </div>
+  <div class="panel-body">
+  <table id="vacunas_tabla" class="table table-condensed table-bordered table-striped table-hover">
+      <thead>
+          <tr>
+              <th class="text-center">Nombre</th>
+              <th class="text-center">
+                <i class="fa fa-cogs" aria-hidden="true"></i>
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+      {% for enfermedad in enfermedades %}
+          <tr>
+              <td class="text-center">{{ enfermedad.nombre }}</td>
+              <td class="text-center">
+                  <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal">
+                      <i class="fa fa-binoculars" aria-hidden="true"></i>
+                  </button>
 
-            <h1>Enfermedads list</h1>
+                  <!-- Modal -->
+                  <div id="myModal" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Nombre</th>
-                        <th>Descripcion</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for enfermedad in enfermedades %}
-                    <tr>
-                        <td><a href="{{ path('enfermedad_show', { 'id': enfermedad.id }) }}">{{ enfermedad.id }}</a></td>
-                        <td>{{ enfermedad.nombre }}</td>
-                        <td>{{ enfermedad.descripcion }}</td>
-                        <td>
-                            <ul>
-                                <li>
-                                    <a href="{{ path('enfermedad_show', { 'id': enfermedad.id }) }}">show</a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}">edit</a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                          <!-- Modal content-->
+                          <div class="modal-content col-md-12 col-md-offset-3">
+                              <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title text-center">Detalle de factor de riesgo</h4>
+                              </div>
+                              <div class="modal-body col-md-12 col-md-offset-2">
+                                  <dl class="dl-horizontal">
+                                      <dt>Nombre</dt>
+                                      <dd>{{ enfermedad.nombre }}</dd>
+                                      <dt>Descripcion</dt>
+                                      <dd>{{ enfermedad.descripcion }}</dd>
+                                  </dl>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                              </div>
+                          </div>
 
-            <ul>
-                <li>
-                    <a href="{{ path('enfermedad_new') }}">Create a new enfermedad</a>
-                </li>
-            </ul>
+                      </div>
+                  </div>
+                  <!-- End modal -->
+                  <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                  </a>
+                  <a href="#" onclick="enfermedadDelete({{ enfermedad.id }});" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  </a>
+              </td>
+          </tr>
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
 
+</div>
+{% endblock %}
+
+{% block otherjavascripts %}
+<script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+
+<script type="text/javascript">
+
+function factorDelete(id){
+  swal({
+      title: '¿Estas seguro?',
+      text: "Estas por eliminar una enfermedad del sistema!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Si, Eliminarlo'
+  }).then((result) => {
+      if (result.value) {
+          swal(
+                  'Eliminado!',
+                  'La enfermedad ha sido eliminado del Sistema.',
+                  'success'
+                  );
+      }
+  });
+}
+
+$(document).ready(function () {
+  $('#vacunas_tabla').DataTable({
+    "dom": '<".col-md-2">frtip',
+    fnInitComplete: function () {
+      $('div.col-md-2').html('<a class="btn btn-xs btn-primary" href="{{path('enfermedad_new')}}"><i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo</a>');
+    },
+    "autoWidth": false,
+    "language": {
+      "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+    },
+    "columnDefs": [{
+      "searchable": false,
+      "orderable": false,
+      "targets": [0, 1]
+    }],
+    "order": [[0, 'asc']],
+    "iDisplayLength": 10,
+  });
+});
+</script>
 {% endblock %}

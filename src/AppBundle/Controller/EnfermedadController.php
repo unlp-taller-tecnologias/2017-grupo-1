@@ -43,34 +43,27 @@ class EnfermedadController extends Controller
         $enfermedad = new Enfermedad();
         $form = $this->createForm('AppBundle\Form\EnfermedadType', $enfermedad);
         $form->handleRequest($request);
-
+        $em = $this->getDoctrine()->getManager();
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($enfermedad);
-            $em->flush();
-
-            return $this->redirectToRoute('enfermedad_show', array('id' => $enfermedad->getId()));
+            try {
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'La enfermedad se agregó al sistema correctamente.');
+                return $this->redirectToRoute("enfermedad_index");
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido agregar la enfermedad en el sistema. Detalle: ' . $e->getMessage());
+            }
         }
-
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $validator = $this->get('validator');
+            $errors = $validator->validate($enfermedad);
+            foreach ($errors as $error) {
+                $this->get('session')->getFlashBag()->add('error', $error->getMessage());
+            }
+        }
         return $this->render('enfermedad/new.html.twig', array(
             'enfermedad' => $enfermedad,
             'form' => $form->createView(),
-        ));
-    }
-
-    /**
-     * Finds and displays a enfermedad entity.
-     *
-     * @Route("/{id}", name="enfermedad_show")
-     * @Method("GET")
-     */
-    public function showAction(Enfermedad $enfermedad)
-    {
-        $deleteForm = $this->createDeleteForm($enfermedad);
-
-        return $this->render('enfermedad/show.html.twig', array(
-            'enfermedad' => $enfermedad,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -82,20 +75,31 @@ class EnfermedadController extends Controller
      */
     public function editAction(Request $request, Enfermedad $enfermedad)
     {
-        $deleteForm = $this->createDeleteForm($enfermedad);
-        $editForm = $this->createForm('AppBundle\Form\EnfermedadType', $enfermedad);
-        $editForm->handleRequest($request);
+        $form = $this->createForm('AppBundle\Form\EnfermedadType', $enfermedad);
+        $form->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('enfermedad_edit', array('id' => $enfermedad->getId()));
+        if ($form->isSubmitted() && $form->isValid()) {
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($enfermedad);
+          try {
+              $em->flush();
+              $this->get('session')->getFlashBag()->add('success', 'La enfermedad se editó correctamente.');
+              return $this->redirectToRoute("enfermedad_index");
+          } catch (\Exception $e) {
+              $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar la enfermedad. Detalle: ' . $e->getMessage());
+          }
         }
+          if ($form->isSubmitted() && !$form->isValid()) {
+              $validator = $this->get('validator');
+              $errors = $validator->validate($enfermedad);
+              foreach ($errors as $error) {
+                  $this->get('session')->getFlashBag()->add('error', $error->getMessage());
+              }
+          }
 
         return $this->render('enfermedad/edit.html.twig', array(
             'enfermedad' => $enfermedad,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $form->createView()
         ));
     }
 

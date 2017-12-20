@@ -57,28 +57,6 @@ class FactorRiesgoController extends Controller
     }
 
     /**
-     * Finds and displays a factorRiesgo entity.
-     *
-     * @Route("/{id}", name="factorriesgo_show")
-     * @Method("GET")
-     */
-    public function showAction($id)
-    {
-        try{
-            $factorRiesgo = $this->getDoctrine()->getRepository(FactorRiesgo::class)->find($id);
-            $deleteForm = $this->createDeleteForm($factorRiesgo);
-
-            return $this->render('factorriesgo/show.html.twig', array(
-                'factorRiesgo' => $factorRiesgo,
-                'delete_form' => $deleteForm->createView(),
-            ));
-
-        }catch (NotFoundHttpException $e){
-            exit("Nada");
-        }
-    }
-
-    /**
      * Displays a form to edit an existing factorRiesgo entity.
      *
      * @Route("/{id}/edit", name="factorriesgo_edit")
@@ -89,9 +67,9 @@ class FactorRiesgoController extends Controller
         $form = $this->createForm('AppBundle\Form\FactorRiesgoType', $factorRiesgo);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $editForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
           $em = $this->getDoctrine()->getManager();
-          $em->persist($usuario);
+          $em->persist($factorRiesgo);
           try {
               $em->flush();
               $this->get('session')->getFlashBag()->add('success', 'El factor de riesgo se editó correctamente.');
@@ -101,7 +79,7 @@ class FactorRiesgoController extends Controller
           }}
           if ($form->isSubmitted() && !$form->isValid()) {
               $validator = $this->get('validator');
-              $errors = $validator->validate($usuario);
+              $errors = $validator->validate($factorRiesgo);
               foreach ($errors as $error) {
                   $this->get('session')->getFlashBag()->add('error', $error->getMessage());
               }

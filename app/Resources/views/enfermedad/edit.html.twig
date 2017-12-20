@@ -1,21 +1,63 @@
 {% extends 'base.html.twig' %}
 
+{% block otherstyles %}
+    <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb breadcrumb-scv">
+        <li>
+            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
+        </li>
+        <li>
+            <a href="{{path('factorriesgo_index')}}">Factor de riesgo</a>
+        </li>
+        <li class="active">Editar</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
-    <h1>Enfermedad edit</h1>
-
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('enfermedad_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Editar enfermedad</h1>
+  </div>
+  <div class="panel-body">
+    {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
+    <div class="form-group">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="" class="col-md-3 control-label">Nombre</label>
+          <div class="col-md-6">
+            <div class="input-group margin-bottom-sm">
+              <span class="input-group-addon">
+                <i class="fa fa-keyboard-o"></i>
+              </span>
+              {{ form_widget(form.nombre,{'attr':{'class':'form-control'}}) }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="" class="col-md-3 control-label">Descripcion</label>
+          <div class="col-md-6">
+            <div class="input-group margin-bottom-sm">
+              <span class="input-group-addon">
+                <i class="fa fa-keyboard-o"></i>
+              </span>
+              {{ form_widget(form.descripcion,{'attr':{'class':'form-control'}}) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9 text-right">
+      <a href="{{ path('enfermedad_index') }}" class="btn btn-default">Descartar</a>
+      <input type="submit" class="btn btn-primary" name="submit" value="Guardar">
+    </div>
+    <div class="hidden">
+        {{form_rest(form)}}
+    </div>
+    {{form_end(form)}}
+  </div>
 {% endblock %}

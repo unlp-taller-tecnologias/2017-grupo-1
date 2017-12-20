@@ -3,12 +3,18 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * FactorRiesgo
  *
  * @ORM\Table(name="factor_riesgo")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FactorRiesgoRepository")
+ * @UniqueEntity(
+ *  fields={"nombre"},
+ *  message="El nombre del factor de riesgo ya se encuentra registrado en el sistema"
+ *)
  */
 class FactorRiesgo
 {
@@ -25,6 +31,13 @@ class FactorRiesgo
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
+     * @Assert\NotBlank(message="El nombre del factor de riesgo no puede estar en blanco")
+     * @Assert\Length(
+     *  min=3,
+     *  max=255,
+     * minMessage="El nombre del factor de riesgo deberá tener al menos {{limit}} caracteres",
+     * maxMessage="El nombre del factor de riesgo no puede tener más de {{limit}} caracteres"
+     * )
      */
     private $nombre;
 
@@ -32,6 +45,13 @@ class FactorRiesgo
      * @var string
      *
      * @ORM\Column(name="descripcion", type="string", length=255)
+     * @Assert\NotBlank(message="La descripción del factor de riesgo no puede estar en blanco")
+     * @Assert\Length(
+     *  min=6,
+     *  max=255,
+     * minMessage="La descripción del factor de riesgo deberá tener al menos {{limit}} caracteres",
+     * maxMessage="La descripción del factor de riesgo no puede tener más de {{limit}} caracteres"
+     * )
      */
     private $descripcion;
 
@@ -94,4 +114,3 @@ class FactorRiesgo
         return $this->descripcion;
     }
 }
-
