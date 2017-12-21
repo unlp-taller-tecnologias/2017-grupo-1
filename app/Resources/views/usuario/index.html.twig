@@ -80,20 +80,21 @@
                                                     cancelButtonColor: '#d33',
                                                     cancelButtonText: 'Cancelar',
                                                     confirmButtonText: 'Si, Eliminarlo'
-                                                }).then(function () {
-                                                    $.post(url, {})
-                                                            .done((data) => {
-                                                                if (data.success) {
-                                                                    swal('Borrado!', data.message, 'success').then(function () {
-                                                                        location.reload();
-                                                                    });
-                                                                } else {
-                                                                    swal('Cuidado!', data.message, 'error');
-                                                                }
-                                                            }).fail(() => {
-                                                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
-                                                    });
-                                                }).catch(swal.noop);
+                                                }).then((result) => {
+                                                    if (result.value) {
+                                                        $.post(url, {}).done((data) => {
+                                                            if (data.success) {
+                                                                swal('Borrado!', data.message, 'success').then(function () {
+                                                                    location.reload();
+                                                                });
+                                                            } else {
+                                                                swal('Cuidado!', data.message, 'error');
+                                                            }
+                                                        }).fail(() => {
+                                                            swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                                        });
+                                                    }
+                                                });
                                             }
                                             $(document).ready(function () {
                                                 $('#usuarios_tabla').DataTable({
