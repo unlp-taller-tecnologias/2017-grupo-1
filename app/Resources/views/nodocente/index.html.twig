@@ -1,109 +1,178 @@
 {% extends 'base.html.twig' %}
+{% block otherstyles %}
+    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb breadcrumb-scv">
+        <li>
+            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
+        </li>
+        <li class="active">Inscriptos</li>
+    </ol>
+{% endblock %}
 
 {% block body %}
-    <h1 class="text-center">Listado de No docentes</h1>
 
-    <a href="{{ path('nodocente_new') }}"><button type="button" class="btn btn-success">Agregar un nuevo No docente</button></a>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Listado <strong>de Inscriptos</strong></h3>
+        </div>
+        
 
-    <br><br>
+        <div class="panel-body">
 
-    <table class="table table-hover table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Departamento</th>
-                <th>Oficina</th>
-                <th>Telefono</th>
-                <th>Funcion</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>Pais</th>
-                <th>Provincia</th>
-                <th>Partido</th>
-                <th>Localidad</th>
-                <th>Codigopostal</th>
-                <th>Tipodocumento</th>
-                <th>Nrodocumento</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for noDocente in noDocentes %}
-            <tr>
-                <td>{{ noDocente.departamento }}</td>
-                <td>{{ noDocente.oficina }}</td>
-                <td>{{ noDocente.telefono }}</td>
-                <td>{{ noDocente.funcion }}</td>
-                <td>{{ noDocente.nombre }}</td>
-                <td>{{ noDocente.apellido }}</td>
-                <td>{{ noDocente.email }}</td>
-                <td>{{ noDocente.pais }}</td>
-                <td>{{ noDocente.provincia }}</td>
-                <td>{{ noDocente.partido }}</td>
-                <td>{{ noDocente.localidad }}</td>
-                <td>{{ noDocente.codigoPostal }}</td>
-                <td>{{ noDocente.tipoDocumento }}</td>
-                <td>{{ noDocente.nroDocumento }}</td>
-                <td>
+            <table id="usuarios_tabla" class="table table-condensed table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Departamento</th>
+                        <th class="text-center">Oficina</th>
+                        <th class="text-center">Telefono</th>
+                        <th class="text-center">Funcion</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Apellido</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Pais</th>
+                        <th class="text-center">Provincia</th>
+                        <th class="text-center">Partido</th>
+                        <th class="text-center">Localidad</th>
+                        <th class="text-center">Codigopostal</th>
+                        <th class="text-center">Tipodocumento</th>
+                        <th class="text-center">Nrodocumento</th>
+                        <th class="text-center">
+                            <i class="fa fa-cogs" aria-hidden="true"></i>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for noDocente in noDocentes %}
+                    <tr>
+                        <td class="text-center">{{ noDocente.departamento }}</td>
+                        <td class="text-center">{{ noDocente.oficina }}</td>
+                        <td class="text-center">{{ noDocente.telefono }}</td>
+                        <td class="text-center">{{ noDocente.funcion }}</td>
+                        <td class="text-center">{{ noDocente.nombre }}</td>
+                        <td class="text-center">{{ noDocente.apellido }}</td>
+                        <td class="text-center">{{ noDocente.email }}</td>
+                        <td class="text-center">{{ noDocente.pais }}</td>
+                        <td class="text-center">{{ noDocente.provincia }}</td>
+                        <td class="text-center">{{ noDocente.partido }}</td>
+                        <td class="text-center">{{ noDocente.localidad }}</td>
+                        <td class="text-center">{{ noDocente.codigoPostal }}</td>
+                        <td class="text-center">{{ noDocente.tipoDocumento }}</td>
+                        <td class="text-center">{{ noDocente.nroDocumento }}</td>
+                        <td>
 
-                    <!-- Trigger the modal with a button -->
-                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">Ver Detalle</button>
+                            <!-- Trigger the modal with a button -->
+                            <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye" aria-hidden="true"></i></button>
 
-                    <!-- Modal -->
-                    <div id="myModal" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
+                            <!-- Modal -->
+                            <div id="myModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
 
-                            <!-- Modal content-->
-                            <div class="modal-content col-md-12 col-md-offset-3">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title text-center">Datelle de Inscripto</h4>
-                                </div>
-                                <div class="modal-body col-md-12 col-md-offset-2">
-                                    <dl class="dl-horizontal">
-                                        <dt>Departamento</dt>
-                                        <dd>{{ noDocente.Departamento }}</dd>
-                                        <dt>Oficina</dt>
-                                        <dd>{{ noDocente.Oficina }}</dd>
-                                        <dt>Telefono</dt>
-                                        <dd>{{ noDocente.Telefono }}</dd>
-                                        <dt>Funcion</dt>
-                                        <dd>{{ noDocente.Funcion }}</dd>
-                                        <dt>Nombre</dt>
-                                        <dd>{{ noDocente.Nombre }}</dd>
-                                        <dt>Apellido</dt>
-                                        <dd>{{ noDocente.Apellido }}</dd>
-                                        <dt>Email</dt>
-                                        <dd>{{ noDocente.Email }}</dd>
-                                        <dt>Pais</dt>
-                                        <dd>{{ noDocente.Pais }}</dd>
-                                        <dt>Provincia</dt>
-                                        <dd>{{ noDocente.Provincia }}</dd>
-                                        <dt>Partido</dt>
-                                        <dd>{{ noDocente.Partido }}</dd>
-                                        <dt>Localidad</dt>
-                                        <dd>{{ noDocente.Localidad }}</dd>
-                                        <dt>Codigo postal</dt>
-                                        <dd>{{ noDocente.Codigopostal }}</dd>
-                                        <dt>Tipo documento</dt>
-                                        <dd>{{ noDocente.tipoDocumento }}</dd>
-                                        <dt>Nro Documento</dt>
-                                        <dd>{{ noDocente.nroDocumento }}</dd>
-                                    </dl>                 
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <!-- Modal content-->
+                                    <div class="modal-content col-md-12 col-md-offset-3">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title text-center">Datelle de No Docente</h4>
+                                        </div>
+                                        <div class="modal-body col-md-12 col-md-offset-2">
+                                            <dl class="dl-horizontal">
+                                                <dt>Departamento</dt>
+                                                <dd>{{ noDocente.Departamento }}</dd>
+                                                <dt>Oficina</dt>
+                                                <dd>{{ noDocente.Oficina }}</dd>
+                                                <dt>Telefono</dt>
+                                                <dd>{{ noDocente.Telefono }}</dd>
+                                                <dt>Funcion</dt>
+                                                <dd>{{ noDocente.Funcion }}</dd>
+                                                <dt>Nombre</dt>
+                                                <dd>{{ noDocente.Nombre }}</dd>
+                                                <dt>Apellido</dt>
+                                                <dd>{{ noDocente.Apellido }}</dd>
+                                                <dt>Email</dt>
+                                                <dd>{{ noDocente.Email }}</dd>
+                                                <dt>Pais</dt>
+                                                <dd>{{ noDocente.Pais }}</dd>
+                                                <dt>Provincia</dt>
+                                                <dd>{{ noDocente.Provincia }}</dd>
+                                                <dt>Partido</dt>
+                                                <dd>{{ noDocente.Partido }}</dd>
+                                                <dt>Localidad</dt>
+                                                <dd>{{ noDocente.Localidad }}</dd>
+                                                <dt>Codigo postal</dt>
+                                                <dd>{{ noDocente.Codigopostal }}</dd>
+                                                <dt>Tipo documento</dt>
+                                                <dd>{{ noDocente.tipoDocumento }}</dd>
+                                                <dt>Nro Documento</dt>
+                                                <dd>{{ noDocente.nroDocumento }}</dd>
+                                            </dl>                 
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
-
-                        </div>
-                    </div>
-                    <!-- End modal -->
-                  
-                    <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-sm btn-warning">Modificar</button></a>           
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                            <!-- End modal -->
+                          
+                            <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>               
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
+
+{% block otherjavascripts %}
+    <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script>
+        function usuarioDelete(idUsuario) {
+            swal({
+                title: '¿Estas seguro?',
+                text: "Estas por eliminar un usuario del sistema!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, Eliminarlo'
+            }).then((result) => {
+                if (result.value) {
+                    swal(
+                            'Eliminado!',
+                            'El usuario ha sido eliminado del Sistema.',
+                            'success'
+                            );
+                }
+            });
+        }
+        $(document).ready(function () {
+            $('#usuarios_tabla').DataTable({
+                "dom": '<".col-md-4">frtip',
+                fnInitComplete: function () {
+                    $('div.col-md-4').html('<a href="{{ path('nodocente_new') }}"><button type="button" class="btn btn-xs btn-primary"><i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo</button></a><br><br>');
+                },
+                "autoWidth": false,
+                "language": {
+                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                },
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": [0, 4]
+                    }],
+                "order": [[1, 'asc']],
+                "iDisplayLength": 10,
+            });
+        });
+    </script>
+{% endblock %}
+
