@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Usuario controller.
@@ -103,6 +104,23 @@ class UsuarioController extends Controller {
                     'form' => $form->createView(),
                     'entity' => $usuario
         ));
+    }
+
+    /**
+     * Eliminar usuaro del sistema
+     * 
+     * @Route("/{id}/delete", name="usuario_delete" , condition="request.isXmlHttpRequest()")
+     * @Method({"POST"})
+     */
+    public function deleteAction(Request $request, Usuario $usuario) {
+        $em = $this->getDoctrine()->getManager();
+        $usuario->setIsActive(FALSE);
+        try {
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'El Usuario fue eliminado con éxito'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar el Usuario del sistema'));
+        }
     }
 
 }
