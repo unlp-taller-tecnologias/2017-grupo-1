@@ -105,14 +105,28 @@ class InscriptoController extends Controller
      */
     public function editAction(Request $request, Inscripto $inscripto)
     {
+        $em = $this->getDoctrine()->getManager();
         $deleteForm = $this->createDeleteForm($inscripto);
         $editForm = $this->createForm('AppBundle\Form\InscriptoType', $inscripto);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em->persist($inscripto);
+            try {
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'El inscripto se editó correctamente.');
+                return $this->redirectToRoute("inscripto_index");
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el inscripto. Detalle: ' . $e->getMessage());
+            }
+        }
 
-            return $this->redirectToRoute('inscripto_edit', array('id' => $inscripto->getId()));
+        if ($editForm->isSubmitted() && !$editForm->isValid()) {
+            $validator = $this->get('validator');
+            $errors = $validator->validate($editForm);
+            foreach ($errors as $error) {
+                $this->get('session')->getFlashBag()->add('error', $error->getMessage());
+            }
         }
 
         return $this->render('inscripto/edit.html.twig', array(
@@ -199,7 +213,9 @@ class InscriptoController extends Controller
             // Recorro el excel dando de alta 1 por 1 
             $continuar = 1;
             $i = 2;
-            while ($i != 30){
+            $noCargados = 0;
+            $cargados = 0;
+            while ($i != 32){
                 if ($sheet->getCell('A'.$i)->getValue() != ''){
                     $ficha = $sheet->getCell('A'.$i)->getValue();
                     
@@ -238,15 +254,25 @@ class InscriptoController extends Controller
 
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($inscripto);
-                    $em->flush();
-
+                    try {
+                        $em->flush();
+                        $cargados = $cargados + 1;
+                    } catch (\Exception $e) {
+                        $noCargados = $noCargados + 1;
+                        $em = $this->getDoctrine()->resetManager();
+                    }
                     $i = $i + 1;
                 }else{
                     $continuar = 0;
                 }
             }
         }
-        $this->get('session')->getFlashBag()->add('success', 'El excel se importo correctamente.');
-        return ($this->indexAction($request));
+        if ($noCargados == 0){
+            $this->get('session')->getFlashBag()->add('success', 'Se importaron '.$cargados.' inscriptos correctamente');
+            return ($this->indexAction($request));
+        }else{
+            $this->get('session')->getFlashBag()->add('warning', 'No se han podido importar '.$noCargados.' inscriptos de un total de '.($i-2));
+            return ($this->indexAction($request));
+        }
     }
 }
