@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Inscripto
@@ -32,6 +33,12 @@ class Inscripto extends Visitante
      * @var string
      *
      * @ORM\Column(name="legajo", type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 30,
+     *      minMessage = "El legajo deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El legajo no puede tener más de {{ limit }} caracteres"
+     * )
      */
     protected $legajo;
 
@@ -39,6 +46,7 @@ class Inscripto extends Visitante
      * @var date
      *
      * @ORM\Column(name="fechaInscripcion", type="date")
+     * @Assert\Date()
      */
     protected $fechaInscripcion;
 

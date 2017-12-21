@@ -52,20 +52,31 @@ class InscriptoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $inscripto = new Inscripto();
-        $form = $this->createForm('AppBundle\Form\InscriptoType', $inscripto);
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Inscripto();
+        $form = $this->createForm('AppBundle\Form\InscriptoType', $entity);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($inscripto);
-            $em->flush();
-
-            return $this->redirectToRoute('inscripto_show', array('id' => $inscripto->getId()));
+            $em->persist($entity);
+            try {
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'El inscripto se agregó al sistema correctamente.');
+                return $this->redirectToRoute("inscripto_index");
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido agregar al inscripto en el sistema. Detalle: ' . $e->getMessage());
+            }
+        }
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $validator = $this->get('validator');
+            $errors = $validator->validate($entity);
+            foreach ($errors as $error) {
+                $this->get('session')->getFlashBag()->add('error', $error->getMessage());
+            }
         }
 
         return $this->render('inscripto/new.html.twig', array(
-            'inscripto' => $inscripto,
+            'inscripto' => $entity,
             'form' => $form->createView(),
         ));
     }

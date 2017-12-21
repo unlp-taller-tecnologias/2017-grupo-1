@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Visitante
@@ -28,6 +29,18 @@ abstract class Visitante {
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
+     * @Assert\NotBlank(message="El campo nombre no puede estar en blanco")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "El nombre deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El nombre no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Z]+$/",
+     *     match=true,
+     *     message="El nombre no puede contener numeros ni caracteres especiales"
+     * )
      */
     protected $nombre;
 
@@ -35,6 +48,19 @@ abstract class Visitante {
      * @var string
      *
      * @ORM\Column(name="apellido", type="string", length=255)
+     * @Assert\NotBlank(message="El campo apellido no puede estar en blanco")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "El apellido deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El apellido no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Z]+$/",
+     *     match=true,
+     *     message="El apellido no puede contener numeros ni caracteres especiales"
+     * )
+
      */
     protected $apellido;
 
@@ -42,6 +68,10 @@ abstract class Visitante {
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Assert\Email(
+     *     message = "El email {{ value }} no es un email valido.",
+     *     checkMX = true
+     * )
      */
     protected $email;
 
@@ -49,6 +79,18 @@ abstract class Visitante {
      * @var string
      *
      * @ORM\Column(name="pais", type="string", length=255)
+     * @Assert\NotBlank(message="El campo pais no puede estar en blanco")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "El campo pais deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El campo pais no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Züàèìòùáéíóúâãñ]+$/",
+     *     match=true,
+     *     message="El campo pais no puede contener numeros ni caracteres especiales"
+     * )
      */
     protected $pais;
 
@@ -56,27 +98,69 @@ abstract class Visitante {
      * @var string
      *
      * @ORM\Column(name="provincia", type="string", length=255)
+     * @Assert\NotBlank(message="El campo provincia no puede estar en blanco")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "El campo pais deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El campo pais no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Züàèìòùáéíóúâãñ]+$/",
+     *     match=true,
+     *     message="El campo provincia no puede contener numeros ni caracteres especiales"
+     * )
+
      */
     protected $provincia;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="partido", type="string", length=255)
+     * @ORM\Column(name="partido", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="El campo partido no puede estar en blanco")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "El campo partido deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El campo partido no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Züàèìòùáéíóúâãñ]+$/",
+     *     match=true,
+     *     message="El campo partido no puede contener numeros ni caracteres especiales"
+     * )
+
      */
     protected $partido;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="localidad", type="string", length=255)
+     * @ORM\Column(name="localidad", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="El campo localidad no puede estar en blanco")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "El campo localidad deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El campo localidad no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Züàèìòùáéíóúâãñ]+$/",
+     *     match=true,
+     *     message="El campo localidad no puede contener numeros ni caracteres especiales"
+     * )
+
      */
     protected $localidad;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoPostal", type="string", length=255)
+     * @ORM\Column(name="codigoPostal", type="string", length=255, nullable=true)
+     * 
+     * El codigo postal debe permitir caracteres especiales, asi como longitudes iguales a 1.
+     * Por lo que no se hacen validaciones en este campo
      */
     protected $codigoPostal;
 
@@ -84,6 +168,17 @@ abstract class Visitante {
      * @var string
      *
      * @ORM\Column(name="tipoDocumento", type="string", length=255)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 20,
+     *      minMessage = "El tipo documento deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El tipo documento no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Z]+$/",
+     *     match=true,
+     *     message="El tipo documento no puede contener numeros ni caracteres especiales"
+     * )
      */
     protected $tipoDocumento;
 
@@ -91,6 +186,17 @@ abstract class Visitante {
      * @var integer
      *
      * @ORM\Column(name="nroDocumento", type="string", length=255, unique=true)
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "El documento deberá tener al menos {{ limit }} caracteres",
+     *      maxMessage = "El documento no puede tener más de {{ limit }} caracteres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Z0-9]+$/",
+     *     match=true,
+     *     message="El documento no puede contener caracteres especiales"
+     * )
      */
     protected $nroDocumento;
 

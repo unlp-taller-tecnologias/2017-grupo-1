@@ -30,6 +30,7 @@
 
                 <thead>
                     <tr>
+                        <th class="text-center">#</th>
                         <th class="text-center">Nro ficha</th>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">Apellido</th>
@@ -47,15 +48,16 @@
                 <tbody>
                 {% for inscripto in inscriptos %}
                     <tr>
-                        <td>{{ inscripto.nroFicha }}</td>
-                        <td>{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</td>
-                        <td>{{ inscripto.nombre }}</td>
-                        <td>{{ inscripto.apellido }}</td>
-                        <td>{{ inscripto.pais }}</td>
-                        <td>{{ inscripto.provincia }}</td>
-                        <td>{{ inscripto.tipoDocumento }}</td>
-                        <td>{{ inscripto.nroDocumento }}</td>
-                        <td>
+                        <td class="text-center">{{ loop.index }}</td>
+                        <td class="text-center">{{ inscripto.nroFicha }}</td>
+                        <td class="text-center">{{ inscripto.nombre }}</td>
+                        <td class="text-center">{{ inscripto.apellido }}</td>
+                        <td class="text-center">{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</td>
+                        <td class="text-center">{{ inscripto.pais }}</td>
+                        <td class="text-center">{{ inscripto.provincia }}</td>
+                        <td class="text-center">{{ inscripto.tipoDocumento }}</td>
+                        <td class="text-center">{{ inscripto.nroDocumento }}</td>
+                        <td class="text-center">
 
                             <!-- Trigger the modal with a button -->
                             <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye" aria-hidden="true"></i></button>
