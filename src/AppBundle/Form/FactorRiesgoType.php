@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class FactorRiesgoType extends AbstractType
 {
@@ -13,7 +14,8 @@ class FactorRiesgoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('descripcion');
+        $builder->add('nombre',TextType::class)
+                ->add('descripcion',TextType::class);
     }
 
     /**
