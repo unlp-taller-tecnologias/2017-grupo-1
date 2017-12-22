@@ -67,8 +67,8 @@
                   <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                   </a>
-                  <a href="#" onclick="enfermedadDelete({{ enfermedad.id }});" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  <a href="#" onclick="enfermedadDelete('{{ path("enfermedad_delete", {"id":enfermedad.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                      <i class="fa fa-trash-o" aria-hidden="true"></i>
                   </a>
               </td>
           </tr>
@@ -87,7 +87,7 @@
 
 <script type="text/javascript">
 
-function factorDelete(id){
+function enfermedadDelete(url){
   swal({
       title: '¿Estas seguro?',
       text: "Estas por eliminar una enfermedad del sistema!",
@@ -99,11 +99,17 @@ function factorDelete(id){
       confirmButtonText: 'Si, Eliminarlo'
   }).then((result) => {
       if (result.value) {
-          swal(
-                  'Eliminado!',
-                  'La enfermedad ha sido eliminado del Sistema.',
-                  'success'
-                  );
+          $.post(url, {}).done((data) => {
+              if (data.success) {
+                  swal('Borrado!', data.message, 'success').then(function () {
+                      location.reload();
+                  });
+              } else {
+                  swal('Cuidado!', data.message, 'error');
+              }
+          }).fail(() => {
+              swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+          });
       }
   });
 }

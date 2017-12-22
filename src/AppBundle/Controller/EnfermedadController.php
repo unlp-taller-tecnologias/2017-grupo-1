@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Enfermedad controller.
@@ -106,36 +107,19 @@ class EnfermedadController extends Controller
     /**
      * Deletes a enfermedad entity.
      *
-     * @Route("/{id}", name="enfermedad_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="enfermedad_delete")
+     * @Method("post")
      */
     public function deleteAction(Request $request, Enfermedad $enfermedad)
     {
-        $form = $this->createDeleteForm($enfermedad);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($enfermedad);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('enfermedad_index');
+      $em=$this->getDoctrine()->getManager();
+      $em->remove($enfermedad);
+      try{
+        return new JsonResponse(array('success' => true, 'message' => 'La enfermedad fue eliminado con éxito'));
+      }catch(\Exception $e){
+        return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la enfermedad del sistema'));
+      }
     }
 
-    /**
-     * Creates a form to delete a enfermedad entity.
-     *
-     * @param Enfermedad $enfermedad The enfermedad entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Enfermedad $enfermedad)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('enfermedad_delete', array('id' => $enfermedad->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
+
 }
