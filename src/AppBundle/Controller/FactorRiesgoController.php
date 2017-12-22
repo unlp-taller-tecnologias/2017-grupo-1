@@ -101,6 +101,7 @@ class FactorRiesgoController extends Controller
     public function deleteAction(Request $request, FactorRiesgo $factorRiesgo)
     {
       $em=$this->getDoctrine()->getManager();
+      $em->remove($factorRiesgo);
       try{
         return new JsonResponse(array('success' => true, 'message' => 'El factor de riesgo fue eliminado con éxito'));
       }catch(\Exception $e){

@@ -67,8 +67,8 @@
                     <a href="{{ path('factorriesgo_edit', { 'id': factorRiesgo.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área">
                       <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </a>
-                    <a href="#" onclick="factorDelete({{ factorRiesgo.id }});" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                      <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    <a href="#" onclick="factorDelete('{{ path("factorriesgo_delete", {"id":factorRiesgo.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
                     </a>
                 </td>
             </tr>
@@ -88,25 +88,31 @@
 
     <script type="text/javascript">
 
-    function factorDelete(id){
-      swal({
-          title: '¿Estas seguro?',
-          text: "Estas por eliminar un factor de riesgo del sistema!",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          cancelButtonText: 'Cancelar',
-          confirmButtonText: 'Si, Eliminarlo'
-      }).then((result) => {
-          if (result.value) {
-              swal(
-                      'Eliminado!',
-                      'El factor de riesgo ha sido eliminado del Sistema.',
-                      'success'
-                      );
-          }
-      });
+    function factorDelete(url) {
+        swal({
+            title: '¿Estas seguro?',
+            text: "Estas por eliminar un factor de riesgo del sistema!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Si, Eliminarlo'
+        }).then((result) => {
+            if (result.value) {
+                $.post(url, {}).done((data) => {
+                    if (data.success) {
+                        swal('Borrado!', data.message, 'success').then(function () {
+                            location.reload();
+                        });
+                    } else {
+                        swal('Cuidado!', data.message, 'error');
+                    }
+                }).fail(() => {
+                    swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                });
+            }
+        });
     }
 
     $(document).ready(function () {
