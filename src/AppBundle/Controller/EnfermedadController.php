@@ -108,13 +108,14 @@ class EnfermedadController extends Controller
      * Deletes a enfermedad entity.
      *
      * @Route("/{id}/delete", name="enfermedad_delete")
-     * @Method("post")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, Enfermedad $enfermedad)
     {
       $em=$this->getDoctrine()->getManager();
-      $em->remove($enfermedad);
       try{
+        $em->remove($enfermedad);
+        $em->flush();
         return new JsonResponse(array('success' => true, 'message' => 'La enfermedad fue eliminado con éxito'));
       }catch(\Exception $e){
         return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la enfermedad del sistema'));
