@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\NoDocente;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Nodocente controller.
@@ -46,15 +48,24 @@ class NoDocenteController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($noDocente);
-            $em->flush();
-
-            return $this->redirectToRoute('nodocente_show', array('id' => $noDocente->getId()));
-        }
-
-        return $this->render('nodocente/new.html.twig', array(
-            'noDocente' => $noDocente,
-            'form' => $form->createView(),
-        ));
+            try {
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'El usuario se agregó al sistema correctamente.');
+                return $this->redirectToRoute("usuario_new");
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido agregar el usuario en el sistema. Detalle: ' . $e->getMessage());
+            }
+          }
+          if ($form->isSubmitted() && !$form->isValid()) {
+              $validator = $this->get('validator');
+              $errors = $validator->validate($noDocente);
+              foreach ($errors as $error) {
+                  $this->get('session')->getFlashBag()->add('error', $error->getMessage());
+              }
+          }
+          return $this->render('nodocente/new.html.twig', array(
+                      'form' => $form->createView(),
+          ));
     }
 
     /**
@@ -101,36 +112,19 @@ class NoDocenteController extends Controller
     /**
      * Deletes a noDocente entity.
      *
-     * @Route("/{id}", name="nodocente_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="nodocente_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, NoDocente $noDocente)
     {
-        $form = $this->createDeleteForm($noDocente);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($noDocente);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('nodocente_index');
+      $em = $this->getDoctrine()->getManager();
+      try {
+          $em->remove($noDocente);
+          $em->flush();
+          return new JsonResponse(array('success' => true, 'message' => 'El no docente fue eliminado con éxito'));
+      } catch (\Exception $e) {
+          return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar el no docente del sistema'));
+      }
     }
 
-    /**
-     * Creates a form to delete a noDocente entity.
-     *
-     * @param NoDocente $noDocente The noDocente entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(NoDocente $noDocente)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('nodocente_delete', array('id' => $noDocente->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }

@@ -1,21 +1,220 @@
 {% extends 'base.html.twig' %}
 
+{% block otherstyles %}
+    <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb breadcrumb-scv">
+        <li>
+            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
+        </li>
+        <li>
+            <a href="{{path('vacuna_index')}}">Vacuna</a>
+        </li>
+        <li class="active">Nuevo</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
-    <h1>Nodocente edit</h1>
-
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('nodocente_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Nuevo <strong>Inscripto</strong></h3>
+    </div>
+    <div class="panel-body">
+        {{ form_start(form, {'attr':{'class':'form-horizontal'} } ) }}
+        <div class="form-group">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Departamento</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.departamento,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Oficina</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.oficina,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Telefono</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                            {{ form_widget(form.telefono,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Funcion</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                            {{ form_widget(form.funcion,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Nombre</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.nombre,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Apellido</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.apellido,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Email</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        {{ form_widget(form.email,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Pais</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.pais,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Provincia</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.provincia,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Partido</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.partido,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Localidad</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.localidad,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Codigo Postal</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.codigoPostal,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Tipo Documento</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.tipoDocumento,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Nro Documento</label>
+                    <div class="col-md-6">
+                        <div class="input-group margin-bottom-sm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-keyboard-o"></i>
+                            </span>
+                            {{ form_widget(form.nroDocumento,{'attr':{'class':'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 text-right">
+            <a href="{{ path("inscripto_index") }}" class="btn btn-default" >Volver</a>
+            <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
+        </div>
+        <div class="hidden">
+            {{ form_rest(form) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
 {% endblock %}

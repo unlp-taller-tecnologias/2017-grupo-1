@@ -19,14 +19,13 @@
         <div class="panel-heading">
             <h3 class="panel-title">Listado <strong>de Inscriptos</strong></h3>
         </div>
-        
+
 
         <div class="panel-body">
 
             <table id="usuarios_tabla" class="table table-condensed table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        <th class="text-center">#</th>
                         <th class="text-center">Departamento</th>
                         <th class="text-center">Oficina</th>
                         <th class="text-center">Telefono</th>
@@ -108,7 +107,7 @@
                                                 <dd>{{ noDocente.tipoDocumento }}</dd>
                                                 <dt>Nro Documento</dt>
                                                 <dd>{{ noDocente.nroDocumento }}</dd>
-                                            </dl>                 
+                                            </dl>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -118,8 +117,11 @@
                                 </div>
                             </div>
                             <!-- End modal -->
-                          
-                            <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>               
+
+                            <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                            <a href="#" onclick="usuarioDelete('{{ path("nodocente_delete", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -134,25 +136,31 @@
     <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
-        function usuarioDelete(idUsuario) {
+        function usuarioDelete(url) {
             swal({
                 title: '¿Estas seguro?',
-                text: "Estas por eliminar un usuario del sistema!",
+                text: "Estas por eliminar un no docente del sistema!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 cancelButtonText: 'Cancelar',
                 confirmButtonText: 'Si, Eliminarlo'
-            }).then((result) => {
-                if (result.value) {
-                    swal(
-                            'Eliminado!',
-                            'El usuario ha sido eliminado del Sistema.',
-                            'success'
-                            );
-                }
-            });
+              }).then((result) => {
+                  if (result.value) {
+                      $.post(url, {}).done((data) => {
+                          if (data.success) {
+                              swal('Borrado!', data.message, 'success').then(function () {
+                                  location.reload();
+                              });
+                          } else {
+                              swal('Cuidado!', data.message, 'error');
+                          }
+                      }).fail(() => {
+                          swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                      });
+                  }
+              });
         }
         $(document).ready(function () {
             $('#usuarios_tabla').DataTable({
@@ -175,4 +183,3 @@
         });
     </script>
 {% endblock %}
-
