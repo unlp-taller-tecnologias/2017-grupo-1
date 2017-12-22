@@ -44,7 +44,7 @@
 
                 <tbody>
                 {% for inscripto in inscriptos %}
-                    <tr>
+                    <tr   {% if inscripto.borrado %} class="danger" {% endif %}>
                         <td class="text-center">{{ loop.index }}</td>
                         <td class="text-center">{{ inscripto.nroFicha }}</td>
                         <td class="text-center">{{ inscripto.nombre }}</td>
@@ -55,60 +55,63 @@
                         <td class="text-center">{{ inscripto.tipoDocumento }}</td>
                         <td class="text-center">{{ inscripto.nroDocumento }}</td>
                         <td class="text-center">
+                            {% if not inscripto.borrado %}
+                                <!-- Trigger the modal with a button -->
+                                <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye" aria-hidden="true"></i></button>
 
-                            <!-- Trigger the modal with a button -->
-                            <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                <!-- Modal -->
+                                <div id="myModal" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
 
-                            <!-- Modal -->
-                            <div id="myModal" class="modal fade" role="dialog">
-                                <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content col-md-12 col-md-offset-3">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title text-center">Datelle de Inscripto</h4>
+                                            </div>
+                                            <div class="modal-body col-md-12 col-md-offset-2">
+                                                <dl class="dl-horizontal">
+                                                    <dt>Nroficha</dt>
+                                                    <dd>{{ inscripto.nroFicha }}</dd>
+                                                    <dt>Legajo</dt>
+                                                    <dd>{{ inscripto.legajo }}</dd>
+                                                    <dt>Fecha de inscripcion</dt>
+                                                    <dd>{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</dd>
+                                                    <dt>Nombre</dt>
+                                                    <dd>{{ inscripto.nombre }}</dd>
+                                                    <dt>Apellido</dt>
+                                                    <dd>{{ inscripto.apellido }}</dd>
+                                                    <dt>Email</dt>
+                                                    <dd>{{ inscripto.email }}</dd>
+                                                    <dt>Pais</dt>
+                                                    <dd>{{ inscripto.pais }}</dd>
+                                                    <dt>Provincia</dt>
+                                                    <dd>{{ inscripto.provincia }}</dd>
+                                                    <dt>Partido</dt>
+                                                    <dd>{{ inscripto.partido }}</dd>
+                                                    <dt>Localidad</dt>
+                                                    <dd>{{ inscripto.localidad }}</dd>
+                                                    <dt>Codigo postal</dt>
+                                                    <dd>{{ inscripto.codigoPostal }}</dd>
+                                                    <dt>Tipodo cumento</dt>
+                                                    <dd>{{ inscripto.tipoDocumento }}</dd>
+                                                    <dt>Nro documento</dt>
+                                                    <dd>{{ inscripto.nroDocumento }}</dd>
+                                                </dl>                 
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
 
-                                    <!-- Modal content-->
-                                    <div class="modal-content col-md-12 col-md-offset-3">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title text-center">Datelle de Inscripto</h4>
-                                        </div>
-                                        <div class="modal-body col-md-12 col-md-offset-2">
-                                            <dl class="dl-horizontal">
-                                                <dt>Nroficha</dt>
-                                                <dd>{{ inscripto.nroFicha }}</dd>
-                                                <dt>Legajo</dt>
-                                                <dd>{{ inscripto.legajo }}</dd>
-                                                <dt>Fecha de inscripcion</dt>
-                                                <dd>{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</dd>
-                                                <dt>Nombre</dt>
-                                                <dd>{{ inscripto.nombre }}</dd>
-                                                <dt>Apellido</dt>
-                                                <dd>{{ inscripto.apellido }}</dd>
-                                                <dt>Email</dt>
-                                                <dd>{{ inscripto.email }}</dd>
-                                                <dt>Pais</dt>
-                                                <dd>{{ inscripto.pais }}</dd>
-                                                <dt>Provincia</dt>
-                                                <dd>{{ inscripto.provincia }}</dd>
-                                                <dt>Partido</dt>
-                                                <dd>{{ inscripto.partido }}</dd>
-                                                <dt>Localidad</dt>
-                                                <dd>{{ inscripto.localidad }}</dd>
-                                                <dt>Codigo postal</dt>
-                                                <dd>{{ inscripto.codigoPostal }}</dd>
-                                                <dt>Tipodo cumento</dt>
-                                                <dd>{{ inscripto.tipoDocumento }}</dd>
-                                                <dt>Nro documento</dt>
-                                                <dd>{{ inscripto.nroDocumento }}</dd>
-                                            </dl>                 
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        </div>
                                     </div>
-
                                 </div>
-                            </div>
-                            <!-- End modal -->
-                          
-                            <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>           
+                                <!-- End modal -->
+                              
+                                <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+
+                                <a href="#" onclick="inscriptoDelete('{{ path("inscripto_delete", {"id":inscripto.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            {% endif %}  
                         </td>
                     </tr>
                 {% endfor %}
@@ -124,10 +127,10 @@
     <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
-        function usuarioDelete(idUsuario) {
+        function inscriptoDelete(url) {
             swal({
                 title: '¿Estas seguro?',
-                text: "Estas por eliminar un usuario del sistema!",
+                text: "Estas por eliminar un inscripto del sistema!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -136,11 +139,17 @@
                 confirmButtonText: 'Si, Eliminarlo'
             }).then((result) => {
                 if (result.value) {
-                    swal(
-                            'Eliminado!',
-                            'El usuario ha sido eliminado del Sistema.',
-                            'success'
-                            );
+                    $.post(url, {}).done((data) => {
+                        if (data.success) {
+                            swal('Borrado!', data.message, 'success').then(function () {
+                                location.reload();
+                            });
+                        } else {
+                            swal('Cuidado!', data.message, 'error');
+                        }
+                    }).fail(() => {
+                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                    });
                 }
             });
         }
@@ -157,7 +166,7 @@
                 "columnDefs": [{
                         "searchable": false,
                         "orderable": false,
-                        "targets": [0, 4]
+                        "targets": [0, 1]
                     }],
                 "order": [[1, 'asc']],
                 "iDisplayLength": 10,

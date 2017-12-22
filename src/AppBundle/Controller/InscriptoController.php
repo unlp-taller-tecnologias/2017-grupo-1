@@ -137,39 +137,20 @@ class InscriptoController extends Controller
     }
 
     /**
-     * Deletes a inscripto entity.
-     *
-     * @Route("/{id}", name="inscripto_delete")
-     * @Method("DELETE")
+     * Eliminar inscripto del sistema
+     * 
+     * @Route("/{id}/delete", name="inscripto_delete" , condition="request.isXmlHttpRequest()")
+     * @Method({"POST"})
      */
-    public function deleteAction(Request $request, Inscripto $inscripto)
-    {
-        $form = $this->createDeleteForm($inscripto);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($inscripto);
+    public function deleteAction(Request $request, Inscripto $inscripto) {
+        $em = $this->getDoctrine()->getManager();
+        $inscripto->setBorrado(TRUE);
+        try {
             $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'El inscripto fue eliminado con éxito'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar el inscripto del sistema'));
         }
-
-        return $this->redirectToRoute('inscripto_index');
-    }
-
-    /**
-     * Creates a form to delete a inscripto entity.
-     *
-     * @param Inscripto $inscripto The inscripto entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Inscripto $inscripto)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('inscripto_delete', array('id' => $inscripto->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 
 

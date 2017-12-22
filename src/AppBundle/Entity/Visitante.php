@@ -201,6 +201,13 @@ abstract class Visitante {
     protected $nroDocumento;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="borrado", type="boolean", length=1)
+     */
+    private $borrado;
+
+    /**
      * Get id
      *
      * @return int
@@ -427,6 +434,30 @@ abstract class Visitante {
         $this->nroDocumento = $nroDocumento;
 
         return $this;
+    }
+
+    /**
+     * Set borrado
+     *
+     * @param boolean $borrado
+     *
+     * @return Visitante
+     */
+    public function setBorrado($borrado)
+    {
+        $this->borrado = $borrado;
+
+        return $this;
+    }
+
+    /**
+     * Get borrado
+     *
+     * @return Visitante
+     */
+    public function getBorrado()
+    {
+        return $this->borrado;
     }
 
 }
