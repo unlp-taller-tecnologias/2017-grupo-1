@@ -4,12 +4,17 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Vacuna
  *
  * @ORM\Table(name="vacuna")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VacunaRepository")
+ * @UniqueEntity(
+ *  fields={"abreviatura"},
+ *  message="La abreviatura de la vacuna ya se encuentra cargada en el sistema"
+ *  )
  */
 class Vacuna
 {
@@ -64,6 +69,11 @@ class Vacuna
      * @var string
      *
      * @ORM\Column(name="dosisRequeridas", type="integer", length=1)
+     * @Assert\NotBlank(message="El campo dosis requeridas de vacuna no puede estar en blanco")
+     * @Assert\Range(
+     *  min=1,
+     *  minMessage= "La vacuna debe tener como minimo {{ limit }} dosis"
+     *)
      */
     private $dosisRequeridas;
 
@@ -85,6 +95,7 @@ class Vacuna
      * @var string
      *
      * @ORM\Column(name="observacion", type="string", length=255, nullable=true)
+     *
      */
     private $observacion;
 
@@ -109,7 +120,7 @@ class Vacuna
     public function setNombre($nombre)
     {
         $this->nombre = $nombre;
-    
+
         return $this;
     }
 
@@ -133,7 +144,7 @@ class Vacuna
     public function setAbreviatura($abreviatura)
     {
         $this->abreviatura = $abreviatura;
-    
+
         return $this;
     }
 
@@ -157,7 +168,7 @@ class Vacuna
     public function setDosisRequeridas($dosisRequeridas)
     {
         $this->dosisRequeridas = $dosisRequeridas;
-    
+
         return $this;
     }
 
@@ -181,7 +192,7 @@ class Vacuna
     public function setTieneVencimiento($tieneVencimiento)
     {
         $this->tieneVencimiento = $tieneVencimiento;
-    
+
         return $this;
     }
 
@@ -205,7 +216,7 @@ class Vacuna
     public function setEsObligatoria($esObligatoria)
     {
         $this->esObligatoria = $esObligatoria;
-    
+
         return $this;
     }
 
@@ -229,7 +240,7 @@ class Vacuna
     public function setObservacion($observacion)
     {
         $this->observacion = $observacion;
-    
+
         return $this;
     }
 
@@ -243,4 +254,3 @@ class Vacuna
         return $this->observacion;
     }
 }
-

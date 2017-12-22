@@ -19,7 +19,7 @@
         <div class="panel-heading">
             <h3 class="panel-title">Listado <strong>de Vacuna</strong></h3>
         </div>
-        
+
 
         <div class="panel-body">
 
@@ -29,10 +29,6 @@
                     <tr>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">Abreviatura</th>
-                        <th class="text-center">Dosisrequeridas</th>
-                        <th class="text-center">Tiene vencimiento</th>
-                        <th class="text-center">Esobligatoria</th>
-                        <th class="text-center">Observacion</th>
                         <th class="text-center">
                             <i class="fa fa-cogs" aria-hidden="true"></i>
                         </th>
@@ -44,12 +40,46 @@
                     <tr>
                         <td class="text-center">{{ vacuna.nombre }}</td>
                         <td class="text-center">{{ vacuna.abreviatura }}</td>
-                        <td class="text-center">{{ vacuna.dosisRequeridas }}</td>
-                        <td class="text-center">{% if vacuna.tieneVencimiento %}Si{% else %}No{% endif %}</td>
-                        <td class="text-center">{% if vacuna.esObligatoria %}Si{% else %}No{% endif %}</td>
-                        <td class="text-center">{{ vacuna.observacion }}</td>
-                        <td class="text-center">                           
-                            <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>           
+                        <td class="text-center">
+                          <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal">
+                              <i class="fa fa-binoculars" aria-hidden="true"></i>
+                          </button>
+                          <div id="myModal" class="modal fade" role="dialog">
+                              <div class="modal-dialog">
+
+                                  <!-- Modal content-->
+                                  <div class="modal-content col-md-12 col-md-offset-3">
+                                      <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                          <h4 class="modal-title text-center">Detalle de factor de riesgo</h4>
+                                      </div>
+                                      <div class="modal-body col-md-12 col-md-offset-2">
+                                          <dl class="dl-horizontal">
+                                              <dt>Nombre</dt>
+                                              <dd>{{ vacuna.nombre }}</dd>
+                                              <dt>Abreviatura</dt>
+                                              <dd>{{ vacuna.abreviatura }}</dd>
+                                              <dt>Dosis requeridas</dt>
+                                              <dd>{{vacuna.dosisRequeridas}}</dd>
+                                              <dt>Tiene vencimiento</dt>
+                                              <dd>{% if vacuna.tieneVencimiento %}Si{% else %}No{% endif %}</dd>
+                                              <dt>Es obligatoria</dt>
+                                              <dd>{% if vacuna.esObligatoria %}Si{% else %}No{% endif %}</dd>
+                                              <dt>Observacion</dt>
+                                              <dd>{{vacuna.observacion}}</dd>
+                                          </dl>
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      </div>
+                                  </div>
+
+                              </div>
+                          </div>
+                            <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                            <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -65,23 +95,30 @@
     <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
-        function usuarioDelete(idUsuario) {
+        function vacunaDelete(url) {
             swal({
                 title: '¿Estas seguro?',
-                text: "Estas por eliminar un usuario del sistema!",
+                text: "Estas por eliminar una vacuna del sistema!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Si, Eliminarlo'
+                confirmButtonText: 'Si, Eliminarla'
             }).then((result) => {
                 if (result.value) {
-                    swal(
-                            'Eliminado!',
-                            'El usuario ha sido eliminado del Sistema.',
-                            'success'
-                            );
+                  $.post(url,{}).done((data)=>{
+                    if(data.success){
+                      swal('Borrado!', data.message, 'success').then(function () {
+                          location.reload();
+                      });
+                    } else {
+                      swal('Cuidado!', data.message, 'error');
+                    }
+                  }).fail(()=>{
+                    swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                  }
+                );
                 }
             });
         }
@@ -98,7 +135,7 @@
                 "columnDefs": [{
                         "searchable": false,
                         "orderable": false,
-                        "targets": [0, 4]
+                        "targets": [0, 2]
                     }],
                 "order": [[1, 'asc']],
                 "iDisplayLength": 10,

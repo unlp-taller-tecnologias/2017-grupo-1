@@ -67,9 +67,6 @@
                         <label for="" class="col-md-3 control-label">Tiene vencimiento</label>
                         <div class="col-md-1">
                             <div class="input-group margin-bottom-sm">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-keyboard-o"></i>
-                                </span>
                                 {{ form_widget(edit_form.tieneVencimiento,{'attr':{'class':'form-control'} }) }}
                             </div>
                         </div>
@@ -80,9 +77,6 @@
                         <label for="" class="col-md-3 control-label">Es obligatoria</label>
                         <div class="col-md-1">
                             <div class="input-group margin-bottom-sm">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-keyboard-o"></i>
-                                </span>
                                 {{ form_widget(edit_form.esObligatoria,{'attr':{'class':'form-control'} }) }}
                             </div>
                         </div>
@@ -114,24 +108,15 @@
     </div>
 {% endblock %}
 
-{# extends 'base.html.twig' %}
-
-{% block body %}
-    <h1>Vacuna edit</h1>
-
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('vacuna_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
-{% endblock #}
+{% block otherjavascripts %}
+    <script src="{{ asset('vendor/bootstrap-switch-master/dist/js/bootstrap-switch.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $.fn.bootstrapSwitch.defaults.size = 'small';
+            $.fn.bootstrapSwitch.defaults.onText = 'SI';
+            $.fn.bootstrapSwitch.defaults.offText = 'NO';
+            $("[name='appbundle_vacuna[tieneVencimiento]']").bootstrapSwitch();
+            $("[name='appbundle_vacuna[esObligatoria]']").bootstrapSwitch();
+        });
+    </script>
+{% endblock %}

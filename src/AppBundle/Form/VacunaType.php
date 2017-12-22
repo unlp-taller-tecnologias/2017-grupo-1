@@ -5,6 +5,8 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class VacunaType extends AbstractType
 {
@@ -13,9 +15,20 @@ class VacunaType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('abreviatura')->add('dosisRequeridas')->add('tieneVencimiento')->add('esObligatoria')->add('observacion');
+        $builder->add('nombre',TextType::class)
+                ->add('abreviatura',TextType::class)
+                ->add('dosisRequeridas')
+                ->add('tieneVencimiento',CheckboxType::class,array(
+                  'required'=>false
+                ))
+                ->add('esObligatoria',CheckboxType::class,array(
+                  'required'=>false
+                ))
+                ->add('observacion',TextType::class,array(
+                  'required'=>false
+                ));
     }
-    
+
     /**
      * {@inheritdoc}
      */
