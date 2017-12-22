@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\FactorRiesgo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Factorriesgo controller.
@@ -93,34 +95,17 @@ class FactorRiesgoController extends Controller
     /**
      * Deletes a factorRiesgo entity.
      *
-     * @Route("/{id}", name="factorriesgo_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="factorriesgo_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, FactorRiesgo $factorRiesgo)
     {
-        $form = $this->createDeleteForm($factorRiesgo);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($factorRiesgo);
-            $em->flush();
-        }
-        return $this->redirectToRoute('factorriesgo_index');
+      $em=$this->getDoctrine()->getManager();
+      try{
+        return new JsonResponse(array('success' => true, 'message' => 'El factor de riesgo fue eliminado con éxito'));
+      }catch(\Exception $e){
+        return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar el factor de riesgo del sistema'));
+      }
     }
 
-    /**
-     * Creates a form to delete a factorRiesgo entity.
-     *
-     * @param FactorRiesgo $factorRiesgo The factorRiesgo entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(FactorRiesgo $factorRiesgo)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('factorriesgo_delete', array('id' => $factorRiesgo->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }
