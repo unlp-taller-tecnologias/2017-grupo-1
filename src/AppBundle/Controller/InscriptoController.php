@@ -60,6 +60,7 @@ class InscriptoController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($entity);
             try {
+                $entity->setBorrado(FALSE);
                 $em->flush();
                 $this->get('session')->getFlashBag()->add('success', 'El inscripto se agregó al sistema correctamente.');
                 return $this->redirectToRoute("inscripto_index");
@@ -232,6 +233,7 @@ class InscriptoController extends Controller
                     $inscripto->setPartido($partido);
                     $inscripto->setTipoDocumento($tipo);
                     $inscripto->setNroDocumento($documento);
+                    $inscripto->setBorrado(FALSE);
 
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($inscripto);

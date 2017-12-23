@@ -20,7 +20,8 @@ class VisitanteType extends AbstractType
                 ->add('provincia')
                 ->add('partido')
                 ->add('tipoDocumento')
-                ->add('nroDocumento');
+                ->add('nroDocumento')
+                ->add('borrado');
     }
     
     /**

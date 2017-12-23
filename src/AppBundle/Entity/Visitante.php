@@ -216,7 +216,7 @@ abstract class Visitante {
      */
     private $borrado;
 
-    function getRegistroVacunacion(): RegistroVacunacion {
+    function getRegistroVacunacion() {
         return $this->registroVacunacion;
     }
 
