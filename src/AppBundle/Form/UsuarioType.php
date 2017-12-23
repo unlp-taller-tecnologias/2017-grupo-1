@@ -25,9 +25,15 @@ class UsuarioType extends AbstractType {
                 ->add('isActive', CheckboxType::class, array(
                     'required' => false,
                 ))
-                ->add('password', PasswordType::class)
-                ->add('passwordConfirm', PasswordType::class, array(
+                ->add('resetPassword', CheckboxType::class, array(
                     'mapped' => false
+                ))
+                ->add('password', PasswordType::class, array(
+                    'required' => false,
+                ))
+                ->add('passwordConfirm', PasswordType::class, array(
+                    'mapped' => false,
+                    'required' => false,
                 ))
                 ->add('rol', EntityType::class, array(
                     'class' => 'AppBundle:Rol',

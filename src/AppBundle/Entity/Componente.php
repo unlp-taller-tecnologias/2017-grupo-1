@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Entity\Vacuna;
+use AppBundle\Entity\RegistroVacunacion;
 
 /**
  * Componente
@@ -10,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="componente")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ComponenteRepository")
  */
-class Componente
-{
+class Componente {
+
     /**
      * @var int
      *
@@ -36,9 +38,10 @@ class Componente
     private $dosisRecibidas;
 
     /**
-     * @var \stdClass
+     * @var Vacuna
      *
-     * @ORM\Column(name="vacuna", type="object")
+     * @ORM\ManyToOne(targetEntity="Vacuna")
+     * @ORM\JoinColumn(name="vacuna_id", referencedColumnName="id")
      */
     private $vacuna;
 
@@ -49,14 +52,28 @@ class Componente
      */
     private $vencimiento;
 
+    /**
+     * @var RegistroVacunacion
+     * 
+     * @ORM\ManyToOne(targetEntity="RegistroVacunacion", inversedBy="componentes")
+     * @ORM\JoinColumn(name="registroVacunacion_id", referencedColumnName="id")
+     */
+    private $registroVacunacion;
+
+    function getRegistroVacunacion(): RegistroVacunacion {
+        return $this->registroVacunacion;
+    }
+
+    function setRegistroVacunacion(RegistroVacunacion $registroVacunacion) {
+        $this->registroVacunacion = $registroVacunacion;
+    }
 
     /**
      * Get id
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -67,10 +84,9 @@ class Componente
      *
      * @return Componente
      */
-    public function setCumple($cumple)
-    {
+    public function setCumple($cumple) {
         $this->cumple = $cumple;
-    
+
         return $this;
     }
 
@@ -79,8 +95,7 @@ class Componente
      *
      * @return boolean
      */
-    public function getCumple()
-    {
+    public function getCumple() {
         return $this->cumple;
     }
 
@@ -91,10 +106,9 @@ class Componente
      *
      * @return Componente
      */
-    public function setDosisRecibidas($dosisRecibidas)
-    {
+    public function setDosisRecibidas($dosisRecibidas) {
         $this->dosisRecibidas = $dosisRecibidas;
-    
+
         return $this;
     }
 
@@ -103,33 +117,16 @@ class Componente
      *
      * @return integer
      */
-    public function getDosisRecibidas()
-    {
+    public function getDosisRecibidas() {
         return $this->dosisRecibidas;
     }
 
-    /**
-     * Set vacuna
-     *
-     * @param \stdClass $vacuna
-     *
-     * @return Componente
-     */
-    public function setVacuna($vacuna)
-    {
-        $this->vacuna = $vacuna;
-    
-        return $this;
+    function getVacuna(): Vacuna {
+        return $this->vacuna;
     }
 
-    /**
-     * Get vacuna
-     *
-     * @return \stdClass
-     */
-    public function getVacuna()
-    {
-        return $this->vacuna;
+    function setVacuna(Vacuna $vacuna) {
+        $this->vacuna = $vacuna;
     }
 
     /**
@@ -139,10 +136,9 @@ class Componente
      *
      * @return Componente
      */
-    public function setVencimiento($vencimiento)
-    {
+    public function setVencimiento($vencimiento) {
         $this->vencimiento = $vencimiento;
-    
+
         return $this;
     }
 
@@ -151,9 +147,8 @@ class Componente
      *
      * @return \DateTime
      */
-    public function getVencimiento()
-    {
+    public function getVencimiento() {
         return $this->vencimiento;
     }
-}
 
+}

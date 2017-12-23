@@ -6,7 +6,6 @@ use AppBundle\Entity\Usuario;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -73,17 +72,13 @@ class UsuarioController extends Controller {
     public function editAction(Request $request, Usuario $usuario) {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm('AppBundle\Form\UsuarioType', $usuario);
-        $form->add('password', PasswordType::class, array(
-                    'required' => false,
-                    'data' => $usuario->getPassword(),
-                ))
-                ->add('passwordConfirm', PasswordType::class, array(
-                    'mapped' => false,
-                    'required' => false,
-                    'data' => $usuario->getPassword(),
-        ));
+        $usuarioOriginal = clone $usuario;
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            if($form->get("resetPassword")->getData()){
+                
+            }
             $em->persist($usuario);
             try {
                 $em->flush();

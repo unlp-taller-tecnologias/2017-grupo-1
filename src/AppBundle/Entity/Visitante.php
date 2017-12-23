@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Entity\RegistroVacunacion;
 
 /**
  * Visitante
@@ -201,11 +202,27 @@ abstract class Visitante {
     protected $nroDocumento;
 
     /**
+     * @var RegistroVacunacion
+     * 
+     * @ORM\OneToOne(targetEntity="RegistroVacunacion", inversedBy="propietario")
+     * @ORM\JoinColumn(name="registroVacunacion_id", referencedColumnName="id")
+     */
+    protected $registroVacunacion;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="borrado", type="boolean", length=1)
      */
     private $borrado;
+
+    function getRegistroVacunacion(): RegistroVacunacion {
+        return $this->registroVacunacion;
+    }
+
+    function setRegistroVacunacion(RegistroVacunacion $registroVacunacion) {
+        $this->registroVacunacion = $registroVacunacion;
+    }
 
     /**
      * Get id
@@ -443,8 +460,7 @@ abstract class Visitante {
      *
      * @return Visitante
      */
-    public function setBorrado($borrado)
-    {
+    public function setBorrado($borrado) {
         $this->borrado = $borrado;
 
         return $this;
@@ -455,8 +471,7 @@ abstract class Visitante {
      *
      * @return Visitante
      */
-    public function getBorrado()
-    {
+    public function getBorrado() {
         return $this->borrado;
     }
 

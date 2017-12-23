@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\TipoObservacion;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Entity\RegistroVacunacion;
 
 /**
  * Observacion
@@ -13,8 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="observacion")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ObservacionRepository")
  */
-class Observacion
-{
+class Observacion {
+
     /**
      * @var int
      *
@@ -35,6 +36,7 @@ class Observacion
      * @var TipoObservacion $tipo
      * 
      * @ORM\ManyToOne(targetEntity="TipoObservacion")
+     * @ORM\JoinColumn(name="tipo_id", referencedColumnName="id")
      * @Assert\NotNull(message="El tipo no puede estar sin asignar")
      */
     private $tipo;
@@ -68,14 +70,28 @@ class Observacion
      */
     private $actualizadoPor;
 
+    /**
+     * @var RegistroVacunacion
+     * 
+     * @ORM\ManyToOne(targetEntity="RegistroVacunacion", inversedBy="observaciones")
+     * @ORM\JoinColumn(name="registroVacunacion_id", referencedColumnName="id")
+     */
+    private $registroVacunacion;
+
+    function getRegistroVacunacion(): RegistroVacunacion {
+        return $this->registroVacunacion;
+    }
+
+    function setRegistroVacunacion(RegistroVacunacion $registroVacunacion) {
+        $this->registroVacunacion = $registroVacunacion;
+    }
 
     /**
      * Get id
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -86,10 +102,9 @@ class Observacion
      *
      * @return Observacion
      */
-    public function setContenido($contenido)
-    {
+    public function setContenido($contenido) {
         $this->contenido = $contenido;
-    
+
         return $this;
     }
 
@@ -98,8 +113,7 @@ class Observacion
      *
      * @return string
      */
-    public function getContenido()
-    {
+    public function getContenido() {
         return $this->contenido;
     }
 
@@ -110,10 +124,9 @@ class Observacion
      *
      * @return Observacion
      */
-    public function setTipo($tipo)
-    {
+    public function setTipo($tipo) {
         $this->tipo = $tipo;
-    
+
         return $this;
     }
 
@@ -122,8 +135,7 @@ class Observacion
      *
      * @return \stdClass
      */
-    public function getTipo()
-    {
+    public function getTipo() {
         return $this->tipo;
     }
 
@@ -134,10 +146,9 @@ class Observacion
      *
      * @return Observacion
      */
-    public function setFechaCreacion($fechaCreacion)
-    {
+    public function setFechaCreacion($fechaCreacion) {
         $this->fechaCreacion = $fechaCreacion;
-    
+
         return $this;
     }
 
@@ -146,8 +157,7 @@ class Observacion
      *
      * @return \DateTime
      */
-    public function getFechaCreacion()
-    {
+    public function getFechaCreacion() {
         return $this->fechaCreacion;
     }
 
@@ -158,10 +168,9 @@ class Observacion
      *
      * @return Observacion
      */
-    public function setFechaActualizacion($fechaActualizacion)
-    {
+    public function setFechaActualizacion($fechaActualizacion) {
         $this->fechaActualizacion = $fechaActualizacion;
-    
+
         return $this;
     }
 
@@ -170,8 +179,7 @@ class Observacion
      *
      * @return \DateTime
      */
-    public function getFechaActualizacion()
-    {
+    public function getFechaActualizacion() {
         return $this->fechaActualizacion;
     }
 
@@ -182,10 +190,9 @@ class Observacion
      *
      * @return Observacion
      */
-    public function setCreadoPor($creadoPor)
-    {
+    public function setCreadoPor($creadoPor) {
         $this->creadoPor = $creadoPor;
-    
+
         return $this;
     }
 
@@ -194,8 +201,7 @@ class Observacion
      *
      * @return \stdClass
      */
-    public function getCreadoPor()
-    {
+    public function getCreadoPor() {
         return $this->creadoPor;
     }
 
@@ -206,10 +212,9 @@ class Observacion
      *
      * @return Observacion
      */
-    public function setActualizadoPor($actualizadoPor)
-    {
+    public function setActualizadoPor($actualizadoPor) {
         $this->actualizadoPor = $actualizadoPor;
-    
+
         return $this;
     }
 
@@ -218,9 +223,8 @@ class Observacion
      *
      * @return \stdClass
      */
-    public function getActualizadoPor()
-    {
+    public function getActualizadoPor() {
         return $this->actualizadoPor;
     }
-}
 
+}

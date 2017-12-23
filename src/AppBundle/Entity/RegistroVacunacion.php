@@ -3,6 +3,13 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Componente;
+use AppBundle\Entity\Usuario;
+use AppBundle\Entity\Visitante;
+use AppBundle\Entity\Observacion;
+use AppBundle\Entity\RegistroEnfermedades;
+use AppBundle\Entity\RegistroFactorRiesgo;
 
 /**
  * RegistroVacunacion
@@ -10,8 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="registro_vacunacion")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RegistroVacunacionRepository")
  */
-class RegistroVacunacion
-{
+class RegistroVacunacion {
+
     /**
      * @var int
      *
@@ -29,25 +36,17 @@ class RegistroVacunacion
     private $cumple;
 
     /**
-     * @var \stdClass
-     *
-     * @ORM\Column(name="propietario", type="object")
+     * @var Visitante
+     * @ORM\OneToOne(targetEntity="Visitante", mappedBy="registroVacunacion")
      */
     private $propietario;
 
     /**
-     * @var \stdClass
+     * @var ArrayCollection
      *
-     * @ORM\Column(name="observacionesPublicas", type="object")
+     * @ORM\OneToMany(targetEntity="Observacion", mappedBy="registroVacunacion")
      */
-    private $observacionesPublicas;
-
-    /**
-     * @var \stdClass
-     *
-     * @ORM\Column(name="observacionesPrivadas", type="object")
-     */
-    private $observacionesPrivadas;
+    private $observaciones;
 
     /**
      * @var \DateTime
@@ -64,27 +63,85 @@ class RegistroVacunacion
     private $actualizado;
 
     /**
-     * @var \stdClass
+     * @var Usuario
      *
-     * @ORM\Column(name="creador", type="object")
+     * @ORM\ManyToOne(targetEntity="Usuario")
+     * @ORM\JoinColumn(name="creador_id", referencedColumnName="id")
      */
     private $creador;
 
     /**
-     * @var \stdClass
+     * @var Usuario
      *
-     * @ORM\Column(name="actualizadoPor", type="object")
+     * @ORM\ManyToOne(targetEntity="Usuario")
+     * @ORM\JoinColumn(name="actualizadoPor_id", referencedColumnName="id")
      */
     private $actualizadoPor;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Componente", mappedBy="registroVacunacion")
+     */
+    private $componentes;
+
+    /**
+     * @var ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="RegistroEnfermedades", mappedBy="registroVacunacion")
+     */
+    protected $registroEnfermedades;
+
+    /**
+     * @var ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="RegistroFactorRiesgo", mappedBy="registroVacunacion")
+     */
+    protected $registroFactoresRiesgo;
+
+    public function __construct() {
+        $this->componentes = new ArrayCollection();
+        $this->observaciones = new ArrayCollection();
+        $this->registroEnfermedades = new ArrayCollection();
+        $this->registroFactoresRiesgo = new ArrayCollection();
+    }
+
+    function getRegistroFactoresRiesgo(): ArrayCollection {
+        return $this->registroFactoresRiesgo;
+    }
+
+    function setRegistroFactoresRiesgo(ArrayCollection $registroFactoresRiesgo) {
+        $this->registroFactoresRiesgo = $registroFactoresRiesgo;
+    }
+
+    function getRegistroEnfermedades(): ArrayCollection {
+        return $this->registroEnfermedades;
+    }
+
+    function setRegistroEnfermedades(ArrayCollection $registroEnfermedades) {
+        $this->registroEnfermedades = $registroEnfermedades;
+    }
+
+    function getActualizado(): \DateTime {
+        return $this->actualizado;
+    }
+
+    function getComponentes() {
+        return $this->componentes;
+    }
+
+    function setActualizado(\DateTime $actualizado) {
+        $this->actualizado = $actualizado;
+    }
+
+    function setComponentes($componentes) {
+        $this->componentes = $componentes;
+    }
 
     /**
      * Get id
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -95,10 +152,9 @@ class RegistroVacunacion
      *
      * @return RegistroVacunacion
      */
-    public function setCumple($cumple)
-    {
+    public function setCumple($cumple) {
         $this->cumple = $cumple;
-    
+
         return $this;
     }
 
@@ -107,81 +163,24 @@ class RegistroVacunacion
      *
      * @return boolean
      */
-    public function getCumple()
-    {
+    public function getCumple() {
         return $this->cumple;
     }
 
-    /**
-     * Set propietario
-     *
-     * @param \stdClass $propietario
-     *
-     * @return RegistroVacunacion
-     */
-    public function setPropietario($propietario)
-    {
-        $this->propietario = $propietario;
-    
-        return $this;
-    }
-
-    /**
-     * Get propietario
-     *
-     * @return \stdClass
-     */
-    public function getPropietario()
-    {
+    function getPropietario(): Visitante {
         return $this->propietario;
     }
 
-    /**
-     * Set observacionesPublicas
-     *
-     * @param \stdClass $observacionesPublicas
-     *
-     * @return RegistroVacunacion
-     */
-    public function setObservacionesPublicas($observacionesPublicas)
-    {
-        $this->observacionesPublicas = $observacionesPublicas;
-    
-        return $this;
+    function setPropietario(Visitante $propietario) {
+        $this->propietario = $propietario;
     }
 
-    /**
-     * Get observacionesPublicas
-     *
-     * @return \stdClass
-     */
-    public function getObservacionesPublicas()
-    {
-        return $this->observacionesPublicas;
+    function getObservaciones(): ArrayCollection {
+        return $this->observaciones;
     }
 
-    /**
-     * Set observacionesPrivadas
-     *
-     * @param \stdClass $observacionesPrivadas
-     *
-     * @return RegistroVacunacion
-     */
-    public function setObservacionesPrivadas($observacionesPrivadas)
-    {
-        $this->observacionesPrivadas = $observacionesPrivadas;
-    
-        return $this;
-    }
-
-    /**
-     * Get observacionesPrivadas
-     *
-     * @return \stdClass
-     */
-    public function getObservacionesPrivadas()
-    {
-        return $this->observacionesPrivadas;
+    function setObservaciones(ArrayCollection $observaciones) {
+        $this->observaciones = $observaciones;
     }
 
     /**
@@ -191,10 +190,9 @@ class RegistroVacunacion
      *
      * @return RegistroVacunacion
      */
-    public function setFechaCreacion($fechaCreacion)
-    {
+    public function setFechaCreacion($fechaCreacion) {
         $this->fechaCreacion = $fechaCreacion;
-    
+
         return $this;
     }
 
@@ -203,8 +201,7 @@ class RegistroVacunacion
      *
      * @return \DateTime
      */
-    public function getFechaCreacion()
-    {
+    public function getFechaCreacion() {
         return $this->fechaCreacion;
     }
 
@@ -215,10 +212,9 @@ class RegistroVacunacion
      *
      * @return RegistroVacunacion
      */
-    public function setFechaActualizacion($fechaActualizacion)
-    {
+    public function setFechaActualizacion($fechaActualizacion) {
         $this->fechaActualizacion = $fechaActualizacion;
-    
+
         return $this;
     }
 
@@ -227,57 +223,24 @@ class RegistroVacunacion
      *
      * @return \DateTime
      */
-    public function getFechaActualizacion()
-    {
+    public function getFechaActualizacion() {
         return $this->fechaActualizacion;
     }
 
-    /**
-     * Set creador
-     *
-     * @param \stdClass $creador
-     *
-     * @return RegistroVacunacion
-     */
-    public function setCreador($creador)
-    {
-        $this->creador = $creador;
-    
-        return $this;
-    }
-
-    /**
-     * Get creador
-     *
-     * @return \stdClass
-     */
-    public function getCreador()
-    {
+    function getCreador(): Usuario {
         return $this->creador;
     }
 
-    /**
-     * Set actualizadoPor
-     *
-     * @param \stdClass $actualizadoPor
-     *
-     * @return RegistroVacunacion
-     */
-    public function setActualizadoPor($actualizadoPor)
-    {
-        $this->actualizadoPor = $actualizadoPor;
-    
-        return $this;
-    }
-
-    /**
-     * Get actualizadoPor
-     *
-     * @return \stdClass
-     */
-    public function getActualizadoPor()
-    {
+    function getActualizadoPor(): Usuario {
         return $this->actualizadoPor;
     }
-}
 
+    function setCreador(Usuario $creador) {
+        $this->creador = $creador;
+    }
+
+    function setActualizadoPor(Usuario $actualizadoPor) {
+        $this->actualizadoPor = $actualizadoPor;
+    }
+
+}
