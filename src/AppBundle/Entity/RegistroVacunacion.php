@@ -79,6 +79,8 @@ class RegistroVacunacion {
     private $actualizadoPor;
 
     /**
+     * @var ArrayCollection
+     * 
      * @ORM\OneToMany(targetEntity="Componente", mappedBy="registroVacunacion")
      */
     private $componentes;
@@ -102,6 +104,62 @@ class RegistroVacunacion {
         $this->observaciones = new ArrayCollection();
         $this->registroEnfermedades = new ArrayCollection();
         $this->registroFactoresRiesgo = new ArrayCollection();
+    }
+
+    /**
+     * 
+     */
+    public function addComponente(Componente $componente) {
+        $this->componentes->add($componente);
+    }
+
+    /**
+     * 
+     */
+    public function removeComponente(Componente $componente) {
+        return $this->getComponentes()->removeElement($componente);
+    }
+
+    /**
+     * 
+     */
+    public function addObservacion(Observacion $observacion) {
+        $this->observaciones->add($observacion);
+    }
+
+    /**
+     * 
+     */
+    public function removeObservacion(Observacion $observacion) {
+        return $this->observaciones->removeElement($observacion);
+    }
+
+    /**
+     * 
+     */
+    public function addRegEnfermedad(RegistroEnfermedades $registroEnfermedad) {
+        $this->registroEnfermedades->add($registroEnfermedad);
+    }
+
+    /**
+     * 
+     */
+    public function removeRegEnfermedad(RegistroEnfermedades $registroEnfermedad) {
+        return $this->registroEnfermedades->removeElement($registroEnfermedad);
+    }
+
+    /**
+     * 
+     */
+    public function addRegFacRiesgo(RegistroFactorRiesgo $registroRiesgo) {
+        $this->registroFactoresRiesgo->add($registroRiesgo);
+    }
+
+    /**
+     * 
+     */
+    public function removeRegFacRiesgo(RegistroFactorRiesgo $registroRiesgo) {
+        return $this->registroFactoresRiesgo->removeElement($registroRiesgo);
     }
 
     function getRegistroFactoresRiesgo(): ArrayCollection {
