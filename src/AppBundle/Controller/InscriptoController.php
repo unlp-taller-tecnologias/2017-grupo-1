@@ -55,6 +55,67 @@ class InscriptoController extends Controller
     }
 
     /**
+     * Editar registro action
+     *
+     * @Route("/editarRegistroAction", name="editar_registro_action")
+     * @Method("POST")
+     */
+    public function editarRegistroAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $inscripto = $em->getRepository('AppBundle:Inscripto')->find($request->get("idInscripto"));
+        $registrovacunacion = $inscripto->getRegistroVacunacion($request->get("idRegistro"));
+
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fechaActualizacion = new DateTime(date("Y-m-d"));
+        $registrovacunacion->setFechaActualizacion($fechaActualizacion);
+
+        $cantVacunas = $request->get('cantVacunas');
+
+        for ($i=1; $i <= $cantVacunas ; $i++) {
+            if ($request->get("idComponente".$i)){
+                $componente = $em->getRepository('AppBundle:Componente')->find($request->get("idComponente".$i));
+            }else{
+                $componente = new Componente();
+            }
+
+            if ($request->get('vencimiento'.$i)){
+                $fechaVencimiento = new DateTime($request->get('vencimiento'.$i));
+                $componente->setVencimiento($fechaVencimiento);
+            }
+
+            if ($request->get('cumple'.$i)){
+                $componente->setCumple(TRUE);
+            }else{
+                $componente->setCumple(FALSE);
+            }
+            
+            $componente->setDosisRecibidas($request->get('dosisRecibidas'.$i));
+
+            $vacuna = $em->getRepository('AppBundle:Vacuna')->find($request->get('idVacuna'.$i));
+            $componente->setVacuna($vacuna);
+
+            $componente->setRegistroVacunacion($registrovacunacion);
+            $registrovacunacion->addComponente($componente);
+
+            $em->persist($componente);                
+        }
+
+        $inscripto->setRegistroVacunacion($registrovacunacion);
+        $em->persist($inscripto);
+        $em->persist($registrovacunacion);
+        try {
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', 'El registro se edito exitosamente.');
+            return $this->redirectToRoute("inscripto_index");
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el registro. Detalle: ' . $e->getMessage());
+        }    
+
+        return $this->render('registrovacunacion/index.html.twig', array('registroVacunacion' => $registroVacunacion, 'vacunas' => $vacunas));
+    }
+
+    /**
      * Alta registro
      *
      * @Route("/altaRegistroAction", name="alta_registro_action")
