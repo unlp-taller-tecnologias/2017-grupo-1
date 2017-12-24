@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Inscripto;
+use AppBundle\Entity\Componente;
+use AppBundle\Entity\RegistroVacunacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,6 +20,75 @@ use \Datetime;
  */
 class InscriptoController extends Controller
 {
+
+    /**
+     * Alta registro
+     *
+     * @Route("/{id}/altaRegistro", name="alta_registro")
+     * @Method("GET")
+     */
+    public function altaRegistro(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
+        $inscripto = $em->getRepository('AppBundle:Inscripto')->find($request->get("id"));
+
+        return $this->render('registrovacunacion/index.html.twig', array('inscripto' => $inscripto, 'vacunas' => $vacunas));
+    }
+
+    /**
+     * Alta registro
+     *
+     * @Route("/altaRegistroAction", name="alta_registro_action")
+     * @Method("POST")
+     */
+    public function altaRegistroAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $registrovacunacion = new registrovacunacion();
+        $inscripto = $em->getRepository('AppBundle:Inscripto')->find($request->get('idInscripto'));
+        
+        // El usuario que creo la publicacion, todavia no estan hechas la sesiones.
+        $usuario = $em->getRepository('AppBundle:Usuario')->find(3);
+
+        $registrovacunacion->setPropietario($inscripto);
+        $registrovacunacion->setCreador($usuario);
+        $registrovacunacion->setActualizadoPor($usuario);
+        $registrovacunacion->setCumple(TRUE);
+        
+
+        $cantVacunas = $request->get('cantVacunas');
+
+        for ($i=1; $i <= $cantVacunas ; $i++) { 
+            $componente = new Componente();
+
+            if ($request->get('cumple'.$i)){
+                $componente->setCumple(TRUE);
+            }else{
+                $componente->setCumple(FALSE);
+            }
+            
+            $componente->setDosisRecibidas($request->get('dosisRecibidas'.$i));
+
+            $vacuna = $em->getRepository('AppBundle:Vacuna')->find($request->get('idVacuna'.$i));
+            $componente->setVacuna($vacuna);
+
+            $componente->setRegistroVacunacion($registrovacunacion);
+            $registrovacunacion->addComponente($componente);
+
+            $em->persist($componente);
+        } 
+
+              
+        $inscripto->setRegistroVacunacion($registrovacunacion);
+        $em->persist($inscripto);
+        $em->persist($registrovacunacion);
+        $em->flush();        
+
+        return $this->render('registrovacunacion/index.html.twig', array(
+            'registroVacunacion' => $registroVacunacion, 'vacunas' => $vacunas
+        ));
+    }
 
     /**
      * @Route("/altaExcelView", name="altaExcelView")
@@ -83,22 +154,6 @@ class InscriptoController extends Controller
     }
 
     /**
-     * Finds and displays a inscripto entity.
-     *
-     * @Route("/{id}", name="inscripto_show")
-     * @Method("GET")
-     */
-    public function showAction(Inscripto $inscripto)
-    {
-        $deleteForm = $this->createDeleteForm($inscripto);
-
-        return $this->render('inscripto/show.html.twig', array(
-            'inscripto' => $inscripto,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
      * Displays a form to edit an existing inscripto entity.
      *
      * @Route("/{id}/edit", name="inscripto_edit")
@@ -107,7 +162,6 @@ class InscriptoController extends Controller
     public function editAction(Request $request, Inscripto $inscripto)
     {
         $em = $this->getDoctrine()->getManager();
-        $deleteForm = $this->createDeleteForm($inscripto);
         $editForm = $this->createForm('AppBundle\Form\InscriptoType', $inscripto);
         $editForm->handleRequest($request);
 
@@ -133,7 +187,6 @@ class InscriptoController extends Controller
         return $this->render('inscripto/edit.html.twig', array(
             'inscripto' => $inscripto,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

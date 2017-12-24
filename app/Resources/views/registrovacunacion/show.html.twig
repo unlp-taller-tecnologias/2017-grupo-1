@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Registrovacunacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ registroVacunacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Cumple</th>
+                <td>{% if registroVacunacion.cumple %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechacreacion</th>
+                <td>{% if registroVacunacion.fechaCreacion %}{{ registroVacunacion.fechaCreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Actualizado</th>
+                <td>{% if registroVacunacion.actualizado %}{{ registroVacunacion.actualizado|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('registrovacunacion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('registrovacunacion_edit', { 'id': registroVacunacion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

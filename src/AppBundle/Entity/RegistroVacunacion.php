@@ -58,9 +58,9 @@ class RegistroVacunacion {
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="actualizado", type="datetime", nullable=true)
+     * @ORM\Column(name="fechaActualizacion", type="datetime", nullable=true)
      */
-    private $actualizado;
+    private $fechaActualizacion;
 
     /**
      * @var Usuario
@@ -178,16 +178,8 @@ class RegistroVacunacion {
         $this->registroEnfermedades = $registroEnfermedades;
     }
 
-    function getActualizado(): \DateTime {
-        return $this->actualizado;
-    }
-
     function getComponentes() {
         return $this->componentes;
-    }
-
-    function setActualizado(\DateTime $actualizado) {
-        $this->actualizado = $actualizado;
     }
 
     function setComponentes($componentes) {
@@ -225,7 +217,7 @@ class RegistroVacunacion {
         return $this->cumple;
     }
 
-    function getPropietario(): Visitante {
+    function getPropietario() {
         return $this->propietario;
     }
 
@@ -285,11 +277,11 @@ class RegistroVacunacion {
         return $this->fechaActualizacion;
     }
 
-    function getCreador(): Usuario {
+    function getCreador() {
         return $this->creador;
     }
 
-    function getActualizadoPor(): Usuario {
+    function getActualizadoPor() {
         return $this->actualizadoPor;
     }
 
