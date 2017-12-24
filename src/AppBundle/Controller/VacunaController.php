@@ -52,7 +52,7 @@ class VacunaController extends Controller
             try {
                 $em->flush();
                 $this->get('session')->getFlashBag()->add('success', 'La vacuna se agregó al sistema correctamente.');
-                return $this->redirectToRoute("vacuna_new");
+                return $this->redirectToRoute("vacuna_index");
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', 'No se ha podido agregar la vacuna en el sistema. Detalle: ' . $e->getMessage());
             }
