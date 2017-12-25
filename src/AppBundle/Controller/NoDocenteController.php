@@ -194,6 +194,32 @@ class NoDocenteController extends Controller
             $registrovacunacion->setCumple(FALSE);
         }
 
+        // El usuario que creo la observacion, todavia no estan hechas la sesiones.
+        $usuario = $em->getRepository('AppBundle:Usuario')->find(3);
+
+        // Creo las observaciones
+        if ($request->get('observacionPublica') != '') {
+          $observacionPublica = new Observacion();
+          $observacionPublica->setContenido($request->get('observacionPublica'));
+          $observacionPublica->setFechaCreacion($fechaActualizacion);
+          $observacionPublica->setCreadoPor($usuario);
+          $observacionPublica->setRegistroVacunacion($registrovacunacion);
+          $observacionPublica->setEsPrivada(FALSE);
+          $registrovacunacion->addObservacion($observacionPublica);
+          $em->persist($observacionPublica);
+        }
+
+        if ($request->get('observacionPrivada') != '') {
+          $observacionPrivada = new Observacion();
+          $observacionPrivada->setContenido($request->get('observacionPrivada'));
+          $observacionPrivada->setFechaCreacion($fechaActualizacion);
+          $observacionPrivada->setCreadoPor($usuario);
+          $observacionPrivada->setRegistroVacunacion($registrovacunacion);
+          $observacionPrivada->setEsPrivada(TRUE);
+          $registrovacunacion->addObservacion($observacionPrivada);
+          $em->persist($observacionPrivada);
+        }
+
         $cantVacunas = $request->get('cantVacunas');
 
         for ($i=1; $i <= $cantVacunas ; $i++) {
@@ -231,7 +257,11 @@ class NoDocenteController extends Controller
         try {
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'El registro se edito exitosamente.');
-            return $this->redirectToRoute("nodocente_index");
+            if ($visitante->getTipo() == 'Inscripto') {
+                return $this->redirectToRoute("inscripto_index");
+            }else{
+                return $this->redirectToRoute("nodocente_index");
+            }
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el registro. Detalle: ' . $e->getMessage());
         }    
