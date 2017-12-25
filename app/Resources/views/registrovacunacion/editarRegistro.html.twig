@@ -26,30 +26,55 @@
 
                 <input type="hidden" name="idVisitante" value="{{visitante.id}}">
                 <input type="hidden" name="idRegistro" value="{{registrovacunacion.id}}">
-
+                <h2>Vacunas del Calendario Nacional</h2>
                 {% for vacuna in vacunas %}
-        
-                    <h3>{{ vacuna.nombre }}</h3>
-                    <div class="form-group">
-                        <label for="dosisRecibidas{{ loop.index }}">Dosis recibidas: </label>
-                        <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" placeholder="Dosis Recibidas"{% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %}required />
-                    </div>
-
-                    {% if vacuna.tieneVencimiento %}
+                    {% if vacuna.esObligatoria %}
+                        <h3>{{ vacuna.nombre }}</h3>
                         <div class="form-group">
-                            <label for="vencimiento{{ loop.index }}">Vencimiento</label>
-                            <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endfor %} />
+                            <label for="dosisRecibidas{{ loop.index }}">Dosis recibidas: </label>
+                            <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" placeholder="Dosis Recibidas"{% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %}required />
                         </div>
+
+                        {% if vacuna.tieneVencimiento %}
+                            <div class="form-group">
+                                <label for="vencimiento{{ loop.index }}">Vencimiento</label>
+                                <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %} />
+                            </div>
+                        {% endif %}
+                            
+                        <div class="checkbox">
+                            <label><input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>Completo </label>
+                        </div>
+
+                        <input type="hidden" name="idComponente{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
+                        <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
+                        <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
                     {% endif %}
-                        
-                    <div class="checkbox">
-                        <label><input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>Cumple </label>
-                    </div>
+                {% endfor %}
+                <h2>Otras vacunas</h2>
+                {% for vacuna in vacunas %}
+                    {% if not vacuna.esObligatoria %}
+                        <h3>{{ vacuna.nombre }}</h3>
+                        <div class="form-group">
+                            <label for="dosisRecibidas{{ loop.index }}">Dosis recibidas: </label>
+                            <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" placeholder="Dosis Recibidas"{% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %}required />
+                        </div>
 
-                    <input type="hidden" name="idComponente{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
-                    <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
-                    <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
+                        {% if vacuna.tieneVencimiento %}
+                            <div class="form-group">
+                                <label for="vencimiento{{ loop.index }}">Vencimiento</label>
+                                <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %} />
+                            </div>
+                        {% endif %}
+                            
+                        <div class="checkbox">
+                            <label><input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>Completo </label>
+                        </div>
 
+                        <input type="hidden" name="idComponente{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
+                        <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
+                        <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
+                    {% endif %}
                 {% endfor %}
                 <br><br>
                 <div class="checkbox">

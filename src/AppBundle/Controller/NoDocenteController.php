@@ -84,12 +84,12 @@ class NoDocenteController extends Controller
 
         for ($i=1; $i <= $cantVacunas ; $i++) { 
             $componente = new Componente();
-
-            if ($request->get('vencimiento'.$i)){
+            
+            if ($request->get('vencimiento'.$i) != ''){
                 $fechaVencimiento = new DateTime($request->get('vencimiento'.$i));
                 $componente->setVencimiento($fechaVencimiento);
             }
-
+            
             if ($request->get('cumple'.$i)){
                 $componente->setCumple(TRUE);
             }else{
