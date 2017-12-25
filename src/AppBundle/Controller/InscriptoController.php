@@ -285,15 +285,15 @@ class InscriptoController extends Controller
     }
 
     /**
-     * Eliminar inscripto del sistema
-     * 
-     * @Route("/{id}/delete", name="inscripto_delete" , condition="request.isXmlHttpRequest()")
-     * @Method({"POST"})
+     * Deletes a inscripto entity.
+     *
+     * @Route("/{id}/delete", name="inscripto_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, Inscripto $inscripto) {
         $em = $this->getDoctrine()->getManager();
-        $inscripto->setBorrado(TRUE);
         try {
+            $inscripto->setBorrado(TRUE);
             $em->flush();
             return new JsonResponse(array('success' => true, 'message' => 'El inscripto fue eliminado con éxito'));
         } catch (\Exception $e) {

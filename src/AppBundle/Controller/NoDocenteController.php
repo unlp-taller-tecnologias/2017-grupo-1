@@ -47,11 +47,12 @@ class NoDocenteController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $noDocente->setBorrado(FALSE);
             $em->persist($noDocente);
             try {
                 $em->flush();
                 $this->get('session')->getFlashBag()->add('success', 'El usuario se agregó al sistema correctamente.');
-                return $this->redirectToRoute("usuario_new");
+                return $this->redirectToRoute("nodocente_index");
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', 'No se ha podido agregar el usuario en el sistema. Detalle: ' . $e->getMessage());
             }
@@ -69,18 +70,16 @@ class NoDocenteController extends Controller
     }
 
     /**
-     * Finds and displays a noDocente entity.
+     * Show a No docente entity.
      *
-     * @Route("/{id}", name="nodocente_show")
+     * @Route("/{id}/show", name="nodocente_show")
      * @Method("GET")
      */
-    public function showAction(NoDocente $noDocente)
-    {
-        $deleteForm = $this->createDeleteForm($noDocente);
-
+    public function showAction(Request $request, NoDocente $noDocente) {
+        $form = $this->createForm('AppBundle\Form\NoDocenteType', $noDocente);
         return $this->render('nodocente/show.html.twig', array(
-            'noDocente' => $noDocente,
-            'delete_form' => $deleteForm->createView(),
+                    'noDocente' => $noDocente,
+                    'form' => $form->createView(),
         ));
     }
 
@@ -92,20 +91,32 @@ class NoDocenteController extends Controller
      */
     public function editAction(Request $request, NoDocente $noDocente)
     {
-        $deleteForm = $this->createDeleteForm($noDocente);
+        $em = $this->getDoctrine()->getManager();
         $editForm = $this->createForm('AppBundle\Form\NoDocenteType', $noDocente);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em->persist($noDocente);
+            try {
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'El No docente se editó correctamente.');
+                return $this->redirectToRoute("nodocente_index");
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar al No docente. Detalle: ' . $e->getMessage());
+            }
+        }
 
-            return $this->redirectToRoute('nodocente_edit', array('id' => $noDocente->getId()));
+        if ($editForm->isSubmitted() && !$editForm->isValid()) {
+            $validator = $this->get('validator');
+            $errors = $validator->validate($editForm);
+            foreach ($errors as $error) {
+                $this->get('session')->getFlashBag()->add('error', $error->getMessage());
+            }
         }
 
         return $this->render('nodocente/edit.html.twig', array(
             'noDocente' => $noDocente,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
         ));
     }
 
@@ -119,7 +130,7 @@ class NoDocenteController extends Controller
     {
       $em = $this->getDoctrine()->getManager();
       try {
-          $em->remove($noDocente);
+          $noDocente->setBorrado(TRUE);
           $em->flush();
           return new JsonResponse(array('success' => true, 'message' => 'El no docente fue eliminado con éxito'));
       } catch (\Exception $e) {

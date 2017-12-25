@@ -69,7 +69,8 @@
                               
                                 <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 
-                                <a href="#" onclick="inscriptoDelete('{{ path("inscripto_delete", {"id":inscripto.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                <a href="#" onclick="usuarioDelete('{{ path("inscripto_delete", {"id":inscripto.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
                             {% endif %}  
                         </td>
                     </tr>
@@ -100,7 +101,7 @@
             });
             $('#panel-config').modal();
         }
-        function inscriptoDelete(url) {
+        function usuarioDelete(url) {
             swal({
                 title: '¿Estas seguro?',
                 text: "Estas por eliminar un inscripto del sistema!",
@@ -110,21 +111,21 @@
                 cancelButtonColor: '#d33',
                 cancelButtonText: 'Cancelar',
                 confirmButtonText: 'Si, Eliminarlo'
-            }).then((result) => {
-                if (result.value) {
-                    $.post(url, {}).done((data) => {
-                        if (data.success) {
-                            swal('Borrado!', data.message, 'success').then(function () {
-                                location.reload();
-                            });
-                        } else {
-                            swal('Cuidado!', data.message, 'error');
-                        }
-                    }).fail(() => {
-                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
-                    });
-                }
-            });
+              }).then((result) => {
+                  if (result.value) {
+                      $.post(url, {}).done((data) => {
+                          if (data.success) {
+                              swal('Borrado!', data.message, 'success').then(function () {
+                                  location.reload();
+                              });
+                          } else {
+                              swal('Cuidado!', data.message, 'error');
+                          }
+                      }).fail(() => {
+                          swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                      });
+                  }
+              });
         }
         $(document).ready(function () {
             $('#usuarios_tabla').DataTable({

@@ -1,0 +1,92 @@
+{{ form_start(form, {'attr':{'class':'form-horizontal'} }) }}
+{{ form_errors(form)}}
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Departamento:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getDepartamento() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Oficina:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getOficina() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Telefono:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getTelefono() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Funcion:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getFuncion() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Nombre:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getNombre() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Apellido:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getApellido() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Email:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getEmail() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Pais:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getPais() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Provincia:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getProvincia() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Partido:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getPartido() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Localidad:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getLocalidad() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Codigo postal:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getCodigopostal() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Tipo documento:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getTipoDocumento() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Nro documento:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ noDocente.getNroDocumento() | capitalize}}</p>
+    </div>
+</div>
+
+<div class="hidden">
+    {{ form_rest(form) }}
+    <input type="submit" value="Submit">
+</div>
+{{ form_end(form) }}
