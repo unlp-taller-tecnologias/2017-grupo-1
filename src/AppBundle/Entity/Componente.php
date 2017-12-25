@@ -48,7 +48,7 @@ class Componente {
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="vencimiento", type="datetime", nullable=true)
+     * @ORM\Column(name="vencimiento", type="date", nullable=true)
      */
     private $vencimiento;
 
@@ -132,7 +132,7 @@ class Componente {
     /**
      * Set vencimiento
      *
-     * @param \DateTime $vencimiento
+     * @param \Date $vencimiento
      *
      * @return Componente
      */
@@ -145,7 +145,7 @@ class Componente {
     /**
      * Get vencimiento
      *
-     * @return \DateTime
+     * @return \Date
      */
     public function getVencimiento() {
         return $this->vencimiento;

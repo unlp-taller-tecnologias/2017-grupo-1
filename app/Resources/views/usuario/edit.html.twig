@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
-
 {% block otherstyles %}
-    <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -20,6 +20,7 @@
         <div class="panel-heading">
             <h3 class="panel-title">Editar <strong>Usuario del Sistema</strong></h3>
         </div>
+
         <div class="panel-body">
             {{ form_start(form, {'attr':{'class':'form-horizontal'} } ) }}
             <div class="form-group">

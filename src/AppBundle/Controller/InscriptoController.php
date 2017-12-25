@@ -33,7 +33,86 @@ class InscriptoController extends Controller
         $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
         $inscripto = $em->getRepository('AppBundle:Inscripto')->find($request->get("id"));
 
-        return $this->render('registrovacunacion/index.html.twig', array('inscripto' => $inscripto, 'vacunas' => $vacunas));
+        return $this->render('registrovacunacion/altaRegistro.html.twig', array('inscripto' => $inscripto, 'vacunas' => $vacunas));
+    }
+
+    /**
+     * Editar registro
+     *
+     * @Route("/{id}/editarRegistro", name="editar_registro")
+     * @Method("GET")
+     */
+    public function editarRegistro(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $inscripto = $em->getRepository('AppBundle:Inscripto')->find($request->get("id"));
+        $registrovacunacion = $inscripto->getRegistroVacunacion();
+        $componentes = $registrovacunacion->getComponentes();
+        $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
+
+        return $this->render('registrovacunacion/editarRegistro.html.twig', 
+            array('inscripto' => $inscripto, 'vacunas' => $vacunas, 'registrovacunacion' => $registrovacunacion, 'componentes'=> $componentes));
+    }
+
+    /**
+     * Editar registro action
+     *
+     * @Route("/editarRegistroAction", name="editar_registro_action")
+     * @Method("POST")
+     */
+    public function editarRegistroAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $inscripto = $em->getRepository('AppBundle:Inscripto')->find($request->get("idInscripto"));
+        $registrovacunacion = $inscripto->getRegistroVacunacion($request->get("idRegistro"));
+
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fechaActualizacion = new DateTime(date("Y-m-d"));
+        $registrovacunacion->setFechaActualizacion($fechaActualizacion);
+
+        $cantVacunas = $request->get('cantVacunas');
+
+        for ($i=1; $i <= $cantVacunas ; $i++) {
+            if ($request->get("idComponente".$i)){
+                $componente = $em->getRepository('AppBundle:Componente')->find($request->get("idComponente".$i));
+            }else{
+                $componente = new Componente();
+            }
+
+            if ($request->get('vencimiento'.$i)){
+                $fechaVencimiento = new DateTime($request->get('vencimiento'.$i));
+                $componente->setVencimiento($fechaVencimiento);
+            }
+
+            if ($request->get('cumple'.$i)){
+                $componente->setCumple(TRUE);
+            }else{
+                $componente->setCumple(FALSE);
+            }
+            
+            $componente->setDosisRecibidas($request->get('dosisRecibidas'.$i));
+
+            $vacuna = $em->getRepository('AppBundle:Vacuna')->find($request->get('idVacuna'.$i));
+            $componente->setVacuna($vacuna);
+
+            $componente->setRegistroVacunacion($registrovacunacion);
+            $registrovacunacion->addComponente($componente);
+
+            $em->persist($componente);                
+        }
+
+        $inscripto->setRegistroVacunacion($registrovacunacion);
+        $em->persist($inscripto);
+        $em->persist($registrovacunacion);
+        try {
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', 'El registro se edito exitosamente.');
+            return $this->redirectToRoute("inscripto_index");
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el registro. Detalle: ' . $e->getMessage());
+        }    
+
+        return $this->render('registrovacunacion/index.html.twig', array('registroVacunacion' => $registroVacunacion, 'vacunas' => $vacunas));
     }
 
     /**
@@ -55,12 +134,21 @@ class InscriptoController extends Controller
         $registrovacunacion->setCreador($usuario);
         $registrovacunacion->setActualizadoPor($usuario);
         $registrovacunacion->setCumple(TRUE);
+
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fechaCreacion = new DateTime(date("Y-m-d H:i:s"));
+        $registrovacunacion->setFechaCreacion($fechaCreacion);
         
 
         $cantVacunas = $request->get('cantVacunas');
 
         for ($i=1; $i <= $cantVacunas ; $i++) { 
             $componente = new Componente();
+
+            if ($request->get('vencimiento'.$i)){
+                $fechaVencimiento = new DateTime($request->get('vencimiento'.$i));
+                $componente->setVencimiento($fechaVencimiento);
+            }
 
             if ($request->get('cumple'.$i)){
                 $componente->setCumple(TRUE);
@@ -83,7 +171,13 @@ class InscriptoController extends Controller
         $inscripto->setRegistroVacunacion($registrovacunacion);
         $em->persist($inscripto);
         $em->persist($registrovacunacion);
-        $em->flush();        
+        try {
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', 'El registro se dio de alta exitosamente.');
+            return $this->redirectToRoute("inscripto_index");
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('error', 'No se ha podido dar de alta el registro. Detalle: ' . $e->getMessage());
+        }    
 
         return $this->render('registrovacunacion/index.html.twig', array(
             'registroVacunacion' => $registroVacunacion, 'vacunas' => $vacunas

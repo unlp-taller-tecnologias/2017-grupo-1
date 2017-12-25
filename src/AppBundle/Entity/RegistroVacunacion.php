@@ -49,16 +49,16 @@ class RegistroVacunacion {
     private $observaciones;
 
     /**
-     * @var \DateTime
+     * @var \Date
      *
-     * @ORM\Column(name="fechaCreacion", type="datetime")
+     * @ORM\Column(name="fechaCreacion", type="date")
      */
     private $fechaCreacion;
 
     /**
-     * @var \DateTime
+     * @var \Date
      *
-     * @ORM\Column(name="fechaActualizacion", type="datetime", nullable=true)
+     * @ORM\Column(name="fechaActualizacion", type="date", nullable=true)
      */
     private $fechaActualizacion;
 
@@ -236,7 +236,7 @@ class RegistroVacunacion {
     /**
      * Set fechaCreacion
      *
-     * @param \DateTime $fechaCreacion
+     * @param \Date $fechaCreacion
      *
      * @return RegistroVacunacion
      */
@@ -249,7 +249,7 @@ class RegistroVacunacion {
     /**
      * Get fechaCreacion
      *
-     * @return \DateTime
+     * @return \Date
      */
     public function getFechaCreacion() {
         return $this->fechaCreacion;
@@ -258,7 +258,7 @@ class RegistroVacunacion {
     /**
      * Set fechaActualizacion
      *
-     * @param \DateTime $fechaActualizacion
+     * @param \Date $fechaActualizacion
      *
      * @return RegistroVacunacion
      */
@@ -271,7 +271,7 @@ class RegistroVacunacion {
     /**
      * Get fechaActualizacion
      *
-     * @return \DateTime
+     * @return \Date
      */
     public function getFechaActualizacion() {
         return $this->fechaActualizacion;

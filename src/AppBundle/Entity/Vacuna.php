@@ -39,9 +39,9 @@ class Vacuna
      *      maxMessage = "El nombre de vacuna no puede tener más de {{ limit }} caracteres"
      * )
      * @Assert\Regex(
-     *     pattern="/\W/",
-     *     match=false,
-     *     message="El nombre de vacuna no debe contener espacios ni caracteres especiales"
+     *     pattern="/[a-zA-Z]+$/",
+     *     match=true,
+     *     message="El nombre no puede contener numeros ni caracteres especiales"
      * )
      */
     private $nombre;
@@ -58,9 +58,9 @@ class Vacuna
      *      maxMessage = "La abreviatura de vacuna no puede tener más de {{ limit }} caracteres"
      * )
      * @Assert\Regex(
-     *     pattern="/\W/",
-     *     match=false,
-     *     message="La abreviatura de vacuna no debe contener espacios ni caracteres especiales"
+     *     pattern="/[a-zA-Z]+$/",
+     *     match=true,
+     *     message="La abreviatura no puede contener numeros ni caracteres especiales"
      * )
      */
     private $abreviatura;

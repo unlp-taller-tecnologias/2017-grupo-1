@@ -56,6 +56,12 @@
                         <td class="text-center">{{ inscripto.nroDocumento }}</td>
                         <td class="text-center">
                             {% if not inscripto.borrado %}
+                                {% if inscripto.registroVacunacion %}
+                                    <a href="{{ path('editar_registro', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
+                                {% else %}
+                                    <a href="{{ path('alta_registro', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
+                                {% endif %}
+
                                 <!-- Trigger the modal with a button -->
                                 <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye" aria-hidden="true"></i></button>
 
