@@ -405,4 +405,18 @@ class InscriptoController extends Controller
             return ($this->indexAction($request));
         }
     }
+
+    /**
+     * Show a inscripto entity.
+     *
+     * @Route("/{id}/show", name="inscripto_show")
+     * @Method("GET")
+     */
+    public function showAction(Request $request, Inscripto $inscripto) {
+        $form = $this->createForm('AppBundle\Form\InscriptoType', $inscripto);
+        return $this->render('inscripto/show.html.twig', array(
+                    'inscripto' => $inscripto,
+                    'form' => $form->createView(),
+        ));
+    }
 }

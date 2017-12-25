@@ -1,0 +1,79 @@
+{{ form_start(form, {'attr':{'class':'form-horizontal'} }) }}
+{{ form_errors(form)}}
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Nro ficha:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getNroFicha() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Legajo:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getLegajo() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Fecha de inscripcion:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getFechaInscripcion() | date('Y-m-d')}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Nombre:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getNombre() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Apellido:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getApellido() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Email:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getEmail() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Pais:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getPais() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Provincia:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getProvincia() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Localidad:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getLocalidad() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Codigo Postal:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getCodigoPostal() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Tipo documento:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getTipoDocumento() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Nro documento:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ inscripto.getNroDocumento() | capitalize}}</p>
+    </div>
+</div>
+<div class="hidden">
+    {{ form_rest(form) }}
+    <input type="submit" value="Submit">
+</div>
+{{ form_end(form) }}
