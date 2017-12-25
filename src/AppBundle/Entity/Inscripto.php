@@ -132,5 +132,10 @@ class Inscripto extends Visitante
     {
         return $this->fechaInscripcion;
     }
+    
+    public function getTipo()
+    {
+        return 'Inscripto';
+    }
 }
 

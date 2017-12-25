@@ -225,7 +225,7 @@ class RegistroVacunacion {
         $this->propietario = $propietario;
     }
 
-    function getObservaciones(): ArrayCollection {
+    function getObservaciones() {
         return $this->observaciones;
     }
 

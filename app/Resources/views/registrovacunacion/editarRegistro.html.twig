@@ -76,17 +76,54 @@
                         <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
                     {% endif %}
                 {% endfor %}
+
+                 <!-- OBSERVACIONES PUBLICAS Y PRIVADAS -->
+                <br><br><br>
+                <div class="form-group">
+                    <label for="comment">Observacion Privada:</label>
+                    <textarea class="form-control" rows="5" cols="50" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL"></textarea>
+                </div>
                 <br><br>
+                <div class="form-group">
+                    <label for="comment">Observacion Publica:</label>
+                    <textarea class="form-control" rows="5" cols="50" name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL"></textarea>
+                </div>
+                <br>
+                <!-- FIN OBSERVACIONES PUBLICAS Y PRIVADAS -->
+
                 <div class="checkbox">
                     <label><input name="cumple" type="checkbox" {% if registrovacunacion.cumple %} checked {% endif %}> Cumple el registro de vacunacion</label>
                 </div>
                 <br><br>
-
                 <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default" >Volver</a>
 
                 <input class="btn btn-primary" type="submit" name="submit" value="Guardar">          
             </form>
         
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="">
+                        <h3>Observaciones</h3>
+                    </div>
+                    {% for observacion in observaciones %}
+                        {% if observacion.esPrivada %}
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <p class="col-lg-6">Observacion Privada</p><p class="col-lg-6 text-right">{{ observacion.fechaCreacion | date('d/m/Y')}}</p> <br>
+                                </div>
+                        {% else %}
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <p class="col-lg-6">Observacion Publica</p><p class="col-lg-6 text-right">{{ observacion.fechaCreacion | date('d/m/Y')}}</p> <br>
+                                </div>
+                        {% endif %}
+                                <div class="panel-body">
+                                    {{ observacion.contenido }}
+                                </div>
+                            </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 

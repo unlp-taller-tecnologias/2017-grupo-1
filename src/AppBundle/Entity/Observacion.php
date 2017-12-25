@@ -33,13 +33,13 @@ class Observacion {
     private $contenido;
 
     /**
-     * @var TipoObservacion $tipo
-     * 
-     * @ORM\ManyToOne(targetEntity="TipoObservacion")
-     * @ORM\JoinColumn(name="tipo_id", referencedColumnName="id")
+     * @var boolean
+     *
+     * @ORM\Column(name="esPrivada", type="boolean", length=1)
+     *
      * @Assert\NotNull(message="El tipo no puede estar sin asignar")
      */
-    private $tipo;
+    private $esPrivada;
 
     /**
      * @var \DateTime
@@ -51,7 +51,7 @@ class Observacion {
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaActualizacion", type="datetime")
+     * @ORM\Column(name="fechaActualizacion", type="datetime", nullable=true)
      */
     private $fechaActualizacion;
 
@@ -118,25 +118,27 @@ class Observacion {
     }
 
     /**
-     * Set tipo
+     * Set esPrivada
      *
-     * @param \stdClass $tipo
+     * @param boolean $esPrivada
      *
      * @return Observacion
      */
-    public function setTipo($tipo) {
-        $this->tipo = $tipo;
+    public function setEsPrivada($esPrivada)
+    {
+        $this->esPrivada = $esPrivada;
 
         return $this;
     }
 
     /**
-     * Get tipo
+     * Get esPrivada
      *
-     * @return \stdClass
+     * @return boolean
      */
-    public function getTipo() {
-        return $this->tipo;
+    public function getEsPrivada()
+    {
+        return $this->esPrivada;
     }
 
     /**

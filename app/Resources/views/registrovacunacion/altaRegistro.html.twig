@@ -21,14 +21,20 @@
             <h3 class="panel-title text-center">Registro de vacunacion de <strong>{{ visitante.nombre }} {{visitante.apellido }}</strong></h3>
         </div>
 
+
+        <!-- INICIO DEL FORM -->
         <div class="panel-body">
             <form class="form-inline" enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("alta_registro_action") }}" method="POST">
-
                 <input type="hidden" name="idVisitante" value="{{visitante.id}}">
+
+
+                <!-- VACUNAS PERTENECIENTES AL CALENDARIO NACIONAL -->
                 <h2>Vacunas del Calendario Nacional</h2>
                 {% for vacuna in vacunas %}
                     {% if vacuna.esObligatoria %}
-                        <h3>{{ vacuna.nombre }}</h3>
+                        <div class="form-group">
+                            <label for="dosisRecibidas{{ loop.index }}"><h4>{{vacuna.nombre}}: </h4> </label>
+                        </div>
 
                         <div class="form-group">
                             <label for="dosisRecibidas{{ loop.index }}">Dosis recibidas: </label>
@@ -43,17 +49,23 @@
                         {% endif %}
                             
                         <div class="checkbox">
-                            <label><input name="cumple{{ loop.index }}" type="checkbox"> Cumple </label>
+                            <label><input name="cumple{{ loop.index }}" type="checkbox"> Completa </label>
                         </div>
 
                         <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
                         <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
                     {% endif %}
+                    <br>
                 {% endfor %}
+                <!-- FIN DE LAS VACUNAS PERTENECIENTES AL CALENDARIO NACIONAL -->
+
+                <!-- OTRAS VACUNAS -->
                 <h2>Otras vacunas</h2>
                 {% for vacuna in vacunas %}
                     {% if not vacuna.esObligatoria %}
-                        <h3>{{ vacuna.nombre }}</h3>
+                        <div class="form-group">
+                            <label for="dosisRecibidas{{ loop.index }}"><h4>{{vacuna.nombre}}: </h4> </label>
+                        </div>
 
                         <div class="form-group">
                             <label for="dosisRecibidas{{ loop.index }}">Dosis recibidas: </label>
@@ -68,14 +80,30 @@
                         {% endif %}
                             
                         <div class="checkbox">
-                            <label><input name="cumple{{ loop.index }}" type="checkbox"> Cumple </label>
+                            <label><input name="cumple{{ loop.index }}" type="checkbox"> Completa </label>
                         </div>
 
                         <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
                         <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
                     {% endif %}
                 {% endfor %}
+                <!-- FIN DE LAS OTRAS VACUNAS -->
+
+
+                <!-- OBSERVACIONES PUBLICAS Y PRIVADAS -->
+                <br><br><br>
+                <div class="form-group">
+                    <label for="comment">Observacion Privada:</label>
+                    <textarea class="form-control" rows="5" cols="50" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL"></textarea>
+                </div>
                 <br><br>
+                <div class="form-group">
+                    <label for="comment">Observacion Publica:</label>
+                    <textarea class="form-control" rows="5" cols="50" name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL"></textarea>
+                </div>
+                <br>
+                <!-- FIN OBSERVACIONES PUBLICAS Y PRIVADAS -->
+
                 <div class="checkbox">
                     <label><input name="cumple" type="checkbox"> Cumple el registro de vacunacion</label>
                 </div>
@@ -83,7 +111,9 @@
                 <a href="{{app.request.headers.get('referer')}}" class="btn btn-default" >Volver</a>
                 <input class="btn btn-primary" type="submit" name="submit" value="Guardar">          
             </form>
-        
         </div>
+        <!-- FIN DEL FORM -->
+
+
     </div>
 {% endblock %}

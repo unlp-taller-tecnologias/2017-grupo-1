@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\NoDocente;
+use AppBundle\Entity\Observacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -51,7 +52,6 @@ class NoDocenteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
         $visitante = $em->getRepository('AppBundle:Visitante')->find($request->get("id"));
-
         return $this->render('registrovacunacion/altaRegistro.html.twig', array('visitante' => $visitante, 'vacunas' => $vacunas));
     }
 
@@ -78,7 +78,29 @@ class NoDocenteController extends Controller
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $fechaCreacion = new DateTime(date("Y-m-d H:i:s"));
         $registrovacunacion->setFechaCreacion($fechaCreacion);
-        
+
+        // Creo las observaciones
+        if ($request->get('observacionPublica') != '') {
+          $observacionPublica = new Observacion();
+          $observacionPublica->setContenido($request->get('observacionPublica'));
+          $observacionPublica->setFechaCreacion($fechaCreacion);
+          $observacionPublica->setCreadoPor($usuario);
+          $observacionPublica->setRegistroVacunacion($registrovacunacion);
+          $observacionPublica->setEsPrivada(FALSE);
+          $registrovacunacion->addObservacion($observacionPublica);
+          $em->persist($observacionPublica);
+        }
+
+        if ($request->get('observacionPrivada') != '') {
+          $observacionPrivada = new Observacion();
+          $observacionPrivada->setContenido($request->get('observacionPrivada'));
+          $observacionPrivada->setFechaCreacion($fechaCreacion);
+          $observacionPrivada->setCreadoPor($usuario);
+          $observacionPrivada->setRegistroVacunacion($registrovacunacion);
+          $observacionPrivada->setEsPrivada(TRUE);
+          $registrovacunacion->addObservacion($observacionPrivada);
+          $em->persist($observacionPrivada);
+        }
 
         $cantVacunas = $request->get('cantVacunas');
 
@@ -106,22 +128,25 @@ class NoDocenteController extends Controller
 
             $em->persist($componente);
         } 
-
-              
+     
         $visitante->setRegistroVacunacion($registrovacunacion);
+
         $em->persist($visitante);
         $em->persist($registrovacunacion);
         try {
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'El registro se dio de alta exitosamente.');
-            return $this->redirectToRoute("nodocente_index");
+            if ($visitante->getTipo() == 'Inscripto') {
+                return $this->redirectToRoute("inscripto_index");
+            }else{
+                return $this->redirectToRoute("nodocente_index");
+            }
+            
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('error', 'No se ha podido dar de alta el registro. Detalle: ' . $e->getMessage());
         }    
 
-        return $this->render('registrovacunacion/index.html.twig', array(
-            'registroVacunacion' => $registroVacunacion, 'vacunas' => $vacunas
-        ));
+        return $this->redirectToRoute("inscripto_index");
     }
 
     /**
@@ -137,9 +162,10 @@ class NoDocenteController extends Controller
         $registrovacunacion = $visitante->getRegistroVacunacion();
         $componentes = $registrovacunacion->getComponentes();
         $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
+        $observaciones = $registrovacunacion->getObservaciones();
 
         return $this->render('registrovacunacion/editarRegistro.html.twig', 
-            array('visitante' => $visitante, 'vacunas' => $vacunas, 'registrovacunacion' => $registrovacunacion, 'componentes'=> $componentes));
+            array('observaciones' => $observaciones, 'visitante' => $visitante, 'vacunas' => $vacunas, 'registrovacunacion' => $registrovacunacion, 'componentes'=> $componentes));
     }
 
     /**

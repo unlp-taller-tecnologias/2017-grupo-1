@@ -155,5 +155,10 @@ class NoDocente extends Visitante
     {
         return $this->funcion;
     }
+
+    public function getTipo()
+    {
+        return 'NoDocente';
+    }
 }
 

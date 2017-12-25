@@ -209,7 +209,7 @@ class Vacuna
     /**
      * Set esObligatoria
      *
-     * @param string $esObligatoria
+     * @param boolean $esObligatoria
      *
      * @return Vacuna
      */
@@ -223,7 +223,7 @@ class Vacuna
     /**
      * Get esObligatoria
      *
-     * @return string
+     * @return boolean
      */
     public function getEsObligatoria()
     {
