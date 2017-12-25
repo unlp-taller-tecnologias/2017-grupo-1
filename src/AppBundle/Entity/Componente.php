@@ -26,14 +26,14 @@ class Componente {
     /**
      * @var bool
      *
-     * @ORM\Column(name="cumple", type="boolean")
+     * @ORM\Column(name="cumple", type="boolean", nullable=true)
      */
     private $cumple;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="dosisRecibidas", type="integer")
+     * @ORM\Column(name="dosisRecibidas", type="integer", nullable=true)
      */
     private $dosisRecibidas;
 
