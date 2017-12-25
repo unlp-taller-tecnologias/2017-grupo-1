@@ -1,0 +1,111 @@
+{% extends "default/base.login.html.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+            <!-- start: LOGIN BOX -->
+            <div class="box-login">
+                <h3><i class="fa fa-comments-o fa-lg"></i> Acceda a su Cuenta</h3>
+                <p class="comment">
+                    Ingrese su usuario y contraseña.
+                </p>
+                <div class="form">
+                    <form class="form-login" action="{#{ path('_security_check') }#}" method="post">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-user fa-lg"></i></div>
+                                <input type="text" class="form-control" id="username" name="_username" value="{#{ last_username }#}" placeholder="Usuario" tabindex="1">
+                            </div>
+                        </div>
+                        <div class="form-group form-actions" style="position: relative;">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-unlock fa-lg"></i></div>
+                                <input type="password" class="form-control password" id="password" name="_password" placeholder="Contraseña" tabindex="2">
+                                <a class="forgot" href="#">
+                                    olvidó su contraseña ?
+                                </a>                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-left input_captcha {% if (true) %}hiddenCaptcha{% endif %}">
+                                <img src="{#{ captcha.inline() }#}" title="captcha" />
+                                <span class="input-icon">
+                                    <input type="text" class="form-control" id="input_captcha" name="_input_captcha" placeholder="Ingrese el texto" value="{#{ captcha_phrase }#}" tabindex="3">
+                                </span>
+                            </div>
+                            
+                        </div>
+                        <button type="submit" class="pull-right btn btn-primary" tabindex="4"><span class="fa fa-send"></span> Enviar</button>
+                    </form>
+                </div>
+                <div class="new-account clearboth">
+                    No tiene una cuenta ?
+                    <a href="#" class="register">
+                        Solicite una aquí
+                    </a>
+                </div>
+                <!-- start: COPYRIGHT -->
+                <div class="copyright">
+                    {{ "now"|date("Y") }} &copy; Departamento de informática, Subsecretaría de Deportes de la Provincia de Buenos Aires.
+                </div>
+                <!-- end: COPYRIGHT -->
+            </div>
+            <!-- end: LOGIN BOX -->
+
+            <!-- start: FORGOT BOX -->
+            <div class="box-forgot">
+                <h3>
+                    <i class="fa fa-comments-o fa-lg"></i> Olvidó su contraseña?
+                    <i class="fa fa-spinner fa-pulse fa-lg fa-checking hide pull-right" aria-hidden="true"></i>
+                </h3>
+                <p>
+                    Ingrese su e-mail para resetear la constraseña.
+                </p>
+                <div class="form">
+                    <div class="text-center">
+                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <a class="btn btn-light-grey go-back">
+                    <i class="fa fa-chevron-circle-left"></i> Log-In
+                </a>
+                <!-- start: COPYRIGHT -->
+                <div class="copyright">
+                    {{ "now"|date("Y") }} &copy; Departamento de informática, Subsecretaría de Deportes de la Provincia de Buenos Aires.
+                </div>
+                <!-- end: COPYRIGHT -->
+            </div>
+            <!-- end: FORGOT BOX -->
+            <!-- start: REGISTER BOX -->
+            <div class="box-register">
+                <h3>
+                    <i class="fa fa-comments-o fa-lg"></i> Cree su cuenta
+                    <i class="fa fa-spinner fa-pulse fa-lg fa-checking hide pull-right" aria-hidden="true"></i>
+                </h3>
+                <div class="form">                    
+                    <div class="text-center">
+                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                Ya tiene una cuenta?
+                <a class="btn btn-light-grey go-back">
+                    <i class="fa fa-chevron-circle-left"></i> Log-In
+                </a>                
+                <!-- start: COPYRIGHT -->
+                <div class="copyright">
+                    {{ "now"|date("Y") }} &copy; Departamento de informática, Subsecretaría de Deportes de la Provincia de Buenos Aires.
+                </div>
+                <!-- end: COPYRIGHT -->
+            </div>
+            <!-- end: REGISTER BOX -->            
+        </div>
+    </div>
+{% endblock %}
+
+{% block othersJavaScript %}
+    
+{% endblock %}
+{% block footerAll %}{% endblock %}

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="es">
+    <head>
+        <title>Juegos Bonaerenses {{ "now"|date("Y") }}</title>
+        <!-- start: META -->
+        <meta charset="utf-8" />
+        <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="description" content="Web Oficial de los Juegos Bonaerenses, Subsecretaría de Deportes de La Provincia de Buenos Aires" />
+        <meta name="author" content="WitApp.com.ar"/>
+
+        <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
+
+        {% block stylesheetsCore %}
+            <link rel="stylesheet" href="{{ asset('css/login.min.css') }}">
+        {% endblock %}
+
+    {% block othersCSS %}{% endblock %}
+</head>
+{% block body %}
+    <body class="login">
+    {% endblock %}
+    <div class="main-wrapper">
+        {% block bodyContent %}
+            <div class="container-fluid fix-top" >
+                {% block content %}
+                {% block ajax %}{% endblock %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+</div>
+
+{% block javaScript %}
+    <script src="{{ asset('assets/js/login.min.js') }}" type="text/javascript" charset="utf8"></script>
+    <script src="{{ asset('assets/js/bootstrap-datetimepicker.js') }}" type="text/javascript" charset="utf8"></script>
+{% endblock %}
+{% block flashMessages %}
+    {% include 'flash.messages.html.twig'%}
+{% endblock %}
+{% block othersJavaScript %}{% endblock %}
+{% block footerAll %}
+    <footer class="footer">
+        {% block footer %}
+            <div class="copyright">
+                {{ "now"|date("Y") }} &copy; WitApp.com.ar.
+            </div>
+        {% endblock %}
+    </footer>
+{% endblock %}
+</body>
+</html>

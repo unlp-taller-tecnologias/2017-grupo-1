@@ -49,11 +49,11 @@ class Vacuna
     /**
      * @var string
      *
-     * @ORM\Column(name="abreviatura", type="string", length=10, unique=true)
+     * @ORM\Column(name="abreviatura", type="string", length=100, unique=true)
      * @Assert\NotBlank(message="El campo obreviatura de vacuna no puede estar en blanco")
      * @Assert\Length(
      *      min = 2,
-     *      max = 10,
+     *      max = 100,
      *      minMessage = "La abreviatura de vacuna deberá tener al menos {{ limit }} caracteres",
      *      maxMessage = "La abreviatura de vacuna no puede tener más de {{ limit }} caracteres"
      * )

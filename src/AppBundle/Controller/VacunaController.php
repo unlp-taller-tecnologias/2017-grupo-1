@@ -14,22 +14,25 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @Route("vacuna")
  */
-class VacunaController extends Controller
-{
+class VacunaController extends Controller {
+
     /**
      * Lists all vacuna entities.
      *
      * @Route("/", name="vacuna_index")
      * @Method("GET")
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
-        $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
+        $vacunas_calendario = $em->getRepository('AppBundle:Vacuna')->getVacunasCalendario();
+
+        $vacunas_optativas = $em->getRepository('AppBundle:Vacuna')->getVacunasOptativas();
+
 
         return $this->render('vacuna/index.html.twig', array(
-            'vacunas' => $vacunas,
+                    'vacunas_calendario' => $vacunas_calendario,
+                    'vacunas_optativas' => $vacunas_optativas,
         ));
     }
 
@@ -39,8 +42,7 @@ class VacunaController extends Controller
      * @Route("/new", name="vacuna_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $vacuna = new Vacuna();
         $form = $this->createForm('AppBundle\Form\VacunaType', $vacuna);
         $form->handleRequest($request);
@@ -65,8 +67,8 @@ class VacunaController extends Controller
             }
         }
         return $this->render('vacuna/new.html.twig', array(
-            'vacuna' => $vacuna,
-            'form' => $form->createView(),
+                    'vacuna' => $vacuna,
+                    'form' => $form->createView(),
         ));
     }
 
@@ -76,22 +78,21 @@ class VacunaController extends Controller
      * @Route("/{id}/edit", name="vacuna_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Vacuna $vacuna)
-    {
+    public function editAction(Request $request, Vacuna $vacuna) {
         $editForm = $this->createForm('AppBundle\Form\VacunaType', $vacuna);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-          $em = $this->getDoctrine()->getManager();
-          $em->persist($vacuna);
-          $em->flush();
-          try {
-              $em->flush();
-              $this->get('session')->getFlashBag()->add('success', 'La vacuna se editó al sistema correctamente.');
-              return $this->redirectToRoute("vacuna_index");
-          } catch (\Exception $e) {
-              $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar la vacuna en el sistema. Detalle: ' . $e->getMessage());
-          }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($vacuna);
+            $em->flush();
+            try {
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'La vacuna se editó al sistema correctamente.');
+                return $this->redirectToRoute("vacuna_index");
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar la vacuna en el sistema. Detalle: ' . $e->getMessage());
+            }
         }
         if ($editForm->isSubmitted() && !$editForm->isValid()) {
             $validator = $this->get('validator');
@@ -101,8 +102,8 @@ class VacunaController extends Controller
             }
         }
         return $this->render('vacuna/edit.html.twig', array(
-            'vacuna' => $vacuna,
-            'edit_form' => $editForm->createView(),
+                    'vacuna' => $vacuna,
+                    'edit_form' => $editForm->createView(),
         ));
     }
 
@@ -112,16 +113,15 @@ class VacunaController extends Controller
      * @Route("/{id}/delete", name="vacuna_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request,Vacuna $vacuna)
-    {
-      $em = $this->getDoctrine()->getManager();
-      try {
-          $em->remove($vacuna);
-          $em->flush();
-          return new JsonResponse(array('success' => true, 'message' => 'La vacuna fue eliminado con éxito'));
-      } catch (\Exception $e) {
-          return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la vacuna del sistema'));
-      }
+    public function deleteAction(Request $request, Vacuna $vacuna) {
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $em->remove($vacuna);
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'La vacuna fue eliminado con éxito'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la vacuna del sistema'));
+        }
     }
 
 }
