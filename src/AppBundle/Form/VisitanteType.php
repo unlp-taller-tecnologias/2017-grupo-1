@@ -21,6 +21,7 @@ class VisitanteType extends AbstractType
                 ->add('partido')
                 ->add('tipoDocumento')
                 ->add('nroDocumento')
+                ->add('fechaNacimiento')
                 ->add('borrado');
     }
     

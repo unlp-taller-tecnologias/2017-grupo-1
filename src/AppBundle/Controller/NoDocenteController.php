@@ -73,7 +73,12 @@ class NoDocenteController extends Controller
         $registrovacunacion->setPropietario($visitante);
         $registrovacunacion->setCreador($usuario);
         $registrovacunacion->setActualizadoPor($usuario);
-        $registrovacunacion->setCumple(TRUE);
+        if ($request->get('cumple')){
+            $registrovacunacion->setCumple(TRUE);
+        }else{
+            $registrovacunacion->setCumple(FALSE);
+        }
+        
 
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $fechaCreacion = new DateTime(date("Y-m-d H:i:s"));
@@ -183,6 +188,11 @@ class NoDocenteController extends Controller
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $fechaActualizacion = new DateTime(date("Y-m-d"));
         $registrovacunacion->setFechaActualizacion($fechaActualizacion);
+        if ($request->get('cumple')){
+            $registrovacunacion->setCumple(TRUE);
+        }else{
+            $registrovacunacion->setCumple(FALSE);
+        }
 
         $cantVacunas = $request->get('cantVacunas');
 

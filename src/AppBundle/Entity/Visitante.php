@@ -210,18 +210,18 @@ abstract class Visitante {
     protected $registroVacunacion;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="borrado", type="boolean", length=1)
-     */
-    private $borrado;
-
-    /**
      * @var \Date
      *
      * @ORM\Column(name="fechaNacimiento", type="date", nullable=true)
      */
     protected $fechaNacimiento;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="borrado", type="boolean", length=1)
+     */
+    protected $borrado;
 
     function getRegistroVacunacion() {
         return $this->registroVacunacion;
@@ -485,7 +485,7 @@ abstract class Visitante {
     /**
      * Set fechaInscripcion
      *
-     * @param string $fechaNacimiento
+     * @param date $fechaNacimiento
      *
      * @return fechaNacimiento
      */
@@ -499,7 +499,7 @@ abstract class Visitante {
     /**
      * Get fechaNacimiento
      *
-     * @return string
+     * @return date
      */
     public function getFechaNacimiento()
     {
