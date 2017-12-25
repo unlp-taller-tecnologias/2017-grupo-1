@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+  <div class="panel">
+    <div class="panel-heading">
+      <h3 class='panel-heading'>Grafico de personas que cumplen con el calendario de vacunacion obligatorio</h3>
+    </div>
+    <div class="panel-body">
+      <div id="grafico">
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block otherjavascripts %}
+  <script src="{{asset('vendor/highcharts/highcharts.js')}}"></script>
+  <script type="text/javascript">
+  $(function(){
+    var value1=new Array();
+    var value2=new Array();
+    {% for item in data %}
+      value1.push({{ item.SI }});
+      value2.push({{ item.NO }});
+    {% endfor %}
+      var myChart=Highcharts.chart('grafico',{
+        chart:{
+          type:'bar'
+        },
+        title:{
+          text:'Cumplimiento del calendario obligatorio de vacunacion'
+        },
+        xAxis:{
+          categories:['15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65+']
+        },
+        series:[{
+          name:'SI',
+          data:value1
+        },{
+          name:'NO',
+          data:value2
+        }]
+      });
+    });
+  </script>
+{% endblock %}

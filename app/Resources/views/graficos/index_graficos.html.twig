@@ -1,0 +1,13 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<div class="panel">
+  <div class="panel-title">
+    <h3 class='panel-heading'>Graficos disponibles</h3>
+  </div>
+  <div class="panel-body">
+      <a href="{{path('quien_cumple_grafico')}}">Grafico de quienes cumplen con el calendario de vacunacion</a>
+      <a href="{{path('seleccion_dosis')}}">Grafico de quienes recibieron dosis de vacunas a elegir</a>
+  </div>
+</div>
+{% endblock %}

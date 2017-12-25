@@ -98,6 +98,19 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Fecha Nacimiento</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                                {{ form_widget(form.fechaNacimiento,{'attr':{'class':'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
                         <label for="" class="col-md-3 control-label">Pais</label>
                         <div class="col-md-6">
                             <div class="input-group margin-bottom-sm">
@@ -203,7 +216,7 @@
     <script>
         $(document).ready(function () {
             $('form').on('submit', function (e) {
-                
+
             });
             $('#usuarios_tabla').DataTable({
                 "dom": '<".col-md-2">frtip',

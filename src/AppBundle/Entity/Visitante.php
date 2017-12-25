@@ -159,7 +159,7 @@ abstract class Visitante {
      * @var string
      *
      * @ORM\Column(name="codigoPostal", type="string", length=255, nullable=true)
-     * 
+     *
      * El codigo postal debe permitir caracteres especiales, asi como longitudes iguales a 1.
      * Por lo que no se hacen validaciones en este campo
      */
@@ -203,7 +203,7 @@ abstract class Visitante {
 
     /**
      * @var RegistroVacunacion
-     * 
+     *
      * @ORM\OneToOne(targetEntity="RegistroVacunacion", inversedBy="propietario")
      * @ORM\JoinColumn(name="registroVacunacion_id", referencedColumnName="id")
      */
@@ -215,6 +215,13 @@ abstract class Visitante {
      * @ORM\Column(name="borrado", type="boolean", length=1)
      */
     private $borrado;
+
+    /**
+     * @var \Date
+     *
+     * @ORM\Column(name="fechaNacimiento", type="date", nullable=true)
+     */
+    protected $fechaNacimiento;
 
     function getRegistroVacunacion() {
         return $this->registroVacunacion;
@@ -411,7 +418,7 @@ abstract class Visitante {
 
     /**
      * Get partido
-     * 
+     *
      * @return string
      */
     function getPartido() {
@@ -420,7 +427,7 @@ abstract class Visitante {
 
     /**
      * Get nroDocumento
-     * 
+     *
      * @return integer
      */
     function getNroDocumento() {
@@ -442,9 +449,9 @@ abstract class Visitante {
 
     /**
      * Set nroDocumento
-     * 
+     *
      * @param integer $nroDocumento
-     * 
+     *
      * @return Visitante
      */
     function setNroDocumento($nroDocumento) {
@@ -473,6 +480,30 @@ abstract class Visitante {
      */
     public function getBorrado() {
         return $this->borrado;
+    }
+
+    /**
+     * Set fechaInscripcion
+     *
+     * @param string $fechaNacimiento
+     *
+     * @return fechaNacimiento
+     */
+    public function setFechaNacimiento($fechaNacimiento)
+    {
+        $this->fechaNacimiento = $fechaNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaNacimiento
+     *
+     * @return string
+     */
+    public function getFechaNacimiento()
+    {
+        return $this->fechaNacimiento;
     }
 
 }

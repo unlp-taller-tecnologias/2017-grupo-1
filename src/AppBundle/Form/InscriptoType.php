@@ -20,7 +20,9 @@ class InscriptoType extends AbstractType
         ->add('legajo', TextType::class, array(
                     'required' => false,
                 ))
-        ->add('fechaInscripcion', DateType::class)
+        ->add('fechaInscripcion', DateType::class,array(
+          'widget'=>'single_text'
+        ))
         ->add('nombre', TextType::class)
         ->add('apellido', TextType::class)
         ->add('email', TextType::class)
@@ -30,9 +32,13 @@ class InscriptoType extends AbstractType
         ->add('localidad', TextType::class)
         ->add('codigoPostal', TextType::class)
         ->add('tipoDocumento', TextType::class)
-        ->add('nroDocumento', TextType::class);
+        ->add('nroDocumento', TextType::class)
+        ->add('fechaNacimiento',DateType::class, array(
+          'required'=>false,
+          'widget'=>'single_text'
+        ));
     }
-    
+
     /**
      * {@inheritdoc}
      */
