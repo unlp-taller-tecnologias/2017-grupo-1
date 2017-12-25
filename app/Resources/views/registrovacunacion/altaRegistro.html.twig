@@ -10,7 +10,7 @@
             <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
         </li>
         <li>
-            <a href="{{path('inscripto_index')}}">Inscriptos</a>
+            <a href="{{path('inscripto_index')}}">visitantes</a>
         </li>
         <li class="active">Registro Vacunacion</li>
     </ol>
@@ -18,13 +18,13 @@
 {% block body %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title text-center">Registro de vacunacion de <strong>{{ inscripto.nombre }} {{inscripto.apellido }}</strong></h3>
+            <h3 class="panel-title text-center">Registro de vacunacion de <strong>{{ visitante.nombre }} {{visitante.apellido }}</strong></h3>
         </div>
 
         <div class="panel-body">
             <form class="form-inline" enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("alta_registro_action") }}" method="POST">
 
-                <input type="hidden" name="idInscripto" value="{{inscripto.id}}">
+                <input type="hidden" name="idVisitante" value="{{visitante.id}}">
                 
                 {% for vacuna in vacunas %}
 
@@ -54,7 +54,7 @@
                     <label><input name="cumple" type="checkbox"> Cumple el registro de vacunacion</label>
                 </div>
                 <br><br>
-                <a href="{{ path("inscripto_index") }}" class="btn btn-default" >Volver</a>
+                <a href="{{app.request.headers.get('referer')}}" class="btn btn-default" >Volver</a>
                 <input class="btn btn-primary" type="submit" name="submit" value="Guardar">          
             </form>
         
