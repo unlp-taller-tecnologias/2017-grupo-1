@@ -17,3 +17,7 @@ body{
     background-color: white;
     border: none;
 }
+
+.login_passwdforget{
+    border-left: 4px solid grey;
+}

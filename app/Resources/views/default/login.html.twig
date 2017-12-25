@@ -1,111 +1,107 @@
-{% extends "default/base.login.html.twig" %}
-
-{% block content %}
+{% extends 'default/base.login.html.twig' %}
+{% block container_main %}
     <div class="row">
-        <div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+        <div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+            <div class="logo">
+                <img src="{{ asset('vendor/rapido/images/logo.png') }}">
+            </div>
             <!-- start: LOGIN BOX -->
             <div class="box-login">
-                <h3><i class="fa fa-comments-o fa-lg"></i> Acceda a su Cuenta</h3>
-                <p class="comment">
-                    Ingrese su usuario y contraseña.
+                <h3>Entrar con su cuenta</h3>
+                <p>
+                    Por favor ingrese su nombre de usuario y contraseña para entrar.
                 </p>
-                <div class="form">
-                    <form class="form-login" action="{#{ path('_security_check') }#}" method="post">
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <form class="form-login" action="index.html">
+                    <div class="errorHandler alert alert-danger no-display">
+                        <i class="fa fa-remove-sign"></i> Tienes errores en el formulario. Por favor verifica los datos ingresados.
+                    </div>
+                    <fieldset>
                         <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-user fa-lg"></i></div>
-                                <input type="text" class="form-control" id="username" name="_username" value="{#{ last_username }#}" placeholder="Usuario" tabindex="1">
-                            </div>
+                            <span class="input-icon">
+                                <input type="text" class="form-control" name="username" placeholder="Usuario">
+                                <i class="fa fa-user"></i> </span>
                         </div>
-                        <div class="form-group form-actions" style="position: relative;">
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-unlock fa-lg"></i></div>
-                                <input type="password" class="form-control password" id="password" name="_password" placeholder="Contraseña" tabindex="2">
+                        <div class="form-group form-actions">
+                            <span class="input-icon">
+                                <input type="password" class="form-control password" name="password" placeholder="Contraseña">
+                                <i class="fa fa-lock"></i>
                                 <a class="forgot" href="#">
-                                    olvidó su contraseña ?
-                                </a>                                
-                            </div>
+                                    ¿Olvidaste la contraseña?
+                                </a> </span>
                         </div>
-                        <div class="form-group">
-                            <div class="pull-left input_captcha {% if (true) %}hiddenCaptcha{% endif %}">
-                                <img src="{#{ captcha.inline() }#}" title="captcha" />
-                                <span class="input-icon">
-                                    <input type="text" class="form-control" id="input_captcha" name="_input_captcha" placeholder="Ingrese el texto" value="{#{ captcha_phrase }#}" tabindex="3">
-                                </span>
-                            </div>
-                            
+                        <div class="form-actions">
+
+                            <button type="submit" class="btn btn-green pull-right">
+                                Entrar <i class="fa fa-arrow-circle-right"></i>
+                            </button>
                         </div>
-                        <button type="submit" class="pull-right btn btn-primary" tabindex="4"><span class="fa fa-send"></span> Enviar</button>
-                    </form>
-                </div>
-                <div class="new-account clearboth">
-                    No tiene una cuenta ?
-                    <a href="#" class="register">
-                        Solicite una aquí
-                    </a>
-                </div>
+                    </fieldset>
+                </form>
                 <!-- start: COPYRIGHT -->
                 <div class="copyright">
-                    {{ "now"|date("Y") }} &copy; Departamento de informática, Subsecretaría de Deportes de la Provincia de Buenos Aires.
+                    2017 &copy; SCV by Inform&aacute;tica - UNLP.
                 </div>
                 <!-- end: COPYRIGHT -->
             </div>
             <!-- end: LOGIN BOX -->
-
             <!-- start: FORGOT BOX -->
             <div class="box-forgot">
-                <h3>
-                    <i class="fa fa-comments-o fa-lg"></i> Olvidó su contraseña?
-                    <i class="fa fa-spinner fa-pulse fa-lg fa-checking hide pull-right" aria-hidden="true"></i>
-                </h3>
+                <h3>¿Olvidaste la contraseña?</h3>
                 <p>
-                    Ingrese su e-mail para resetear la constraseña.
+                    Por favor ponte en contacto con el administrador del sistema para resolver el problemaa la brevedad.
                 </p>
-                <div class="form">
-                    <div class="text-center">
-                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-                        <span class="sr-only">Loading...</span>
+                <div class="col-md-12 login_passwdforget" role="alert">
+                    <address>
+                        <strong>Facultad de Ciencias Médicas, UNLP.</strong><br>
+                        Calle 60, Nro 900<br>
+                        La Plata, CP 1900<br>
+                        <abbr title="Teléfono">T:</abbr> (0221) 456-7890
+                    </address>
+                    <address>
+                        <strong>Contacto</strong><br>
+                        <a href="mailto:#">medicina@admin.unlp.edu.ar</a>
+                    </address>
+                </div>
+                <div class="col-md-12">
+                    <form class="form-forgot">
+                        <div class="errorHandler alert alert-danger no-display">
+                            <i class="fa fa-remove-sign"></i> You have some form errors. Please check below.
+                        </div>
+                        <fieldset>                      
+                            <div class="form-actions">
+                                <a class="btn btn-light-grey go-back">
+                                    <i class="fa fa-chevron-circle-left"></i> Entrar
+                                </a>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <div class="copyright">
+                        2017 &copy; SCV by Inform&aacute;tica - UNLP.
                     </div>
                 </div>
-                <a class="btn btn-light-grey go-back">
-                    <i class="fa fa-chevron-circle-left"></i> Log-In
-                </a>
                 <!-- start: COPYRIGHT -->
-                <div class="copyright">
-                    {{ "now"|date("Y") }} &copy; Departamento de informática, Subsecretaría de Deportes de la Provincia de Buenos Aires.
-                </div>
+
                 <!-- end: COPYRIGHT -->
             </div>
             <!-- end: FORGOT BOX -->
-            <!-- start: REGISTER BOX -->
-            <div class="box-register">
-                <h3>
-                    <i class="fa fa-comments-o fa-lg"></i> Cree su cuenta
-                    <i class="fa fa-spinner fa-pulse fa-lg fa-checking hide pull-right" aria-hidden="true"></i>
-                </h3>
-                <div class="form">                    
-                    <div class="text-center">
-                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-                Ya tiene una cuenta?
-                <a class="btn btn-light-grey go-back">
-                    <i class="fa fa-chevron-circle-left"></i> Log-In
-                </a>                
-                <!-- start: COPYRIGHT -->
-                <div class="copyright">
-                    {{ "now"|date("Y") }} &copy; Departamento de informática, Subsecretaría de Deportes de la Provincia de Buenos Aires.
-                </div>
-                <!-- end: COPYRIGHT -->
-            </div>
-            <!-- end: REGISTER BOX -->            
         </div>
     </div>
 {% endblock %}
 
-{% block othersJavaScript %}
-    
+{% block otherjavascripts %}
+    <script src="{{ asset('vendor/rapido/js/login.js') }}"></script>
+    <script src="{{ asset('vendor/rapido/js/main.js') }}"></script>
+    <script src="{{ asset('vendor/jquery-ui/jquery-ui-1.10.2.custom.min.js') }}"></script>
+    <script src="{{ asset('vendor/iCheck/jquery.icheck.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery.transit/jquery.transit.js') }}"></script>
+    <script src="{{ asset('vendor/TouchSwipe/jquery.touchSwipe.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery-validation/dist/jquery.validate.min.js') }}"></script>
+    <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+    <script>
+        jQuery(document).ready(function () {
+            Main.init();
+            Login.init();
+        });
+    </script>
 {% endblock %}
-{% block footerAll %}{% endblock %}
+
