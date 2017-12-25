@@ -1,0 +1,43 @@
+{{ form_start(form, {'attr':{'class':'form-horizontal'} }) }}
+{{ form_errors(form)}}
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Nombre:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ vacuna.getNombre() | capitalize}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label"><strong><em>Abreviatura:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ vacuna.getAbreviatura() | capitalize}} </p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label"><strong><em>D&oacute;sis:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ vacuna.getDosisRequeridas() | capitalize}} </p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label"><strong><em>Vencimeinto:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{% if vacuna.getTieneVencimiento() %}SI{% else %}NO{% endif %}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label"><strong><em>Obligatoria:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{% if vacuna.getEsObligatoria() %}SI{% else %}NO{% endif %}</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-3 control-label "><strong><em>Observaci&oacute;n:</em></strong></label>
+    <div class="col-sm-9">
+        <p class="form-control-static text-extra-large">{{ vacuna.getObservacion() | capitalize}} </p>
+    </div>
+</div>
+<div class="hidden">
+    {{ form_rest(form) }}
+    <input type="submit" value="Submit">
+</div>
+{{ form_end(form) }}

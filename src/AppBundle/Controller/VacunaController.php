@@ -24,12 +24,8 @@ class VacunaController extends Controller {
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
-
         $vacunas_calendario = $em->getRepository('AppBundle:Vacuna')->getVacunasCalendario();
-
         $vacunas_optativas = $em->getRepository('AppBundle:Vacuna')->getVacunasOptativas();
-
-
         return $this->render('vacuna/index.html.twig', array(
                     'vacunas_calendario' => $vacunas_calendario,
                     'vacunas_optativas' => $vacunas_optativas,
@@ -122,6 +118,20 @@ class VacunaController extends Controller {
         } catch (\Exception $e) {
             return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la vacuna del sistema'));
         }
+    }
+
+    /**
+     * Show a vacuna entity.
+     *
+     * @Route("/{id}/show", name="vacuna_show")
+     * @Method("GET")
+     */
+    public function showAction(Request $request, Vacuna $vacuna) {
+        $form = $this->createForm('AppBundle\Form\VacunaType', $vacuna);
+        return $this->render('vacuna/show.html.twig', array(
+                    'vacuna' => $vacuna,
+                    'form' => $form->createView(),
+        ));
     }
 
 }

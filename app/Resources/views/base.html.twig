@@ -2,16 +2,16 @@
 <html>
     {% include 'head.html.twig' %}
     <body>
-
         {% block navbar %} 
             {% include 'navbar.html.twig' %}
         {% endblock %}
-
         {% block sidebar %}
             {% include 'sidebar.html.twig' %}
         {% endblock %}
-
         <div class="container-fluid">
+            {% block contenidoModal %}
+                {% include 'modal.html.twig' with { 'idModal': 'panel-config' } %}
+            {% endblock %}
             <div class="side-body">
                 {% block breadcrumbs %}
                     <ol class="breadcrumb">

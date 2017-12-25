@@ -16,14 +16,18 @@
 {% block body %}
     <div class="panel panel-default col-md-12">
         <div class="panel-heading">
-            <h3 class="panel-title">Listado <strong>de Vacuna en el Calendario Nacional</strong></h3>
+            <h3 class="panel-title">Listado <strong>de Vacunas en el Calendario Nacional</strong></h3>
         </div>
         <div class="panel-body">
             <table id="vacunas_calendario" class="table table-condensed table-bordered table-striped table-hover tabla_vacunacion">
                 <thead>
                     <tr class="success">
+                        <th class="text-center">
+                            <i class="fa fa-hashtag" aria-hidden="true"></i>
+                        </th>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">Abreviatura</th>
+                        <th class="text-center">D&oacute;sis</th>
                         <th class="text-center">
                             <i class="fa fa-cogs" aria-hidden="true"></i>
                         </th>
@@ -32,42 +36,14 @@
                 <tbody>
                     {% for vacuna in vacunas_calendario %}
                         <tr>
+                            <td class="text-center">{{ loop.index }}</td>
                             <td class="text-center">{{ vacuna.nombre }}</td>
                             <td class="text-center">{{ vacuna.abreviatura }}</td>
+                            <td class="text-center">{{ vacuna.dosisRequeridas }}</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal">
+                                <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('vacuna_show',{'id': vacuna.id}) }}', 'Ver vacuna del calendario');">
                                     <i class="fa fa-binoculars" aria-hidden="true"></i>
                                 </button>
-                                <div id="myModal" class="modal fade" role="dialog">
-                                    <div class="modal-dialog">
-                                        <!-- Modal content-->
-                                        <div class="modal-content col-md-12 col-md-offset-3">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title text-center">Detalle de factor de riesgo</h4>
-                                            </div>
-                                            <div class="modal-body col-md-12 col-md-offset-2">
-                                                <dl class="dl-horizontal">
-                                                    <dt>Nombre</dt>
-                                                    <dd>{{ vacuna.nombre }}</dd>
-                                                    <dt>Abreviatura</dt>
-                                                    <dd>{{ vacuna.abreviatura }}</dd>
-                                                    <dt>Dosis requeridas</dt>
-                                                    <dd>{{vacuna.dosisRequeridas}}</dd>
-                                                    <dt>Tiene vencimiento</dt>
-                                                    <dd>{% if vacuna.tieneVencimiento %}Si{% else %}No{% endif %}</dd>
-                                                    <dt>Es obligatoria</dt>
-                                                    <dd>{% if vacuna.esObligatoria %}Si{% else %}No{% endif %}</dd>
-                                                    <dt>Observacion</dt>
-                                                    <dd>{{vacuna.observacion}}</dd>
-                                                </dl>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
                                 <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -81,14 +57,18 @@
     </div>
     <div class="panel panel-default col-md-12">
         <div class="panel-heading">
-            <h3 class="panel-title">Listado <strong>de Vacuna optativas</strong></h3>
+            <h3 class="panel-title">Listado <strong>de Vacunas optativas</strong></h3>
         </div>
         <div class="panel-body">
             <table id="vacunas_optativas" class="table table-condensed table-bordered table-striped table-hover tabla_vacunacion">
                 <thead>
                     <tr class="warning">
+                        <th class="text-center">
+                            <i class="fa fa-hashtag" aria-hidden="true"></i>
+                        </th>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">Abreviatura</th>
+                        <th class="text-center">D&oacute;sis</th>
                         <th class="text-center">
                             <i class="fa fa-cogs" aria-hidden="true"></i>
                         </th>
@@ -97,43 +77,14 @@
                 <tbody>
                     {% for vacuna in vacunas_optativas %}
                         <tr>
+                            <td class="text-center">{{ loop.index }}</td>
                             <td class="text-center">{{ vacuna.nombre }}</td>
                             <td class="text-center">{{ vacuna.abreviatura }}</td>
+                            <td class="text-center">{{ vacuna.dosisRequeridas }}</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModal">
+                                 <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('vacuna_show',{'id': vacuna.id}) }}', 'Ver vacuna optativa');">
                                     <i class="fa fa-binoculars" aria-hidden="true"></i>
                                 </button>
-                                <div id="myModal" class="modal fade" role="dialog">
-                                    <div class="modal-dialog">
-
-                                        <!-- Modal content-->
-                                        <div class="modal-content col-md-12 col-md-offset-3">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title text-center">Detalle de factor de riesgo</h4>
-                                            </div>
-                                            <div class="modal-body col-md-12 col-md-offset-2">
-                                                <dl class="dl-horizontal">
-                                                    <dt>Nombre</dt>
-                                                    <dd>{{ vacuna.nombre }}</dd>
-                                                    <dt>Abreviatura</dt>
-                                                    <dd>{{ vacuna.abreviatura }}</dd>
-                                                    <dt>Dosis requeridas</dt>
-                                                    <dd>{{vacuna.dosisRequeridas}}</dd>
-                                                    <dt>Tiene vencimiento</dt>
-                                                    <dd>{% if vacuna.tieneVencimiento %}Si{% else %}No{% endif %}</dd>
-                                                    <dt>Es obligatoria</dt>
-                                                    <dd>{% if vacuna.esObligatoria %}Si{% else %}No{% endif %}</dd>
-                                                    <dt>Observacion</dt>
-                                                    <dd>{{vacuna.observacion}}</dd>
-                                                </dl>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
                                 <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -153,7 +104,23 @@
     <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
+                                    function crearModalView(url, title) {
+                                        $('#okButton').button('reset');
+                                        $('#panel-config .modal-footer').show();
+                                        $('#cancelButton').hide();
+                                        $('#panel-config .modal-title').html(title);
+                                        $('#panel-config .modal-body').html("");
+                                        $('#panel-config .modal-body').load(url, function () {
+                                            $('#panel-config form').submit(function (event) {
+                                                event.preventDefault();
+                                                $('#panel-config').modal('toggle');
+                                            });
+                                        });
+                                        $('#panel-config').modal();
+                                    }
+
                                     function vacunaDelete(url) {
+
                                         swal({
                                             title: '¿Estas seguro?',
                                             text: "Estas por eliminar una vacuna del sistema!",
@@ -181,11 +148,14 @@
                                         });
                                     }
                                     $(document).ready(function () {
-                                        $('table.tabla_vacunacion').DataTable({
+
+
+
+                                        $('#vacunas_calendario').DataTable({
                                             "dom": '<".col-md-4">frtip',
                                             "autoWidth": false,
                                             fnInitComplete: function () {
-                                                $('div.col-md-4').html('<a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-xs btn-primary">Agregar una nueva vacuna</button></a>');
+                                                $('div.col-md-4').html('<a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-xs btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>  Vacuna</button></a>');
                                             },
                                             "language": {
                                                 "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
@@ -197,6 +167,24 @@
                                                 }],
                                             "order": [[1, 'asc']],
                                             "iDisplayLength": 10,
+                                        });
+
+                                        $('#vacunas_optativas').DataTable({
+                                            "dom": '<".col-md-4">frtip',
+                                            "autoWidth": false,
+                                            fnInitComplete: function () {
+                                                $('div.col-md-4').html('<a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-xs btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>  Vacuna</button></a>');
+                                            },
+                                            "language": {
+                                                "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                                            },
+                                            "columnDefs": [{
+                                                    "searchable": false,
+                                                    "orderable": false,
+                                                    "targets": [0, 2]
+                                                }],
+                                            "order": [[1, 'asc']],
+                                            "iDisplayLength": 5,
                                         });
                                     });
     </script>
