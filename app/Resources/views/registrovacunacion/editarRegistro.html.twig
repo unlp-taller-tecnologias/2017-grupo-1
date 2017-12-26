@@ -23,7 +23,6 @@
 
         <div class="panel-body">
             <form class="form-inline" enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("editar_registro_action") }}" method="POST">
-
                 <input type="hidden" name="idVisitante" value="{{visitante.id}}">
                 <input type="hidden" name="idRegistro" value="{{registrovacunacion.id}}">
                 <h2>Vacunas del Calendario Nacional</h2>
@@ -101,8 +100,11 @@
                     <label><input name="cumple" type="checkbox" {% if registrovacunacion.cumple %} checked {% endif %}> Cumple el registro de vacunacion</label>
                 </div>
                 <br><br>
-                <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default" >Volver</a>
-
+                {% if visitante.tipo == "Inscripto" %}
+                    <a href="{{path ("inscripto_index") }}" class="btn btn-default" >Volver</a>
+                {% else %}
+                    <a href="{{path ("nodocente_index") }}" class="btn btn-default" >Volver</a>
+                {% endif %}
                 <input class="btn btn-primary" type="submit" name="submit" value="Guardar">          
             </form>
         
@@ -115,12 +117,14 @@
                         {% if observacion.esPrivada %}
                             <div class="panel panel-danger">
                                 <div class="panel-heading">
-                                    <p class="col-lg-6">Observacion Privada</p><p class="col-lg-6 text-right">{{ observacion.fechaCreacion | date('d/m/Y')}}</p> <br>
+                                    <p class="col-lg-11">Observacion Privada Creada el {{ observacion.fechaCreacion | date('d/m/Y')}} Por el usuario {{ observacion.creadoPor.username }}</p>
+                                    <a href="{{ path('eliminar_observacion', { 'id': observacion.id, 'idVisitante': visitante.id }) }}"><p class="col-lg-1">Eliminar</p></a><br>
                                 </div>
                         {% else %}
                             <div class="panel panel-info">
                                 <div class="panel-heading">
-                                    <p class="col-lg-6">Observacion Publica</p><p class="col-lg-6 text-right">{{ observacion.fechaCreacion | date('d/m/Y')}}</p> <br>
+                                    <p class="col-lg-11">Observacion Privada Creada el {{ observacion.fechaCreacion | date('d/m/Y')}} Por el usuario {{ observacion.creadoPor.username }}</p>
+                                    <a href="{{ path('eliminar_observacion', { 'id': observacion.id, 'idVisitante': visitante.id }) }}"><p class="col-lg-1">Eliminar</p></a><br>
                                 </div>
                         {% endif %}
                                 <div class="panel-body">
