@@ -54,8 +54,8 @@
 
                         <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
                         <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
+                        <br>
                     {% endif %}
-                    <br>
                 {% endfor %}
                 <!-- FIN DE LAS VACUNAS PERTENECIENTES AL CALENDARIO NACIONAL -->
 
@@ -85,6 +85,7 @@
 
                         <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
                         <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
+                        <br>
                     {% endif %}
                 {% endfor %}
                 <!-- FIN DE LAS OTRAS VACUNAS -->
