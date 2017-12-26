@@ -49,6 +49,7 @@ class Usuario implements UserInterface, \Serializable {
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank(message="El campo contraseña de usuario no puede estar en blanco")
      * @Assert\Length(
      *      min = 6,
      *      max = 30,
@@ -99,7 +100,7 @@ class Usuario implements UserInterface, \Serializable {
           $roles[] = $rol->getNombre();
           }
           return $roles; */
-        return $this->rol;
+        return array($this->getRol()->getRol());
     }
 
     public function eraseCredentials() {
@@ -167,10 +168,8 @@ class Usuario implements UserInterface, \Serializable {
         return $this->rol;
     }
 
-    function setRol($rol) {
+    function setRol(Rol $rol) {
         $this->rol = $rol;
     }
-
-    
 
 }

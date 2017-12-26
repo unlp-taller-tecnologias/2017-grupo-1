@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * Rol
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="rol")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RolRepository")
  */
-class Rol {
+class Rol implements RoleInterface {
 
     /**
      * @var int
@@ -33,7 +34,22 @@ class Rol {
      * 
      * @ORM\Column(type="string", length=255)
      */
+    private $rol;
+
+    /**
+     * @var string
+     * 
+     * @ORM\Column(type="string", length=255)
+     */
     private $descripcion;
+
+    /**
+     * implement Interface
+     *
+     */
+    public function getRole() {
+        
+    }
 
     /**
      * Get id
@@ -60,6 +76,14 @@ class Rol {
      */
     function getDescripcion() {
         return $this->descripcion;
+    }
+
+    function getRol() {
+        return $this->rol;
+    }
+
+    function setRol($rol) {
+        $this->rol = $rol;
     }
 
     /**

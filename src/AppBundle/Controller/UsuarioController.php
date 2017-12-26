@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Usuario controller.
@@ -36,12 +37,14 @@ class UsuarioController extends Controller {
      * @Route("/new", name="usuario_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
         $em = $this->getDoctrine()->getManager();
         $entity = new Usuario();
         $form = $this->createForm('AppBundle\Form\UsuarioType', $entity);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $password = $passwordEncoder->encodePassword($entity, $entity->getPassword());
+            $entity->setPassword($password);
             $em->persist($entity);
             try {
                 $em->flush();
@@ -76,7 +79,7 @@ class UsuarioController extends Controller {
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if($form->get("resetPassword")->getData()){
+            if ($form->get("resetPassword")->getData()) {
                 
             }
             $em->persist($usuario);

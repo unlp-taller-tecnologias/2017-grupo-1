@@ -16,7 +16,7 @@
             <h3 class="panel-title">Nuevo <strong>Usuario del Sistema</strong></h3>
         </div>
         <div class="panel-body">
-            {{ form_start(form, {'attr':{'class':'form-horizontal'} } ) }}
+            {{ form_start(form, {'attr':{'class':'form-horizontal', 'novalidate': 'novalidate'} } ) }}
             <div class="form-group">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -91,23 +91,7 @@
                     toastr['error']('Las contraseñas no coiciden', 'Error');
                 }
             });
-            $('#usuarios_tabla').DataTable({
-                "dom": '<".col-md-2">frtip',
-                fnInitComplete: function () {
-                    $('div.col-md-2').html('<a class="btn btn-xs btn-primary" href="{{path('usuario_new')}}"><i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo</a>');
-                },
-                "autoWidth": false,
-                "language": {
-                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
-                },
-                "columnDefs": [{
-                        "searchable": false,
-                        "orderable": false,
-                        "targets": [0, 4]
-                    }],
-                "order": [[1, 'asc']],
-                "iDisplayLength": 10,
-            });
+
         });
     </script>
 {% endblock %}

@@ -11,31 +11,31 @@
                 <p>
                     Por favor ingrese su nombre de usuario y contraseña para entrar.
                 </p>
-                <form class="form-login" action="index.html">
+                <form class="form-login" action="{{ path('login')}}" method="post">
                     <div class="errorHandler alert alert-danger no-display">
                         <i class="fa fa-remove-sign"></i> Tienes errores en el formulario. Por favor verifica los datos ingresados.
                     </div>
                     <fieldset>
                         <div class="form-group">
                             <span class="input-icon">
-                                <input type="text" class="form-control" name="username" placeholder="Usuario">
+                                <input type="text" class="form-control" name="_username"value="{{ last_username }}" placeholder="Usuario">
                                 <i class="fa fa-user"></i> </span>
                         </div>
                         <div class="form-group form-actions">
                             <span class="input-icon">
-                                <input type="password" class="form-control password" name="password" placeholder="Contraseña">
+                                <input type="password" class="form-control password" name="_password" placeholder="Contraseña">
                                 <i class="fa fa-lock"></i>
                                 <a class="forgot" href="#">
                                     ¿Olvidaste la contraseña?
                                 </a> </span>
                         </div>
                         <div class="form-actions">
-
                             <button type="submit" class="btn btn-green pull-right">
                                 Entrar <i class="fa fa-arrow-circle-right"></i>
                             </button>
                         </div>
                     </fieldset>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 </form>
                 <!-- start: COPYRIGHT -->
                 <div class="copyright">
@@ -101,7 +101,10 @@
         jQuery(document).ready(function () {
             Main.init();
             Login.init();
-        });
+        {% if error is not null %}
+                toastr['error']('Las credenciales son incorrectas', 'Error');
+        {% endif %}
+            });
     </script>
 {% endblock %}
 
