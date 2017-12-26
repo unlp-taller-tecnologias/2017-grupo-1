@@ -72,8 +72,7 @@ abstract class Visitante {
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Assert\Email(
-     *     message = "El email {{ value }} no es un email valido.",
-     *     checkMX = true
+     *     message = "El email {{ value }} no es un email valido."
      * )
      */
     protected $email;
