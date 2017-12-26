@@ -1,4 +1,4 @@
-<?php
+l<?php
 
 namespace AppBundle\Entity;
 
@@ -69,9 +69,20 @@ class RegistroEnfermedades {
         return $this->id;
     }
 
+    /**
+     * Get fechaInicio
+     *
+     * @return \DateTime
+     */
     function getFechaInicio(): datetime {
         return $this->fechaInicio;
     }
+
+    /**
+     * Get fechaFin
+     *
+     * @return \DateTime
+     */
 
     function getFechaFin(): datetime {
         return $this->fechaFin;
@@ -89,10 +100,24 @@ class RegistroEnfermedades {
         return $this->enfermedad;
     }
 
+    /**
+     * Set Fecha Inicio
+     * 
+     * @param \DateTime $fechaInicio
+     *
+     * @return RegistroEnfermedades
+     */
     function setFechaInicio(datetime $fechaInicio) {
         $this->fechaInicio = $fechaInicio;
     }
 
+    /**
+     * Set Fecha Fin
+     * 
+     * @param \DateTime $fechaFin
+     *
+     * @return RegistroEnfermedades
+     */
     function setFechaFin(datetime $fechaFin) {
         $this->fechaFin = $fechaFin;
     }
