@@ -67,8 +67,9 @@ class NoDocenteController extends Controller
         $registrovacunacion = new registrovacunacion();
         $visitante = $em->getRepository('AppBundle:Visitante')->find($request->get('idVisitante'));
         
-        // El usuario que creo la publicacion, todavia no estan hechas la sesiones.
-        $usuario = $em->getRepository('AppBundle:Usuario')->find(3);
+        // El usuario que creo la observacion, todavia no estan hechas la sesiones.
+        $idIsuario = $this->getUser()->getId();
+        $usuario = $em->getRepository('AppBundle:Usuario')->find($idIsuario);
 
         $registrovacunacion->setPropietario($visitante);
         $registrovacunacion->setCreador($usuario);
@@ -195,7 +196,8 @@ class NoDocenteController extends Controller
         }
 
         // El usuario que creo la observacion, todavia no estan hechas la sesiones.
-        $usuario = $em->getRepository('AppBundle:Usuario')->find(3);
+        $idIsuario = $this->getUser()->getId();
+        $usuario = $em->getRepository('AppBundle:Usuario')->find($idIsuario);
 
         // Creo las observaciones
         if ($request->get('observacionPublica') != '') {
