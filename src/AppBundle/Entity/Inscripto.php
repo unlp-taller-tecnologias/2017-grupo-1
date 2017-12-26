@@ -25,14 +25,14 @@ class Inscripto extends Visitante
     /**
      * @var string
      *
-     * @ORM\Column(name="nroFicha", type="string", length=255)
+     * @ORM\Column(name="nroFicha", type="string", length=255, unique=true)
      */
     protected $nroFicha;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="legajo", type="string", length=255, nullable=true)
+     * @ORM\Column(name="legajo", type="string", length=255, unique=true, nullable=true)
      * @Assert\Length(
      *      min = 6,
      *      max = 30,
