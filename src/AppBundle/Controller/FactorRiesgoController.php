@@ -47,9 +47,13 @@ class FactorRiesgoController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($factorRiesgo);
-            $em->flush();
-
-            return $this->redirectToRoute('factorriesgo_show', array('id' => $factorRiesgo->getId()));
+            try {
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'El factor de riesgo se editó correctamente.');
+                return $this->redirectToRoute("factorriesgo_index");
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el factor de riesgo. Detalle: ' . $e->getMessage());
+            }
         }
 
         return $this->render('factorriesgo/new.html.twig', array(

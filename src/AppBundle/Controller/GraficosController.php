@@ -4,6 +4,9 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Vacuna;
 
 /**
  * Graficos controller.
@@ -115,7 +118,8 @@ class GraficosController extends Controller{
         }
       }
       if(!$isThereData){
-        exit();
+        $this->get('session')->getFlashBag()->add('error', 'No existen datos suficientes para mostrar el grafico de personas que cumplieron con el calendario de vacunacion.');
+        return $this->redirectToRoute("graficos_index");
       }
       return $this->render('graficos/quien_cumple.html.twig', array(
         'data'=>$data
@@ -123,23 +127,160 @@ class GraficosController extends Controller{
     }
 
     /**
-     * @Route("/dosisRecibidasIndex",name="seleccion_dosis")
+     * @Route("/dosisRecibidasIndex",name="dosis_recibidas")
+     * @Method({"GET"})
      */
-    public function dosisRecibidasIndexAction()
-    {
-        return $this->render('graficos/dosis_recibidas_index.html.twig', array(
-            // ...
-        ));
+    public function dosisRecibidasIndexAction(){
+      $em=$this->getDoctrine()->getManager();
+      $vacunas=$em->getRepository('AppBundle:Vacuna')->findAll();
+      return $this->render('graficos/dosis_recibidas_index.html.twig', array(
+          'vacunas'=>$vacunas
+      ));
     }
 
     /**
-     * @Route("/dosisRecibidasGrafico",name="dosis_recibidas_graficos")
+     * @Route("/dosisRecibidasIndex",name="dosis_recibidas_grafico")
+     * @Method({"POST"})
      */
-    public function dosisRecibidasGraficoAction()
-    {
-        return $this->render('graficos/dosis_recibidas_grafico.html.twig', array(
-            // ...
-        ));
+    public function dosisRecibidasGraficoIndexAction(Request $request){
+      $vacuna=$request->get('vacuna');
+      $dosis=$request->get('dosis');
+      $em=$this->getDoctrine()->getManager();
+      $ranges=$this->rangeArray();
+      $sql1="SELECT COUNT(*) as total,
+	           CASE
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 15 AND 19 THEN '15-19'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 20 AND 24 THEN '20-24'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 25 AND 29 THEN '25-29'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 30 AND 34 THEN '30-34'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 35 AND 39 THEN '35-39'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 40 AND 44 THEN '40-44'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 45 AND 49 THEN '45-49'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 50 AND 54 THEN '50-54'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 55 AND 59 THEN '55-59'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 60 AND 64 THEN '60-64'
+		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) > 64 THEN '65+'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 15 AND 19 THEN '15-19'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 20 AND 24 THEN '20-24'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 25 AND 29 THEN '25-29'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 30 AND 34 THEN '30-34'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 35 AND 39 THEN '35-39'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 40 AND 44 THEN '40-44'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 45 AND 49 THEN '45-49'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 50 AND 54 THEN '50-54'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 55 AND 59 THEN '55-59'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 60 AND 64 THEN '60-64'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) > 64 THEN '65+'
+               ELSE 'Invalido'
+	           END as rango
+             FROM visitante INNER JOIN registro_vacunacion ON visitante.registroVacunacion_id=registro_vacunacion.id INNER JOIN componente ON registro_vacunacion.id=componente.registroVacunacion_id
+             WHERE vacuna_id=:vacuna AND dosisRecibidas>=:dosis
+             GROUP BY CASE
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 15 AND 19 THEN '15-19'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 20 AND 24 THEN '20-24'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 25 AND 29 THEN '25-29'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 30 AND 34 THEN '30-34'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 35 AND 39 THEN '35-39'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 40 AND 44 THEN '40-44'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 45 AND 49 THEN '45-49'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 50 AND 54 THEN '50-54'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 55 AND 59 THEN '55-59'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 60 AND 64 THEN '60-64'
+ 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) > 64 THEN '65+'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 15 AND 19 THEN '15-19'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 20 AND 24 THEN '20-24'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 25 AND 29 THEN '25-29'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 30 AND 34 THEN '30-34'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 35 AND 39 THEN '35-39'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 40 AND 44 THEN '40-44'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 45 AND 49 THEN '45-49'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 50 AND 54 THEN '50-54'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 55 AND 59 THEN '55-59'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 60 AND 64 THEN '60-64'
+               WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) > 64 THEN '65+'
+ 	           END
+          ";
+          $sql2="SELECT COUNT(*) as total,
+    	           CASE
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 15 AND 19 THEN '15-19'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 20 AND 24 THEN '20-24'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 25 AND 29 THEN '25-29'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 30 AND 34 THEN '30-34'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 35 AND 39 THEN '35-39'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 40 AND 44 THEN '40-44'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 45 AND 49 THEN '45-49'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 50 AND 54 THEN '50-54'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 55 AND 59 THEN '55-59'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 60 AND 64 THEN '60-64'
+    		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) > 64 THEN '65+'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 15 AND 19 THEN '15-19'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 20 AND 24 THEN '20-24'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 25 AND 29 THEN '25-29'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 30 AND 34 THEN '30-34'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 35 AND 39 THEN '35-39'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 40 AND 44 THEN '40-44'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 45 AND 49 THEN '45-49'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 50 AND 54 THEN '50-54'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 55 AND 59 THEN '55-59'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 60 AND 64 THEN '60-64'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) > 64 THEN '65+'
+                   ELSE 'Invalido'
+    	           END as rango
+                 FROM visitante INNER JOIN registro_vacunacion ON visitante.registroVacunacion_id=registro_vacunacion.id INNER JOIN componente ON registro_vacunacion.id=componente.registroVacunacion_id
+                 WHERE vacuna_id=:vacuna AND dosisRecibidas<:dosis
+                 GROUP BY CASE
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 15 AND 19 THEN '15-19'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 20 AND 24 THEN '20-24'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 25 AND 29 THEN '25-29'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 30 AND 34 THEN '30-34'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 35 AND 39 THEN '35-39'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 40 AND 44 THEN '40-44'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 45 AND 49 THEN '45-49'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 50 AND 54 THEN '50-54'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 55 AND 59 THEN '55-59'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 60 AND 64 THEN '60-64'
+     		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) > 64 THEN '65+'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 15 AND 19 THEN '15-19'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 20 AND 24 THEN '20-24'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 25 AND 29 THEN '25-29'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 30 AND 34 THEN '30-34'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 35 AND 39 THEN '35-39'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 40 AND 44 THEN '40-44'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 45 AND 49 THEN '45-49'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 50 AND 54 THEN '50-54'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 55 AND 59 THEN '55-59'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 60 AND 64 THEN '60-64'
+                   WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) > 64 THEN '65+'
+     	           END
+              ";
+          $isThereData=false;
+          $stm1=$em->getConnection()->prepare($sql1);
+          $stm1->bindValue(':vacuna',$vacuna);
+          $stm1->bindValue(':dosis',$dosis);
+          $stm1->execute();
+          $values=$stm1->fetchAll();
+          foreach($values as $value){
+            if($value['rango']!='Invalido'){
+              $isThereData=true;
+              $ranges[$value['rango']]['SI']=$value['total'];
+            }
+          }
+          $stm2=$em->getConnection()->prepare($sql2);
+          $stm2->bindValue(':vacuna',$vacuna);
+          $stm2->bindValue(':dosis',$dosis);
+          $stm2->execute();
+          $values=$stm1->fetchAll();
+          foreach($values as $value){
+            if($value['rango']!='INVALIDO'){
+              $ranges[$value['rango']]['NO']=$value['total'];
+              $isThereData=false;
+            }
+          }
+          if(!$isThereData){
+            $this->get('session')->getFlashBag()->add('error', 'No existen datos suficientes para mostrar el grafico de personas que cumplieron con el calendario de vacunacion.');
+            return $this->redirectToRoute("graficos_index");
+          }
+          exit();
     }
 
 }
