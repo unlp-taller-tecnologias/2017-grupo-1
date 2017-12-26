@@ -269,18 +269,20 @@ class GraficosController extends Controller{
           $stm2->bindValue(':vacuna',$vacuna);
           $stm2->bindValue(':dosis',$dosis);
           $stm2->execute();
-          $values=$stm1->fetchAll();
+          $values=$stm2->fetchAll();
           foreach($values as $value){
             if($value['rango']!='INVALIDO'){
               $ranges[$value['rango']]['NO']=$value['total'];
-              $isThereData=false;
+              $isThereData=true;
             }
           }
           if(!$isThereData){
             $this->get('session')->getFlashBag()->add('error', 'No existen datos suficientes para mostrar el grafico de personas que cumplieron con el calendario de vacunacion.');
             return $this->redirectToRoute("graficos_index");
           }
-          exit();
+          return $this->render('graficos/dosis_recibidas_grafico.html.twig',array(
+            'data'=>$ranges
+          ));
     }
 
 }
