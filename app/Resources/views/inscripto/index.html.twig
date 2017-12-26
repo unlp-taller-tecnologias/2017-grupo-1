@@ -19,7 +19,7 @@
         <div class="panel-heading">
             <h3 class="panel-title">Listado <strong>de Inscriptos</strong></h3>
         </div>
-        
+
 
         <div class="panel-body">
 
@@ -43,38 +43,43 @@
                 </thead>
 
                 <tbody>
-                {% for inscripto in inscriptos %}
-                    <tr   {% if inscripto.borrado %} class="danger" {% endif %}>
-                        <td class="text-center">{{ loop.index }}</td>
-                        <td class="text-center">{{ inscripto.nroFicha }}</td>
-                        <td class="text-center">{{ inscripto.nombre }}</td>
-                        <td class="text-center">{{ inscripto.apellido }}</td>
-                        <td class="text-center">{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</td>
-                        <td class="text-center">{{ inscripto.pais }}</td>
-                        <td class="text-center">{{ inscripto.provincia }}</td>
-                        <td class="text-center">{{ inscripto.tipoDocumento }}</td>
-                        <td class="text-center">{{ inscripto.nroDocumento }}</td>
-                        <td class="text-center">
-                            {% if not inscripto.borrado %}
-                                {% if inscripto.registroVacunacion %}
-                                    <a href="{{ path('editar_registro', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                {% else %}
-                                    <a href="{{ path('alta_registro', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                {% endif %}
+                    {% for inscripto in inscriptos %}
+                        <tr   {% if inscripto.borrado %} class="danger" {% endif %}>
+                            <td class="text-center">{{ loop.index }}</td>
+                            <td class="text-center">{{ inscripto.nroFicha }}</td>
+                            <td class="text-center">{{ inscripto.nombre }}</td>
+                            <td class="text-center">{{ inscripto.apellido }}</td>
+                            <td class="text-center">{% if inscripto.fechaInscripcion %}{{ inscripto.fechaInscripcion|date('Y-m-d') }}{% endif %}</td>
+                            <td class="text-center">{{ inscripto.pais }}</td>
+                            <td class="text-center">{{ inscripto.provincia }}</td>
+                            <td class="text-center">{{ inscripto.tipoDocumento }}</td>
+                            <td class="text-center">{{ inscripto.nroDocumento }}</td>
+                            <td class="text-center">
+                                {% if not inscripto.borrado %}
+                                    {% if inscripto.registroVacunacion %}
+                                        <a href="{{ path('editar_registro', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
+                                            {% else %}
+                                        <a href="{{ path('alta_registro', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
+                                            {% endif %}
 
-                                <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('inscripto_show',{'id': inscripto.id}) }}', 'Ver inscripto');">
-                                    <i class="fa fa-binoculars" aria-hidden="true"></i>
-                                </button>
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('inscripto_show',{'id': inscripto.id}) }}', 'Ver inscripto');">
+                                        <i class="fa fa-binoculars" aria-hidden="true"></i>
+                                    </button>
+                                    {% if is_granted('ROLE_ADMIN') %}  
+                                        <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}">
+                                            <button type="button" class="btn btn-xs btn-warning">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </button>
+                                        </a>
 
-                              
-                                <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-
-                                <a href="#" onclick="usuarioDelete('{{ path("inscripto_delete", {"id":inscripto.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                            {% endif %}  
-                        </td>
-                    </tr>
-                {% endfor %}
+                                        <a href="#" onclick="usuarioDelete('{{ path("inscripto_delete", {"id":inscripto.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </a>
+                                    {% endif %}
+                                {% endif %}  
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -87,64 +92,64 @@
     <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
-        function crearModalView(url, title) {
-            $('#okButton').button('reset');
-            $('#panel-config .modal-footer').show();
-            $('#cancelButton').hide();
-            $('#panel-config .modal-title').html(title);
-            $('#panel-config .modal-body').html("");
-            $('#panel-config .modal-body').load(url, function () {
-                $('#panel-config form').submit(function (event) {
-                    event.preventDefault();
-                    $('#panel-config').modal('toggle');
-                });
-            });
-            $('#panel-config').modal();
-        }
-        function usuarioDelete(url) {
-            swal({
-                title: '¿Estas seguro?',
-                text: "Estas por eliminar un inscripto del sistema!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Si, Eliminarlo'
-              }).then((result) => {
-                  if (result.value) {
-                      $.post(url, {}).done((data) => {
-                          if (data.success) {
-                              swal('Borrado!', data.message, 'success').then(function () {
-                                  location.reload();
-                              });
-                          } else {
-                              swal('Cuidado!', data.message, 'error');
-                          }
-                      }).fail(() => {
-                          swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
-                      });
-                  }
-              });
-        }
-        $(document).ready(function () {
-            $('#usuarios_tabla').DataTable({
-                "dom": '<".col-md-4">frtip',
-                fnInitComplete: function () {
-                    $('div.col-md-4').html('<a href="{{ path('inscripto_new') }}"><button type="button" class="btn btn-xs btn-primary">Agregar un nuevo inscripto</button></a> <button type="button" class="btn btn-xs btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Importar Excel de Inscriptos</button> <div class="collapse" id="collapseExample"><br><div class="card card-body"><div class="container"><form class="form-inline" enctype="multipart/form-data" name="formHosp"action="{{path ("altaExcel") }}" method="POST"><div class="form-group"><input type="file" name="excel"class="form-control" id="excel"></div><button type="submit" class="btn btn-default">Importar</button></form></div></div></div><br><br>');
-                },
-                "autoWidth": false,
-                "language": {
-                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
-                },
-                "columnDefs": [{
-                        "searchable": false,
-                        "orderable": false,
-                        "targets": [0, 1]
-                    }],
-                "order": [[1, 'asc']],
-                "iDisplayLength": 10,
-            });
-        });
+                                            function crearModalView(url, title) {
+                                                $('#okButton').button('reset');
+                                                $('#panel-config .modal-footer').show();
+                                                $('#cancelButton').hide();
+                                                $('#panel-config .modal-title').html(title);
+                                                $('#panel-config .modal-body').html("");
+                                                $('#panel-config .modal-body').load(url, function () {
+                                                    $('#panel-config form').submit(function (event) {
+                                                        event.preventDefault();
+                                                        $('#panel-config').modal('toggle');
+                                                    });
+                                                });
+                                                $('#panel-config').modal();
+                                            }
+                                            function usuarioDelete(url) {
+                                                swal({
+                                                    title: '¿Estas seguro?',
+                                                    text: "Estas por eliminar un inscripto del sistema!",
+                                                    type: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    cancelButtonText: 'Cancelar',
+                                                    confirmButtonText: 'Si, Eliminarlo'
+                                                }).then((result) => {
+                                                    if (result.value) {
+                                                        $.post(url, {}).done((data) => {
+                                                            if (data.success) {
+                                                                swal('Borrado!', data.message, 'success').then(function () {
+                                                                    location.reload();
+                                                                });
+                                                            } else {
+                                                                swal('Cuidado!', data.message, 'error');
+                                                            }
+                                                        }).fail(() => {
+                                                            swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                            $(document).ready(function () {
+                                                $('#usuarios_tabla').DataTable({
+                                                    "dom": '<".col-md-4">frtip',
+                                                    fnInitComplete: function () {
+                                                        $('div.col-md-4').html('<a href="{{ path('inscripto_new') }}"><button type="button" class="btn btn-xs btn-primary">Agregar un nuevo inscripto</button></a> <button type="button" class="btn btn-xs btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Importar Excel de Inscriptos</button> <div class="collapse" id="collapseExample"><br><div class="card card-body"><div class="container"><form class="form-inline" enctype="multipart/form-data" name="formHosp"action="{{path ("altaExcel") }}" method="POST"><div class="form-group"><input type="file" name="excel"class="form-control" id="excel"></div><button type="submit" class="btn btn-default">Importar</button></form></div></div></div><br><br>');
+                                                    },
+                                                    "autoWidth": false,
+                                                    "language": {
+                                                        "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                                                    },
+                                                    "columnDefs": [{
+                                                            "searchable": false,
+                                                            "orderable": false,
+                                                            "targets": [0, 1]
+                                                        }],
+                                                    "order": [[1, 'asc']],
+                                                    "iDisplayLength": 20,
+                                                });
+                                            });
     </script>
 {% endblock %}

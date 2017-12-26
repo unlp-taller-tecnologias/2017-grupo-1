@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(
  *  fields={"nombre"},
  *  message="El nombre de la enfermedad ya se encuentra registrado en el sistema"
- *)
+ * )
  */
 class Enfermedad {
 
@@ -34,10 +34,10 @@ class Enfermedad {
      *
      * @Assert\NotBlank(message="El nombre de la enfermedad no puede estar en blanco")
      * @Assert\Length(
-     *  min=6,
+     *  min=2,
      *  max=255,
-     * minMessage="El nombre de la enfermedad deberá tener al menos {{limit}} caracteres",
-     * maxMessage="El nombre de la enfermedad no puede tener más de {{limit}} caracteres"
+     *  minMessage="El nombre de la enfermedad deberá tener al menos {{ limit }} caracteres",
+     *  maxMessage="El nombre de la enfermedad no puede tener más de {{ limit }}caracteres"
      * )
      */
     private $nombre;
@@ -50,8 +50,8 @@ class Enfermedad {
      * @Assert\Length(
      *  min=6,
      *  max=255,
-     * minMessage="La descripcion de la enfermedad deberá tener al menos {{limit}} caracteres",
-     * maxMessage="La descripcion de la enfermedad no puede tener más de {{limit}} caracteres"
+     *  minMessage="La descripcion de la enfermedad deberá tener al menos {{limit}} caracteres",
+     *  maxMessage="La descripcion de la enfermedad no puede tener más de {{limit}} caracteres"
      * )
      */
     private $descripcion;
