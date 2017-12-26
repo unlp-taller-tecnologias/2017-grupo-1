@@ -44,71 +44,71 @@ class AppFixtures extends Fixture {
          * PERSISTIR LAS VACUNAS DEL CALENDARIO Y OPTATIVAS
          */
         $vacuna = new Vacuna();
-        $vacuna->setNombre("AntihepatitisB")->setAbreviatura("AB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("AntihepatitisB")->setAbreviatura("AB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("dT doble adulto")->setAbreviatura("dT")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("dT doble adulto")->setAbreviatura("dT")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("dTp acelular")->setAbreviatura("dTp")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("dTp acelular")->setAbreviatura("dTp")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Triple viral SRP")->setAbreviatura("SRP")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false);
+        $vacuna->setNombre("Triple viral SRP")->setAbreviatura("SRP")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Doble viral SR")->setAbreviatura("SR")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("Doble viral SR")->setAbreviatura("SR")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Influenza anual")->setAbreviatura("influenza")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("Influenza anual")->setAbreviatura("influenza")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(true)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Hepatitis A")->setAbreviatura("HA")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("Hepatitis A")->setAbreviatura("HA")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Hepatitis A+B")->setAbreviatura("HAB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false);
+        $vacuna->setNombre("Hepatitis A+B")->setAbreviatura("HAB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Varicela")->setAbreviatura("Varicela")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("Varicela")->setAbreviatura("Varicela")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Fiebre amarilla")->setAbreviatura("FA")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false);
+        $vacuna->setNombre("Fiebre amarilla")->setAbreviatura("FA")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Meningococica AC")->setAbreviatura("MAC")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("Meningococica AC")->setAbreviatura("MAC")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Meningococica AB")->setAbreviatura("MAB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("Meningococica AB")->setAbreviatura("MAB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Meningococica ACWY")->setAbreviatura("MACWY")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("Meningococica ACWY")->setAbreviatura("MACWY")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Meningococica B")->setAbreviatura("MB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false);
+        $vacuna->setNombre("Meningococica B")->setAbreviatura("MB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("HPV bivalente")->setAbreviatura("HPVB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("HPV bivalente")->setAbreviatura("HPVB")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("HPV tetravalente")->setAbreviatura("HPVT")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false);
+        $vacuna->setNombre("HPV tetravalente")->setAbreviatura("HPVT")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(false)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         $vacuna = new Vacuna();
-        $vacuna->setNombre("Antineumococica")->setAbreviatura("Antineumococica")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true);
+        $vacuna->setNombre("Antineumococica")->setAbreviatura("Antineumococica")->setDosisRequeridas(rand(1, 5))->setEsObligatoria(false)->setObservacion("Observacion de la vacuna del calendario ")->setTieneVencimiento(true)->setBorrado(FALSE);;
         $manager->persist($vacuna);
 
         /**
