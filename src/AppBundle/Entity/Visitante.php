@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Entity\RegistroVacunacion;
 
 /**
@@ -14,6 +15,7 @@ use AppBundle\Entity\RegistroVacunacion;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="tipoVisitante", type="string")
  * @ORM\DiscriminatorMap({"inscripto" = "Inscripto", "noDocente" = "NoDocente"})
+ * @UniqueEntity(fields={"nroDocumento"}, message="Ya existe un inscripto con este nro de documento.")
  */
 abstract class Visitante {
 

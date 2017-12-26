@@ -4,12 +4,16 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Inscripto
  *
  * @ORM\Table(name="inscripto")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\InscriptoRepository")
+ * @UniqueEntity(fields={"nroFicha"}, message="Ya existe un inscripto con este nro de ficha.")
+ * @UniqueEntity(fields={"legajo"}, message="Ya existe un inscripto con este nro de legajo.")
+ * message="This nroFicha is already in use on that host."
  */
 class Inscripto extends Visitante
 {
