@@ -38,11 +38,6 @@ class Vacuna
      *      minMessage = "El nombre de vacuna deberá tener al menos {{ limit }} caracteres",
      *      maxMessage = "El nombre de vacuna no puede tener más de {{ limit }} caracteres"
      * )
-     * @Assert\Regex(
-     *     pattern="/[a-zA-Z]+$/",
-     *     match=true,
-     *     message="El nombre no puede contener numeros ni caracteres especiales"
-     * )
      */
     private $nombre;
 
