@@ -44,10 +44,12 @@
                                 <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('vacuna_show',{'id': vacuna.id}) }}', 'Ver vacuna del calendario');">
                                     <i class="fa fa-binoculars" aria-hidden="true"></i>
                                 </button>
-                                <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                                <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                </a>
+                                {% if is_granted('ROLE_ADMIN') %}    
+                                    <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                    <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -82,13 +84,15 @@
                             <td class="text-center">{{ vacuna.abreviatura }}</td>
                             <td class="text-center">{{ vacuna.dosisRequeridas }}</td>
                             <td class="text-center">
-                                 <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('vacuna_show',{'id': vacuna.id}) }}', 'Ver vacuna optativa');">
+                                <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('vacuna_show',{'id': vacuna.id}) }}', 'Ver vacuna optativa');">
                                     <i class="fa fa-binoculars" aria-hidden="true"></i>
                                 </button>
-                                <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                                <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                </a>
+                                {% if is_granted('ROLE_ADMIN') %}  
+                                    <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                    <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -104,88 +108,88 @@
     <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
-                                    function crearModalView(url, title) {
-                                        $('#okButton').button('reset');
-                                        $('#panel-config .modal-footer').show();
-                                        $('#cancelButton').hide();
-                                        $('#panel-config .modal-title').html(title);
-                                        $('#panel-config .modal-body').html("");
-                                        $('#panel-config .modal-body').load(url, function () {
-                                            $('#panel-config form').submit(function (event) {
-                                                event.preventDefault();
-                                                $('#panel-config').modal('toggle');
+                                        function crearModalView(url, title) {
+                                            $('#okButton').button('reset');
+                                            $('#panel-config .modal-footer').show();
+                                            $('#cancelButton').hide();
+                                            $('#panel-config .modal-title').html(title);
+                                            $('#panel-config .modal-body').html("");
+                                            $('#panel-config .modal-body').load(url, function () {
+                                                $('#panel-config form').submit(function (event) {
+                                                    event.preventDefault();
+                                                    $('#panel-config').modal('toggle');
+                                                });
+                                            });
+                                            $('#panel-config').modal();
+                                        }
+
+                                        function vacunaDelete(url) {
+
+                                            swal({
+                                                title: '¿Estas seguro?',
+                                                text: "Estas por eliminar una vacuna del sistema!",
+                                                type: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                cancelButtonText: 'Cancelar',
+                                                confirmButtonText: 'Si, Eliminarla'
+                                            }).then((result) => {
+                                                if (result.value) {
+                                                    $.post(url, {}).done((data) => {
+                                                        if (data.success) {
+                                                            swal('Borrado!', data.message, 'success').then(function () {
+                                                                location.reload();
+                                                            });
+                                                        } else {
+                                                            swal('Cuidado!', data.message, 'error');
+                                                        }
+                                                    }).fail(() => {
+                                                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                                    }
+                                                    );
+                                                }
+                                            });
+                                        }
+                                        $(document).ready(function () {
+
+
+
+                                            $('#vacunas_calendario').DataTable({
+                                                "dom": '<".col-md-4">frtip',
+                                                "autoWidth": false,
+                                                fnInitComplete: function () {
+                                                    $('div.col-md-4').html('<a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-xs btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>  Vacuna</button></a>');
+                                                },
+                                                "language": {
+                                                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                                                },
+                                                "columnDefs": [{
+                                                        "searchable": false,
+                                                        "orderable": false,
+                                                        "targets": [0, 2]
+                                                    }],
+                                                "order": [[1, 'asc']],
+                                                "iDisplayLength": 10,
+                                            });
+
+                                            $('#vacunas_optativas').DataTable({
+                                                "dom": '<".col-md-4">frtip',
+                                                "autoWidth": false,
+                                                fnInitComplete: function () {
+                                                    $('div.col-md-4').html('<a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-xs btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>  Vacuna</button></a>');
+                                                },
+                                                "language": {
+                                                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                                                },
+                                                "columnDefs": [{
+                                                        "searchable": false,
+                                                        "orderable": false,
+                                                        "targets": [0, 2]
+                                                    }],
+                                                "order": [[1, 'asc']],
+                                                "iDisplayLength": 5,
                                             });
                                         });
-                                        $('#panel-config').modal();
-                                    }
-
-                                    function vacunaDelete(url) {
-
-                                        swal({
-                                            title: '¿Estas seguro?',
-                                            text: "Estas por eliminar una vacuna del sistema!",
-                                            type: 'warning',
-                                            showCancelButton: true,
-                                            confirmButtonColor: '#3085d6',
-                                            cancelButtonColor: '#d33',
-                                            cancelButtonText: 'Cancelar',
-                                            confirmButtonText: 'Si, Eliminarla'
-                                        }).then((result) => {
-                                            if (result.value) {
-                                                $.post(url, {}).done((data) => {
-                                                    if (data.success) {
-                                                        swal('Borrado!', data.message, 'success').then(function () {
-                                                            location.reload();
-                                                        });
-                                                    } else {
-                                                        swal('Cuidado!', data.message, 'error');
-                                                    }
-                                                }).fail(() => {
-                                                    swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
-                                                }
-                                                );
-                                            }
-                                        });
-                                    }
-                                    $(document).ready(function () {
-
-
-
-                                        $('#vacunas_calendario').DataTable({
-                                            "dom": '<".col-md-4">frtip',
-                                            "autoWidth": false,
-                                            fnInitComplete: function () {
-                                                $('div.col-md-4').html('<a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-xs btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>  Vacuna</button></a>');
-                                            },
-                                            "language": {
-                                                "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
-                                            },
-                                            "columnDefs": [{
-                                                    "searchable": false,
-                                                    "orderable": false,
-                                                    "targets": [0, 2]
-                                                }],
-                                            "order": [[1, 'asc']],
-                                            "iDisplayLength": 10,
-                                        });
-
-                                        $('#vacunas_optativas').DataTable({
-                                            "dom": '<".col-md-4">frtip',
-                                            "autoWidth": false,
-                                            fnInitComplete: function () {
-                                                $('div.col-md-4').html('<a href="{{ path('vacuna_new') }}"><button type="button" class="btn btn-xs btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i>  Vacuna</button></a>');
-                                            },
-                                            "language": {
-                                                "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
-                                            },
-                                            "columnDefs": [{
-                                                    "searchable": false,
-                                                    "orderable": false,
-                                                    "targets": [0, 2]
-                                                }],
-                                            "order": [[1, 'asc']],
-                                            "iDisplayLength": 5,
-                                        });
-                                    });
     </script>
 {% endblock %}

@@ -9,41 +9,41 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class InscriptoType extends AbstractType
-{
+class InscriptoType extends AbstractType {
+
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('nroFicha', TextType::class)
-        ->add('legajo', TextType::class, array(
+                ->add('legajo', TextType::class, array(
                     'required' => false,
                 ))
-        ->add('fechaInscripcion', DateType::class,array(
-          'widget'=>'single_text'
-        ))
-        ->add('nombre', TextType::class)
-        ->add('apellido', TextType::class)
-        ->add('email', TextType::class)
-        ->add('pais', TextType::class)
-        ->add('provincia', TextType::class)
-        ->add('partido', TextType::class)
-        ->add('localidad', TextType::class)
-        ->add('codigoPostal', TextType::class)
-        ->add('tipoDocumento', TextType::class)
-        ->add('nroDocumento', TextType::class)
-        ->add('fechaNacimiento',DateType::class, array(
-          'required'=>false,
-          'widget'=>'single_text'
+                ->add('fechaInscripcion', DateType::class, array(
+                    'widget' => 'single_text'
+                ))
+                ->add('nombre', TextType::class)
+                ->add('apellido', TextType::class)
+                ->add('email', TextType::class, array(
+                    'required' => false,
+                ))
+                ->add('pais', TextType::class)
+                ->add('provincia', TextType::class)
+                ->add('partido', TextType::class)
+                ->add('localidad', TextType::class)
+                ->add('codigoPostal', TextType::class)
+                ->add('tipoDocumento', TextType::class)
+                ->add('nroDocumento', TextType::class)
+                ->add('fechaNacimiento', DateType::class, array(
+                    'required' => false,
+                    'widget' => 'single_text'
         ));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
-    {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Inscripto'
         ));
@@ -52,10 +52,8 @@ class InscriptoType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
-    {
+    public function getBlockPrefix() {
         return 'appbundle_inscripto';
     }
-
 
 }

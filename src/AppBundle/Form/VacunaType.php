@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class VacunaType extends AbstractType
 {
@@ -24,7 +25,7 @@ class VacunaType extends AbstractType
                 ->add('esObligatoria',CheckboxType::class,array(
                   'required'=>false
                 ))
-                ->add('observacion',TextType::class,array(
+                ->add('observacion',TextareaType::class,array(
                   'required'=>false
                 ));
     }

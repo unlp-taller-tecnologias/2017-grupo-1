@@ -68,7 +68,7 @@ class NoDocenteController extends Controller
         $visitante = $em->getRepository('AppBundle:Visitante')->find($request->get('idVisitante'));
         
         // El usuario que creo la publicacion, todavia no estan hechas la sesiones.
-        $usuario = $em->getRepository('AppBundle:Usuario')->find(3);
+        $usuario = $this->getUser();
 
         $registrovacunacion->setPropietario($visitante);
         $registrovacunacion->setCreador($usuario);

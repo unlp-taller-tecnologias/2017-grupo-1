@@ -88,7 +88,7 @@
             $('form').on('submit', function (e) {
                 if ($('#appbundle_usuario_password').val() !== $('#appbundle_usuario_passwordConfirm').val()) {
                     e.preventDefault();
-                    toastr['error']('Las contraseñas no coiciden', 'Error');
+                    toastr['error']('Las contraseñas no coinciden', 'Error');
                 }
             });
 

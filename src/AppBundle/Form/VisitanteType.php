@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class VisitanteType extends AbstractType
 {
@@ -15,7 +16,9 @@ class VisitanteType extends AbstractType
     {
         $builder->add('nombre')
                 ->add('apellido')
-                ->add('email')
+                ->add('email', EmailType::class, array(
+                    'required' => false,
+                ))
                 ->add('pais')
                 ->add('provincia')
                 ->add('partido')

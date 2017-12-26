@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Vacuna controller.
@@ -37,6 +38,7 @@ class VacunaController extends Controller {
      *
      * @Route("/new", name="vacuna_new")
      * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function newAction(Request $request) {
         $vacuna = new Vacuna();
@@ -73,6 +75,7 @@ class VacunaController extends Controller {
      *
      * @Route("/{id}/edit", name="vacuna_edit")
      * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(Request $request, Vacuna $vacuna) {
         $editForm = $this->createForm('AppBundle\Form\VacunaType', $vacuna);
@@ -108,6 +111,7 @@ class VacunaController extends Controller {
      *
      * @Route("/{id}/delete", name="vacuna_delete")
      * @Method("POST")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteAction(Request $request, Vacuna $vacuna) {
         $em = $this->getDoctrine()->getManager();
