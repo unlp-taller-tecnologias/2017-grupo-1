@@ -48,7 +48,7 @@ class VacunaController extends Controller {
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($vacuna);
-            $em->flush();
+            $vacuna->setBorrado(FALSE);
             try {
                 $em->flush();
                 $this->get('session')->getFlashBag()->add('success', 'La vacuna se agregó al sistema correctamente.');
@@ -116,9 +116,27 @@ class VacunaController extends Controller {
     public function deleteAction(Request $request, Vacuna $vacuna) {
         $em = $this->getDoctrine()->getManager();
         try {
-            $em->remove($vacuna);
+            $vacuna->setBorrado(TRUE);
             $em->flush();
             return new JsonResponse(array('success' => true, 'message' => 'La vacuna fue eliminado con éxito'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la vacuna del sistema'));
+        }
+    }
+
+    /**
+     * Alta de vacuna entity.
+     *
+     * @Route("/{id}/altaVacuna", name="vacuna_alta")
+     * @Method("POST")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function altaAction(Request $request, Vacuna $vacuna) {
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $vacuna->setBorrado(FALSE);
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'La vacuna se dio de alta con éxito'));
         } catch (\Exception $e) {
             return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la vacuna del sistema'));
         }

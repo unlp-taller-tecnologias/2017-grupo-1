@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class VisitanteType extends AbstractType
 {
@@ -24,7 +25,9 @@ class VisitanteType extends AbstractType
                 ->add('partido')
                 ->add('tipoDocumento')
                 ->add('nroDocumento')
-                ->add('fechaNacimiento')
+                ->add('fechaNacimiento', DateType::class, array(
+                    'required' => true,
+                ))
                 ->add('borrado');
     }
     

@@ -15,7 +15,7 @@ class NoDocenteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('departamento')->add('oficina')->add('telefono')->add('funcion')->add('nombre')->add('apellido')->add('email')->add('pais')->add('provincia')->add('partido')->add('localidad')->add('codigoPostal')->add('tipoDocumento')->add('nroDocumento')->add('fechaNacimiento',DateType::class, array(
-          'required'=>false,
+          'required'=>true,
           'widget'=>'single_text'
         ));
     }

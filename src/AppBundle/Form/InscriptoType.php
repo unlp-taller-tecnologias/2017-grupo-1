@@ -35,7 +35,7 @@ class InscriptoType extends AbstractType {
                 ->add('tipoDocumento', TextType::class)
                 ->add('nroDocumento', TextType::class)
                 ->add('fechaNacimiento', DateType::class, array(
-                    'required' => false,
+                    'required' => true,
                     'widget' => 'single_text'
         ));
     }

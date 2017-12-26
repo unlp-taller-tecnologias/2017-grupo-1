@@ -35,20 +35,26 @@
                 </thead>
                 <tbody>
                     {% for vacuna in vacunas_calendario %}
-                        <tr>
+                         <tr   {% if vacuna.borrado %} class="danger" {% endif %}>
                             <td class="text-center">{{ loop.index }}</td>
                             <td class="text-center">{{ vacuna.nombre }}</td>
                             <td class="text-center">{{ vacuna.abreviatura }}</td>
                             <td class="text-center">{{ vacuna.dosisRequeridas }}</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('vacuna_show',{'id': vacuna.id}) }}', 'Ver vacuna del calendario');">
-                                    <i class="fa fa-binoculars" aria-hidden="true"></i>
-                                </button>
-                                {% if is_granted('ROLE_ADMIN') %}    
-                                    <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                                    <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                {% if vacuna.borrado %}
+                                    <a href="#" onclick="vacunaAlta('{{ path("vacuna_alta", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
                                     </a>
+                                {% else %}
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('vacuna_show',{'id': vacuna.id}) }}', 'Ver vacuna del calendario');">
+                                        <i class="fa fa-binoculars" aria-hidden="true"></i>
+                                    </button>
+                                    {% if is_granted('ROLE_ADMIN') %}    
+                                        <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                        <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>
@@ -78,20 +84,26 @@
                 </thead>
                 <tbody>
                     {% for vacuna in vacunas_optativas %}
-                        <tr>
+                         <tr   {% if vacuna.borrado %} class="danger" {% endif %}>
                             <td class="text-center">{{ loop.index }}</td>
                             <td class="text-center">{{ vacuna.nombre }}</td>
                             <td class="text-center">{{ vacuna.abreviatura }}</td>
                             <td class="text-center">{{ vacuna.dosisRequeridas }}</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('vacuna_show',{'id': vacuna.id}) }}', 'Ver vacuna optativa');">
-                                    <i class="fa fa-binoculars" aria-hidden="true"></i>
-                                </button>
-                                {% if is_granted('ROLE_ADMIN') %}  
-                                    <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                                    <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                {% if vacuna.borrado %}
+                                    <a href="#" onclick="vacunaAlta('{{ path("vacuna_alta", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
                                     </a>
+                                {% else %}
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('vacuna_show',{'id': vacuna.id}) }}', 'Ver vacuna optativa');">
+                                        <i class="fa fa-binoculars" aria-hidden="true"></i>
+                                    </button>
+                                    {% if is_granted('ROLE_ADMIN') %}  
+                                        <a href="{{ path('vacuna_edit', { 'id': vacuna.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                        <a href="#" onclick="vacunaDelete('{{ path("vacuna_delete", {"id":vacuna.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>
@@ -123,6 +135,35 @@
                                             $('#panel-config').modal();
                                         }
 
+                                        function vacunaAlta(url) {
+
+                                            swal({
+                                                title: '¿Estas seguro?',
+                                                text: "Estas por dar de alta una vacuna del sistema!",
+                                                type: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                cancelButtonText: 'Cancelar',
+                                                confirmButtonText: 'Si, Dar de Alta'
+                                            }).then((result) => {
+                                                if (result.value) {
+                                                    $.post(url, {}).done((data) => {
+                                                        if (data.success) {
+                                                            swal('Agregada!', data.message, 'success').then(function () {
+                                                                location.reload();
+                                                            });
+                                                        } else {
+                                                            swal('Cuidado!', data.message, 'error');
+                                                        }
+                                                    }).fail(() => {
+                                                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                                    }
+                                                    );
+                                                }
+                                            });
+                                        }
+
                                         function vacunaDelete(url) {
 
                                             swal({
@@ -151,10 +192,8 @@
                                                 }
                                             });
                                         }
+
                                         $(document).ready(function () {
-
-
-
                                             $('#vacunas_calendario').DataTable({
                                                 "dom": '<".col-md-4">frtip',
                                                 "autoWidth": false,

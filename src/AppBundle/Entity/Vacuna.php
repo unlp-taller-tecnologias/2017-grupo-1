@@ -94,6 +94,13 @@ class Vacuna
      */
     private $observacion;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="borrado", type="boolean", length=1)
+     */
+    protected $borrado;
+
 
     /**
      * Get id
@@ -247,5 +254,27 @@ class Vacuna
     public function getObservacion()
     {
         return $this->observacion;
+    }
+
+    /**
+     * Set borrado
+     *
+     * @param boolean $borrado
+     *
+     * @return Vacuna
+     */
+    public function setBorrado($borrado) {
+        $this->borrado = $borrado;
+
+        return $this;
+    }
+
+    /**
+     * Get borrado
+     *
+     * @return boolean
+     */
+    public function getBorrado() {
+        return $this->borrado;
     }
 }
