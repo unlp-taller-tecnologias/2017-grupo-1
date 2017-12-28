@@ -80,7 +80,6 @@ class NoDocenteController extends Controller
             $registrovacunacion->setCumple(FALSE);
         }
         
-
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $fechaCreacion = new DateTime(date("Y-m-d H:i:s"));
         $registrovacunacion->setFechaCreacion($fechaCreacion);

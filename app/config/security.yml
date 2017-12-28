@@ -6,7 +6,6 @@ security:
     encoders:
         AppBundle\Entity\Usuario:
             algorithm: bcrypt
-            
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         our_db_provider:
@@ -15,16 +14,14 @@ security:
                 property: username
                 # if you're using multiple entity managers
                 # manager_name: customer
-           
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
         main:
             pattern:    ^/
-            #http_basic: ~
+           # http_basic: ~
             provider: our_db_provider
             anonymous: true         
             form_login:
@@ -35,19 +32,12 @@ security:
             logout:
                 path: logout
                 target: login
-            # activate different ways to authenticate
-
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
-
-        
+    
     access_control:
-      - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }        
+      - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
+      - { path: ^/validacion, roles: IS_AUTHENTICATED_ANONYMOUSLY }     
       - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
-                
+     
 framework:
     # ...
     csrf_protection: ~

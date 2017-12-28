@@ -19,5 +19,13 @@ body{
 }
 
 .login_passwdforget{
-    border-left: 4px solid grey;
+    margin-top: 10px;
+}
+
+.login_validacion{
+    position: static  !important;
+}
+
+.validacion_header{
+    margin-bottom: 30px;
 }

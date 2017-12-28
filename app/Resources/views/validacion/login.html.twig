@@ -7,32 +7,53 @@
             </div>
             <!-- start: LOGIN BOX -->
             <div class="box-login">
-                <h3>Entrar con tu cuenta</h3>
-                <p>
-                    Por favor ingrese su nombre de usuario y contraseña para entrar.
-                </p>
-                <form class="form-login" action="{{ path('login')}}" method="post">
+                <div class="validacion_header">
+                    <h3 class="text-center">SCV - Verificación de cumplimiento</h3>
+                    <p class="text-center">
+                        Por favor ingrese su fecha de nacimiento y número de documento (pasaporte o LC)
+                    </p>
+                </div>
+                <form class="form-login form-horizontal" action="{{ path('validacion_check')}}" method="post">
                     <div class="errorHandler alert alert-danger no-display">
                         <i class="fa fa-remove-sign"></i> Tienes errores en el formulario. Por favor verifica los datos ingresados.
                     </div>
                     <fieldset>
                         <div class="form-group">
-                            <span class="input-icon">
-                                <input type="text" class="form-control" name="_username"value="{{ last_username }}" placeholder="Usuario">
-                                <i class="fa fa-user"></i> </span>
+                            <label for="validacion_fnacimiento" class="col-sm-4 control-label">Nacimiento</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="date" name="validacion_fnacimiento" class="form-control" id="validacion_fnacimiento">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-birthday-cake" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group form-actions">
-                            <span class="input-icon">
-                                <input type="password" class="form-control password" name="_password" placeholder="Contraseña">
-                                <i class="fa fa-lock"></i>
-                                <a class="forgot" href="#">
-                                    ¿Olvidaste la contraseña?
-                                </a> </span>
+                        <div class="form-group">
+                            <label for="validacion_documento" class="col-sm-4 control-label">Documento</label>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <input type="number" name="validacion_documento" class="form-control" id="validacion_documento" placeholder="Número">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-address-card-o" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-green pull-right">
-                                Entrar <i class="fa fa-arrow-circle-right"></i>
-                            </button>
+                        <div class="form-group form-group-lg">
+                            <div class="col-md-5 col-md-offset-4">
+                                <a class="forgot login_validacion" href="#">
+                                    ¿Problemas para acceder?
+                                </a> 
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-5 col-md-offset-4">
+                                <button type="submit" class="btn btn-green pull-right">
+                                    Acceder <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
                         </div>
                     </fieldset>
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
@@ -46,7 +67,7 @@
             <!-- end: LOGIN BOX -->
             <!-- start: FORGOT BOX -->
             <div class="box-forgot">
-                <h3>¿Olvidaste la contraseña?</h3>
+                <h3>¿Problemas para acceder?</h3>
                 <p>
                     Por favor ponte en contacto con el administrador del sistema para resolver el problema a la brevedad.
                 </p>
@@ -70,7 +91,7 @@
                         <fieldset>                      
                             <div class="form-actions">
                                 <a class="btn btn-light-grey go-back">
-                                    <i class="fa fa-chevron-circle-left"></i> Entrar
+                                    <i class="fa fa-chevron-circle-left"></i> Acceder
                                 </a>
                             </div>
                         </fieldset>
@@ -102,7 +123,7 @@
             Main.init();
             Login.init();
         {% if error is not null %}
-                toastr['error']('Las credenciales son incorrectas', 'Error');
+             //   toastr['error']('Las credenciales son incorrectas', 'Error');
         {% endif %}
             });
     </script>
