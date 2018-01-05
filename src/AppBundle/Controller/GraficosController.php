@@ -17,7 +17,7 @@ use AppBundle\Entity\Vacuna;
 class GraficosController extends Controller{
 
     private function rangeArray(){
-      $numbers=array('NO'=>0,'SI'=>0);
+      $numbers=array('SI'=>0,'NO'=>0);
       $ranges=array(
         '15-19'=>$numbers,
         '20-24'=>$numbers,
@@ -32,15 +32,6 @@ class GraficosController extends Controller{
         '65+'=>$numbers
       );
       return $ranges;
-    }
-
-    /**
-     * @Route("/",name="graficos_index")
-     */
-    public function indexGraficosAction(){
-        return $this->render('graficos/index_graficos.html.twig', array(
-
-        ));
     }
 
     /**
@@ -119,7 +110,7 @@ class GraficosController extends Controller{
       }
       if(!$isThereData){
         $this->get('session')->getFlashBag()->add('error', 'No existen datos suficientes para mostrar el grafico de personas que cumplieron con el calendario de vacunacion.');
-        return $this->redirectToRoute("graficos_index");
+        return $this->redirectToRoute("homepage");
       }
       return $this->render('graficos/quien_cumple.html.twig', array(
         'data'=>$data
@@ -143,8 +134,30 @@ class GraficosController extends Controller{
      * @Method({"POST"})
      */
     public function dosisRecibidasGraficoIndexAction(Request $request){
-      $vacuna=$request->get('vacuna');
-      $dosis=$request->get('dosis');
+      $vacunas=$request->get('vacunas');
+      $dosisR=$request->get('dosis');
+      if($vacunas==NULL||empty($vacunas)){
+        $this->get('session')->getFlashBag()->add('error', 'No se seleccionaron vacunas para mostrar el grafico.');
+        return $this->redirectToRoute("dosis_recibidas"); 
+      }
+      $dosis=array();
+      $lastV=$vacunas[count($vacunas)-1];
+      $where="";
+      $i=1;
+      foreach($vacunas as $vacuna){
+        if($dosisR[$vacuna]!=''){
+          $dosis[$vacuna]=$dosisR[$vacuna];
+          $where.="registroVacunacion_id IN (SELECT registroVacunacion_id FROM componente WHERE vacuna_id=:vacuna$i and dosisRecibidas>=:dosis$i)";
+          if($vacuna!=$lastV){
+            $where.=" AND ";
+            $i++;
+          }
+        }
+      }
+      if(empty($dosis)){
+        $this->get('session')->getFlashBag()->add('error', 'No se seleccionaron vacunas para mostrar el grafico.');
+        return $this->redirectToRoute("dosis_recibidas"); 
+      }
       $em=$this->getDoctrine()->getManager();
       $ranges=$this->rangeArray();
       $sql1="SELECT COUNT(*) as total,
@@ -173,8 +186,8 @@ class GraficosController extends Controller{
                WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) > 64 THEN '65+'
                ELSE 'Invalido'
 	           END as rango
-             FROM visitante INNER JOIN registro_vacunacion ON visitante.registroVacunacion_id=registro_vacunacion.id INNER JOIN componente ON registro_vacunacion.id=componente.registroVacunacion_id
-             WHERE vacuna_id=:vacuna AND dosisRecibidas>=:dosis
+             FROM visitante INNER JOIN registro_vacunacion ON visitante.registroVacunacion_id=registro_vacunacion.id 
+             WHERE ".$where." 
              GROUP BY CASE
  		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 15 AND 19 THEN '15-19'
  		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 20 AND 24 THEN '20-24'
@@ -226,8 +239,8 @@ class GraficosController extends Controller{
                    WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) > 64 THEN '65+'
                    ELSE 'Invalido'
     	           END as rango
-                 FROM visitante INNER JOIN registro_vacunacion ON visitante.registroVacunacion_id=registro_vacunacion.id INNER JOIN componente ON registro_vacunacion.id=componente.registroVacunacion_id
-                 WHERE vacuna_id=:vacuna AND dosisRecibidas<:dosis
+                 FROM visitante INNER JOIN registro_vacunacion ON visitante.registroVacunacion_id=registro_vacunacion.id
+                 WHERE ".str_replace('>=', '<', $where)."
                  GROUP BY CASE
      		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 15 AND 19 THEN '15-19'
      		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 20 AND 24 THEN '20-24'
@@ -255,9 +268,17 @@ class GraficosController extends Controller{
               ";
           $isThereData=false;
           $stm1=$em->getConnection()->prepare($sql1);
-          $stm1->bindValue(':vacuna',$vacuna);
-          $stm1->bindValue(':dosis',$dosis);
+          $stm2=$em->getConnection()->prepare($sql2);
+          $i=1;
+          foreach ($dosis as $vacuna => $dose) {
+            $stm1->bindValue(":vacuna$i",$vacuna);
+            $stm1->bindValue(":dosis$i",$dose);
+            $stm2->bindValue(":vacuna$i",$vacuna);
+            $stm2->bindValue(":dosis$i",$dose);
+            $i++;
+          }
           $stm1->execute();
+          $stm2->execute();
           $values=$stm1->fetchAll();
           foreach($values as $value){
             if($value['rango']!='Invalido'){
@@ -265,20 +286,16 @@ class GraficosController extends Controller{
               $ranges[$value['rango']]['SI']=$value['total'];
             }
           }
-          $stm2=$em->getConnection()->prepare($sql2);
-          $stm2->bindValue(':vacuna',$vacuna);
-          $stm2->bindValue(':dosis',$dosis);
-          $stm2->execute();
           $values=$stm2->fetchAll();
           foreach($values as $value){
-            if($value['rango']!='INVALIDO'){
+            if($value['rango']!='Invalido'){
               $ranges[$value['rango']]['NO']=$value['total'];
               $isThereData=true;
             }
           }
           if(!$isThereData){
             $this->get('session')->getFlashBag()->add('error', 'No existen datos suficientes para mostrar el grafico de personas que cumplieron con el calendario de vacunacion.');
-            return $this->redirectToRoute("graficos_index");
+            return $this->redirectToRoute("dosis_recibidas");
           }
           return $this->render('graficos/dosis_recibidas_grafico.html.twig',array(
             'data'=>$ranges
