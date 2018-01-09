@@ -3,42 +3,32 @@
 {% block body %}
 <div class="panel">
   <div class="panel-heading">
-    <h3 class='panel-title'>Grafocp de dosis recibidas</h3>
+    <h3 class='panel-title'>Grafico de dosis recibidas</h3>
   </div>
   <div class="panel-body">
     <form class="form-horizontal" action="{{path('dosis_recibidas_grafico')}}" method="post">
+    {% for vacuna in vacunas %}
       <div class="form-group">
         <div class="col-md-12">
           <div class="form-group">
-            <label for="" class="col-md-3 control-label">Vacuna</label>
             <div class="col-md-6">
               <div class="input-group margin-bottom-sm">
-                <select class="form-control" name="vacuna">
-                  {% for vacuna in vacunas %}
-                      <option value="{{vacuna.id}}">{{vacuna.nombre}}</option>
-                  {% endfor %}
-                </select>
-              </div>
+                <span>{{ vacuna.nombre }}</span>
+                <input type="checkbox" name="vacunas[]" value="{{ vacuna.id }}">
+                <span>Dosis</span>
+                <input type="number" name="dosis[{{vacuna.id}}]" min="1">
             </div>
           </div>
         </div>
       </div>
-      <div class="form-group">
-        <div class="col-md-12">
-          <div class="form-group">
-            <label for="" class="col-md-3 control-label">Dosis</label>
-            <div class="col-md-6">
-              <div class="input-group margin-bottom-sm">
-                <input type="number" name="dosis" min="1">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
+    <br>
+      {% endfor %}
       <div class="col-md-9 text-right">
-          <a href="{{ path("graficos_index") }}" class="btn btn-default" >Descartar</a>
+          <a href="{{ path("homepage") }}" class="btn btn-default" >Descartar</a>
           <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
       </div>
-</form>
-
+  </form>
+</div>
+</div>
 {% endblock %}

@@ -180,6 +180,7 @@
                                                 });
                                             }
 
+<<<<<<< HEAD
                                             $(document).ready(function () {
                                                 $('#enfermedades_tabla').DataTable({
                                                     "autoWidth": false,
@@ -197,4 +198,26 @@
                                                 });
                                             });
     </script>
+=======
+$(document).ready(function () {
+  $('#vacunas_tabla').DataTable({
+    "dom": '<".col-md-2">frtip',
+    fnInitComplete: function () {
+      $('div.col-md-2').html('<a class="btn btn-xs btn-primary" href="{{path('enfermedad_new')}}"><i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo</a>');
+    },
+    "autoWidth": false,
+    "language": {
+      "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+    },
+    "columnDefs": [{
+      "searchable": false,
+      "orderable": false,
+      "targets": [0, 1]
+    }],
+    "order": [[0, 'asc']],
+    "iDisplayLength": 15,
+  });
+});
+</script>
+>>>>>>> da6217a58b9ed0343a7757f651d572f567fa0a51
 {% endblock %}
