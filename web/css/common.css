@@ -29,3 +29,11 @@ body{
 .validacion_header{
     margin-bottom: 30px;
 }
+
+.validacion_sregistro{
+    margin-top: 50px;
+}
+
+#sl_avatar{
+    height: 50px;
+}

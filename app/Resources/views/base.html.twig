@@ -1,41 +1,137 @@
-<!DOCTYPE html>
-<html>
-    {% include 'head.html.twig' %}
+<!--[if IE 8]><html class="ie8" lang="en"><![endif]-->
+<!--[if IE 9]><html class="ie9" lang="en"><![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+    <!--<![endif]-->
+    <!-- start: HEAD -->
+    <head>
+        <title>
+            {% block page_title %}SCV - Sistema de Control de Vacunaci&oacute;n {% endblock %}
+        </title>
+        {% block meta %}
+            {% include 'meta.html.twig' %}
+        {%  endblock%}
+        {% block stylesheets %}
+            {% include 'stylesheet.html.twig' %}
+        {% endblock %}
+        {% block otherstylesheets %}
+        {% endblock %}
+        <link rel="shortcut icon" href="favicon.ico" />
+    </head>
+    <!-- end: HEAD -->
+    <!-- start: BODY -->
     <body>
-        {% block navbar %} 
-            {% include 'navbar.html.twig' %}
+        <div class="main-wrapper">
+            <!-- start: TOPBAR -->
+            {% block topbar %}
+                {% include 'topbar.html.twig' %}
+            {% endblock %}
+            <!-- end: TOPBAR CONTAINER -->
+        </header>
+        <!-- end: TOPBAR -->
+        <!-- start: PAGESLIDE LEFT -->
+        {% block  page_slideleft %}
+            {% include 'slide_left.html.twig' with {'menu': 1, 'submenu': 2}  %}
         {% endblock %}
-        {% block sidebar %}
-            {% include 'sidebar.html.twig' %}
-        {% endblock %}
-        {% block container_main %}
-            <div class="container-fluid">
-                {% block contenidoModal %}
-                    {% include 'modal.html.twig' with { 'idModal': 'panel-config' } %}
-                {% endblock %}
-                <div class="side-body">
-                    {% block breadcrumbs %}
-                        <ol class="breadcrumb">
-                            <li>
-                                <a href="#"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a>
-                            </li>
-                            <li class="active">Usuarios</li>
-                        </ol>
+        <!-- end: PAGESLIDE LEFT -->
+        <!-- start: MAIN CONTAINER -->
+        <div class="main-container inner">
+            <!-- start: PAGE -->
+            <div class="main-content">
+                <div class="container">
+                    <!-- start: PAGE HEADER -->
+                    <!-- start: PAGE MODAL -->
+                    {% block contenidoModal %}
+                        {% include 'modal.html.twig' with { 'idModal': 'panel-config' } %}
                     {% endblock %}
-                    {% block body %} 
+                    <!-- end: PAGE MODAL -->
+                    <!-- start: TOOLBAR -->
+                    {% block toolbar %}
+                        {% include 'toolbar.html.twig' %}
                     {% endblock %}
+                    <!-- end: TOOLBAR -->
+                    <!-- end: PAGE HEADER -->
+                    <!-- start: BREADCRUMB -->
+                    {% block breadcrumb %}
+                        {% include 'breadcrumb.html.twig' %}
+                    {% endblock %}
+                    <!-- end: BREADCRUMB -->
+                    <!-- start: PAGE CONTENT -->
+                    {% block  page_content %}
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <i class="clip-bars"></i>
+                                        <h4 class="panel-title">Pageviews <span class="text-bold">real-time</span></h4>
+                                        <div class="panel-tools">
+                                            <div class="dropdown">
+                                                <a data-toggle="dropdown" class="btn btn-xs dropdown-toggle btn-transparent-grey">
+                                                    <i class="fa fa-cog"></i>
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-light pull-right" role="menu">
+                                                    <li>
+                                                        <a class="panel-collapse collapses" href="#"><i class="fa fa-angle-up"></i> <span>Collapse</span> </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="panel-refresh" href="#">
+                                                            <i class="fa fa-refresh"></i> <span>Refresh</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="panel-config" href="#panel-config" data-toggle="modal">
+                                                            <i class="fa fa-wrench"></i> <span>Configurations</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="panel-expand" href="#">
+                                                            <i class="fa fa-expand"></i> <span>Fullscreen</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <a class="btn btn-xs btn-link panel-close" href="#">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <p>Lalasdfas fasdf kasd fasdfja sdjf aj df asdfjasd fnas d  asjd fjas df asdfkansdfasdf askdf asfjas dfnasdf asjdfasd.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock %}
+                    <!-- end: PAGE CONTENT-->
+                </div>
+                <div class="subviews">
+                    <div class="subviews-container"></div>
                 </div>
             </div>
-        {% endblock %}
-        {% block javascripts %}
-            {% include 'scripts.html.twig' %}
-        {% endblock %}
-        {% block otherjavascripts %}
-        {% endblock %}
-        {% block otherstyles %}
-        {% endblock %}
-        {% block flashMessages %}
-            {% include 'flash.messages.html.twig' %}
-        {% endblock %}
-    </body>
+            <!-- end: PAGE -->
+        </div>
+        <!-- end: MAIN CONTAINER -->
+        <!-- start: FOOTER -->
+        <footer class="inner">
+            <div class="footer-inner">
+                <div class="pull-left">
+                    2017 &copy; SCV by UNLP.
+                </div>
+                <div class="pull-right">
+                    <span class="go-top"><i class="fa fa-chevron-up"></i></span>
+                </div>
+            </div>
+        </footer>
+        <!-- end: FOOTER -->
+    </div>
+    {% block javascript %}
+        {% include 'javascript.html.twig' %}
+    {% endblock %}
+    {% block otherJavascript %}
+    {% endblock %} 
+    {% block flashMessages %}
+        {% include 'flash.messages.html.twig' %}
+    {% endblock %}
+</body>
+<!-- end: BODY -->
 </html>

@@ -1,91 +1,154 @@
 {% extends 'base.html.twig' %}
-{% block breadcrumbs %}
-    <ol class="breadcrumb breadcrumb-scv">
-        <li>
-            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
-        </li>
-        <li>
-            <a href="{{path('usuario_index')}}">Usuarios</a>
-        </li>
-        <li class="active">Nuevo</li>
-    </ol>
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 2, 'submenu': 2}  %}
 {% endblock %}
-{% block body %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Nuevo <strong>Usuario del Sistema</strong></h3>
+
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>Usuarios <small><i class="fa fa-user-plus"></i> Agregar un nuevo usuario en el sistema. </small></h1>
+            </div>
         </div>
-        <div class="panel-body">
-            {{ form_start(form, {'attr':{'class':'form-horizontal', 'novalidate': 'novalidate'} } ) }}
-            <div class="form-group">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="" class="col-md-3 control-label">Usuario</label>
-                        <div class="col-md-6">
-                            <div class="input-group margin-bottom-sm">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-keyboard-o"></i>
-                                </span>
-                                {{ form_widget(form.username,{'attr':{'class':'form-control'} }) }}
-                            </div>
+    </div>
+    <!-- end: TOOLBAR -->
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        Usuarios
+                    </a>
+                </li>
+                <li class="active">
+                    Nuevo
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="clip-bars"></i>
+                    <h4 class="panel-title">Nuevo <span class="text-bold">Usuario</span></h4>
+                    <div class="panel-tools">
+                        <div class="dropdown">
+                            <a data-toggle="dropdown" class="btn btn-xs dropdown-toggle btn-transparent-grey">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-light pull-right" role="menu">
+                                <li>
+                                    <a class="panel-collapse collapses" href="#"><i class="fa fa-angle-up"></i> <span>Collapse</span> </a>
+                                </li>
+                                <li>
+                                    <a class="panel-refresh" href="#">
+                                        <i class="fa fa-refresh"></i> <span>Refresh</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="panel-config" href="#panel-config" data-toggle="modal">
+                                        <i class="fa fa-wrench"></i> <span>Configurations</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="panel-expand" href="#">
+                                        <i class="fa fa-expand"></i> <span>Fullscreen</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
+                        <a class="btn btn-xs btn-link panel-close" href="#">
+                            <i class="fa fa-times"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="panel-body">
+                    {{ form_start(form, {'attr':{'class':'form-horizontal', 'novalidate': 'novalidate'} } ) }}
                     <div class="form-group">
-                        <label for="" class="col-md-3 control-label">Contraseña</label>
-                        <div class="col-md-6">
-                            <div class="input-group margin-bottom-sm">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-keyboard-o"></i>
-                                </span>
-                                {{ form_widget(form.password,{'attr':{'class':'form-control'} }) }}
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="" class="col-md-3 control-label">Usuario</label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-keyboard-o"></i>
+                                        </span>
+                                        {{ form_widget(form.username,{'attr':{'class':'form-control'} }) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="" class="col-md-3 control-label">Contraseña</label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-keyboard-o"></i>
+                                        </span>
+                                        {{ form_widget(form.password,{'attr':{'class':'form-control'} }) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="" class="col-md-3 control-label">Confirmar contraseña</label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-keyboard-o"></i>
+                                        </span>
+                                        {{ form_widget(form.passwordConfirm,{'attr':{'class':'form-control'} }) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="" class="col-md-3 control-label">Rol</label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-keyboard-o"></i>
+                                        </span>
+                                        {{ form_widget(form.rol,{'attr':{'class':'form-control'} }) }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="" class="col-md-3 control-label">Confirmar contraseña</label>
-                        <div class="col-md-6">
-                            <div class="input-group margin-bottom-sm">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-keyboard-o"></i>
-                                </span>
-                                {{ form_widget(form.passwordConfirm,{'attr':{'class':'form-control'} }) }}
-                            </div>
-                        </div>
+                    <div class="col-md-9 text-right">
+                        <a href="{{ path("usuario_index") }}" class="btn btn-default" >Descartar</a>
+                        <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="" class="col-md-3 control-label">Rol</label>
-                        <div class="col-md-6">
-                            <div class="input-group margin-bottom-sm">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-keyboard-o"></i>
-                                </span>
-                                {{ form_widget(form.rol,{'attr':{'class':'form-control'} }) }}
-                            </div>
-                        </div>
+                    <div class="hidden">
+                        {{ form_rest(form) }}
                     </div>
+                    {{ form_end(form) }}
                 </div>
             </div>
-            <div class="col-md-9 text-right">
-                <a href="{{ path("usuario_index") }}" class="btn btn-default" >Descartar</a>
-                <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
-            </div>
-            <div class="hidden">
-                {{ form_rest(form) }}
-            </div>
-            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}
-{% block otherjavascripts %}
+{% block otherJavascript %}
     <script>
         $(document).ready(function () {
-            $('form').on('submit', function (e) {
+            $('form').on('submit', function (e) {   
                 if ($('#appbundle_usuario_password').val() !== $('#appbundle_usuario_passwordConfirm').val()) {
                     e.preventDefault();
                     toastr['error']('Las contraseñas no coinciden', 'Error');

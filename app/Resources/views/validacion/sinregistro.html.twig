@@ -1,0 +1,12 @@
+{% extends 'default/base.login.html.twig' %}
+{% block container_main %}
+    <div class="col-md-4 col-md-offset-4 validacion_sregistro">
+        <div class="jumbotron">
+            <h1>Disculpe,</h1>
+            <p>A&uacute;n no se ha registrado el control de vacunaci&oacute;n para <strong>{{ entity.apellido | upper}}</strong> {{ entity.nombre | capitalize }} en el Sistema.</p>
+            <p class="text-right"><a class="btn btn-primary btn-lg" href="{{ path('validacion_login') }}" role="button"> <i class="fa fa-backward"></i> Volver</a></p>
+        </div>
+    </div>
+{% endblock %}
+
+

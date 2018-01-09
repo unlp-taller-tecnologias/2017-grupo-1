@@ -1,0 +1,124 @@
+<!-- start: PAGESLIDE LEFT -->
+<a class="closedbar inner hidden-sm hidden-xs" href="#">
+</a>
+<nav id="pageslide-left" class="pageslide inner">
+    <div class="navbar-content">
+        <!-- start: SIDEBAR -->
+        <div class="main-navigation left-wrapper transition-left">
+            <div class="navigation-toggler hidden-sm hidden-xs">
+                <a href="#main-navbar" class="sb-toggle-left">
+                </a>
+            </div>
+            <div class="user-profile border-top padding-horizontal-10 block">
+                <div class="inline-block">
+                    <img id="sl_avatar" src="{{ asset('images/avatar2.png') }}" alt="Avatar">
+                </div>
+                <div class="inline-block">
+                    <h5 class="no-margin"> Bienvinid@ </h5>
+                    <h4 class="no-margin"> {{ app.user.username | capitalize}} </h4>
+                    <a  href="{{ path('usuario_edit', {'id': app.user.id}) }}"class="btn user-options sb_toggle">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- start: MAIN NAVIGATION MENU -->
+            <ul class="main-navigation-menu">
+                <li {% if menu == 1 %} class="open active" {% endif  %}>
+                    <a href="{{path('homepage')}}"><i class="fa fa-home"></i> <span class="title"> Inicio </span><span class="label label-default pull-right ">IR</span> </a>
+                </li>
+                <li {% if menu == 2 %} class="open active" {% endif  %}>
+                    <a href="javascript:void(0)"><i class="fa fa-user-circle"></i> <span class="title"> Usuarios </span><i class="icon-arrow"></i> </a>
+                    <ul class="sub-menu">
+                        <li {% if menu == 2 and submenu == 1 %} class="active" {% endif  %}>
+                            <a href="{{path('usuario_index')}}">
+                                <i class="fa fa-list"></i><span class="title"> Listado </span>
+                            </a>
+                        </li>
+                        <li {% if menu == 2 and submenu == 2 %} class="active" {% endif  %}>
+                            <a href="{{path('usuario_new')}}">
+                                <i class="fa fa-user-plus"></i><span class="title"> Nuevo </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li {% if menu == 3 %} class="open active" {% endif  %}>
+                    <a href="javascript:void(0)"><i class="fa fa-users"></i> <span class="title"> Inscr&iacute;ptos / No-docentes </span><i class="icon-arrow"></i> </a>
+                    <ul class="sub-menu">
+                        <li {% if menu == 3 and submenu == 1 %} class="active" {% endif  %}>
+                            <a href="{{path('inscripto_index')}}">
+                                <i class="fa fa-users"></i><span class="title"> Inscr&iacute;ptos </span>
+                            </a>
+                        </li>
+                        <li {% if menu == 3 and submenu == 2 %} class="active" {% endif  %}>
+                            <a href="{{path('nodocente_index')}}">
+                                <i class="fa fa-users"></i><span class="title"> No-docentes </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li {% if menu == 4 %} class="open active" {% endif  %}>
+                    <a href="javascript:void(0)"><i class="fa fa-medkit"></i> <span class="title"> Vacunas </span><i class="icon-arrow"></i> </a>
+                    <ul class="sub-menu">
+                        <li  {% if menu == 4 and submenu == 1 %} class="active" {% endif  %}>
+                            <a href="{{path('vacuna_obligatorias')}}">
+                                <i class="fa fa-list"></i><span class="title"> Obligatorias </span>
+                                <span class="label label-default pull-right"><i class="fa fa-calendar"></i> NACIONAL</span>
+                            </a>
+                        </li>
+                        <li {% if menu == 4 and submenu == 2 %} class="active" {% endif  %}>
+                            <a href="{{path('vacuna_optativas')}}">
+                                <i class="fa fa-list"></i><span class="title"> Optativas </span>
+                            </a>
+                        </li>
+                        <li {% if menu == 4 and submenu == 3 %} class="active" {% endif  %}>
+                            <a href="{{path('vacuna_todas')}}">
+                                <i class="fa fa-list"></i><span class="title"> Todas </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li {% if menu == 5 %} class="open active" {% endif  %}>
+                    <a href="{{ path('enfermedad_index') }}"><i class="fa fa-hospital-o"></i> <span class="title"> Enfermedades </span></a>
+                </li>
+                <li>
+                    <a href="{{ path('factorriesgo_index') }}"><i class="fa fa-heartbeat"></i> <span class="title"> Factores de Riesgo </span> </a>
+                </li>
+                <li {% if menu == 6 %} class="open active" {% endif  %}>
+                    <a href="javascript:void(0)"><i class="fa fa-pie-chart"></i> <span class="title"> Reportes </span><i class="icon-arrow"></i> </a>
+                    <ul class="sub-menu">
+                        <li {% if menu == 6 and submenu == 1 %} class="active" {% endif  %}>
+                            <a href="{{path('vacuna_optativas')}}">
+                                <i class="fa fa-pie-chart"></i><span class="title"> Reporte 1 </span>
+                            </a>
+                        </li>
+                        <li {% if menu == 6 and submenu == 2 %} class="active" {% endif  %}>
+                            <a href="{{path('vacuna_optativas')}}">
+                                <i class="fa fa-pie-chart"></i><span class="title"> Reporte 2 </span>
+                            </a>
+                        </li>
+                        <li {% if menu == 6 and submenu == 3 %} class="active" {% endif  %}>
+                            <a href="{{path('vacuna_optativas')}}">
+                                <i class="fa fa-pie-chart"></i><span class="title"> Reporte 3 </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- end: MAIN NAVIGATION MENU -->
+        </div>
+        <!-- end: SIDEBAR -->
+    </div>
+    <div class="slide-tools">
+        <div class="col-xs-6 text-left no-padding">
+            <a class="btn btn-sm status" href="#">
+                <i class="fa fa-dot-circle-o text-green"></i> <span>{{app.user.rol.nombre}}</span>
+            </a>
+        </div>
+        <div class="col-xs-6 text-right no-padding">
+            <a class="btn btn-sm log-out text-right" href="{{path('logout')}}">
+                <i class="fa fa-power-off"></i> Cerrar sesi&oacute;n
+            </a>
+        </div>
+    </div>
+</nav>
+<!-- end: PAGESLIDE LEFT -->

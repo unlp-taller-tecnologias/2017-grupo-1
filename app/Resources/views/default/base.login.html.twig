@@ -13,12 +13,13 @@
     <link href="{{ asset('vendor/iCheck/skins/all.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('vendor/rapido/css/styles.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('vendor/rapido/css/styles-responsive.css') }}" rel="stylesheet" type="text/css" />
-    <body class="login">
+    <body class="login container-fluid">
         {% block container_main %}
         {% endblock %}
-        {% block javascripts %}
-            {% include 'scripts.html.twig' %}
-        {% endblock %}
+        <script src="{{  asset('vendor/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{  asset('vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script src="{{  asset('vendor/toast/lib/toastr.min.js') }}"></script>
+        <script src="{{  asset('js/main.js') }}"></script>
         {% block otherjavascripts %}
         {% endblock %}
         {% block otherstyles %}

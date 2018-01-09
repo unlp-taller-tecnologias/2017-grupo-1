@@ -20,16 +20,42 @@ class VacunaController extends Controller {
     /**
      * Lists all vacuna entities.
      *
-     * @Route("/", name="vacuna_index")
+     * @Route("/obligatorias", name="vacuna_obligatorias")
      * @Method("GET")
      */
-    public function indexAction() {
+    public function obligatoriasAction() {
         $em = $this->getDoctrine()->getManager();
         $vacunas_calendario = $em->getRepository('AppBundle:Vacuna')->getVacunasCalendario();
-        $vacunas_optativas = $em->getRepository('AppBundle:Vacuna')->getVacunasOptativas();
-        return $this->render('vacuna/index.html.twig', array(
+        return $this->render('vacuna/obligatorias.html.twig', array(
                     'vacunas_calendario' => $vacunas_calendario,
+        ));
+    }
+    
+    /**
+     * Lists all vacuna entities.
+     *
+     * @Route("/optativas", name="vacuna_optativas")
+     * @Method("GET")
+     */
+    public function optativasAction() {
+        $em = $this->getDoctrine()->getManager();
+        $vacunas_optativas = $em->getRepository('AppBundle:Vacuna')->getVacunasOptativas();
+        return $this->render('vacuna/optativas.html.twig', array(
                     'vacunas_optativas' => $vacunas_optativas,
+        ));
+    }
+
+    /**
+     * Lists all vacuna entities.
+     *
+     * @Route("/todas", name="vacuna_todas")
+     * @Method("GET")
+     */
+    public function todasAction() {
+        $em = $this->getDoctrine()->getManager();
+        $vacunas = $em->getRepository('AppBundle:Vacuna')->findBy(array(),array('nombre'=>'ASC'));
+        return $this->render('vacuna/todas.html.twig', array(
+                    'vacunas' => $vacunas,
         ));
     }
 
