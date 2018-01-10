@@ -37,3 +37,10 @@ body{
 #sl_avatar{
     height: 50px;
 }
+
+tr.danger > td{
+    background-color: #e6e4e3 !important;
+}
+span.bootstrap-switch-label{
+    width: 38px !important;
+}
