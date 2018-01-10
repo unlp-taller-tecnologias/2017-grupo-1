@@ -86,6 +86,7 @@
                 <li {% if menu == 7 %} class="open active" {% endif  %}>
                     <a href="javascript:void(0)"><i class="fa fa-pie-chart"></i> <span class="title"> Reportes </span><i class="icon-arrow"></i> </a>
                     <ul class="sub-menu">
+<<<<<<< HEAD
                         <li {% if menu == 7 and submenu == 1 %} class="active" {% endif  %}>
                             <a href="{{path('vacuna_optativas')}}">
                                 <i class="fa fa-pie-chart"></i><span class="title"> Reporte 1 </span>
@@ -98,6 +99,20 @@
                         </li>
                         <li {% if menu == 7 and submenu == 3 %} class="active" {% endif  %}>
                             <a href="{{path('vacuna_optativas')}}">
+=======
+                        <li {% if menu == 6 and submenu == 1 %} class="active" {% endif  %}>
+                            <a href="{{path('quien_cumple_grafico')}}">
+                                <i class="fa fa-pie-chart"></i><span class="title"> Grafico de personas que cumplen con el calendario de vacunacion obligatorio </span>
+                            </a>
+                        </li>
+                        <li {% if menu == 6 and submenu == 2 %} class="active" {% endif  %}>
+                            <a href="{{path('dosis_recibidas')}}">
+                                <i class="fa fa-pie-chart"></i><span class="title"> Grafico de personas que poseen dosis de vacunas a seleccion </span>
+                            </a>
+                        </li>
+                        <li {% if menu == 6 and submenu == 3 %} class="active" {% endif  %}>
+                            <a href="{{path('reporte_index')}}">
+>>>>>>> d195192eacfee89f74dd492d54ec0cb48e07e072
                                 <i class="fa fa-pie-chart"></i><span class="title"> Reporte 3 </span>
                             </a>
                         </li>
