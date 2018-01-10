@@ -105,6 +105,44 @@ class UsuarioController extends Controller {
     }
 
     /**
+     * Editar usuario del sistema
+     *
+     * @Route("/{id}/cambiarpasswd", name="usuario_resetPasswd")
+     * @Method({"GET", "POST"})
+     */
+    public function resetPasswordAction(Request $request, Usuario $usuario) {
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm('AppBundle\Form\UsuarioType', $usuario);
+        $usuarioOriginal = clone $usuario;
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get("resetPassword")->getData()) {
+                
+            }
+            $em->persist($usuario);
+            try {
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'El usuario se editó correctamente.');
+                return $this->redirectToRoute("usuario_index");
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el usuario. Detalle: ' . $e->getMessage());
+            }
+        }
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $validator = $this->get('validator');
+            $errors = $validator->validate($usuario);
+            foreach ($errors as $error) {
+                $this->get('session')->getFlashBag()->add('error', $error->getMessage());
+            }
+        }
+        return $this->render('usuario/resetpassword.html.twig', array(
+                    'form' => $form->createView(),
+                    'entity' => $usuario
+        ));
+    }
+    
+    /**
      * Eliminar usuaro del sistema
      * 
      * @Route("/{id}/delete", name="usuario_delete" , condition="request.isXmlHttpRequest()")
