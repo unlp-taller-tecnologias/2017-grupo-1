@@ -1,19 +1,41 @@
 {% extends 'base.html.twig' %}
-
-{% block otherstyles %}
-    <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 2, 'submenu': 2}  %}
 {% endblock %}
 
-{% block breadcrumbs %}
-    <ol class="breadcrumb breadcrumb-scv">
-        <li>
-            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
-        </li>
-        <li>
-            <a href="{{path('factorriesgo_index')}}">Factor de riesgo</a>
-        </li>
-        <li class="active">Editar</li>
-    </ol>
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>Enfermedades <small><i class="fa fa-user-plus"></i> Editar una enfermedad del sistema. </small></h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: TOOLBAR -->
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('enfermedad_index') }}">
+                        Enfermedades
+                    </a>
+                </li>
+                <li class="active">
+                    Editar
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
 {% endblock %}
 
 {% block page_content %}

@@ -1,22 +1,44 @@
 {% extends 'base.html.twig' %}
-
-{% block otherstyles %}
-    <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 3, 'submenu': 2}  %}
 {% endblock %}
 
-{% block breadcrumbs %}
-    <ol class="breadcrumb breadcrumb-scv">
-        <li>
-            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
-        </li>
-        <li>
-            <a href="{{path('vacuna_index')}}">Vacuna</a>
-        </li>
-        <li class="active">Nuevo</li>
-    </ol>
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>No Docentes <small><i class="fa fa-user-plus"></i> Agregar un nuevo no-docente en el sistema. </small></h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: TOOLBAR -->
 {% endblock %}
 
-{% block body %}
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('nodocente_index') }}">
+                        No Docentes
+                    </a>
+                </li>
+                <li class="active">
+                    Nuevo
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
+{% endblock %}
+
+{% block page_content %}
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">Nuevo <strong>No docente</strong></h3>
