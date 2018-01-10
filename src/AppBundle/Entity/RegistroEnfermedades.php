@@ -107,7 +107,7 @@ class RegistroEnfermedades {
      *
      * @return RegistroEnfermedades
      */
-    function setFechaInicio(datetime $fechaInicio) {
+    function setFechaInicio($fechaInicio) {
         $this->fechaInicio = $fechaInicio;
     }
 
@@ -118,7 +118,7 @@ class RegistroEnfermedades {
      *
      * @return RegistroEnfermedades
      */
-    function setFechaFin(datetime $fechaFin) {
+    function setFechaFin($fechaFin) {
         $this->fechaFin = $fechaFin;
     }
 

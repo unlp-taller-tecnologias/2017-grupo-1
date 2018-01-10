@@ -80,23 +80,23 @@
                 <li {% if menu == 5 %} class="open active" {% endif  %}>
                     <a href="{{ path('enfermedad_index') }}"><i class="fa fa-hospital-o"></i> <span class="title"> Enfermedades </span></a>
                 </li>
-                <li>
+                <li {% if menu == 6 %} class="open active" {% endif  %}>
                     <a href="{{ path('factorriesgo_index') }}"><i class="fa fa-heartbeat"></i> <span class="title"> Factores de Riesgo </span> </a>
                 </li>
-                <li {% if menu == 6 %} class="open active" {% endif  %}>
+                <li {% if menu == 7 %} class="open active" {% endif  %}>
                     <a href="javascript:void(0)"><i class="fa fa-pie-chart"></i> <span class="title"> Reportes </span><i class="icon-arrow"></i> </a>
                     <ul class="sub-menu">
-                        <li {% if menu == 6 and submenu == 1 %} class="active" {% endif  %}>
+                        <li {% if menu == 7 and submenu == 1 %} class="active" {% endif  %}>
                             <a href="{{path('vacuna_optativas')}}">
                                 <i class="fa fa-pie-chart"></i><span class="title"> Reporte 1 </span>
                             </a>
                         </li>
-                        <li {% if menu == 6 and submenu == 2 %} class="active" {% endif  %}>
+                        <li {% if menu == 7 and submenu == 2 %} class="active" {% endif  %}>
                             <a href="{{path('vacuna_optativas')}}">
                                 <i class="fa fa-pie-chart"></i><span class="title"> Reporte 2 </span>
                             </a>
                         </li>
-                        <li {% if menu == 6 and submenu == 3 %} class="active" {% endif  %}>
+                        <li {% if menu == 7 and submenu == 3 %} class="active" {% endif  %}>
                             <a href="{{path('vacuna_optativas')}}">
                                 <i class="fa fa-pie-chart"></i><span class="title"> Reporte 3 </span>
                             </a>
