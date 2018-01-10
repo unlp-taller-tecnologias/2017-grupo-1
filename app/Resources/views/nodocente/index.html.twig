@@ -1,19 +1,79 @@
 {% extends 'base.html.twig' %}
-{% block otherstyles %}
+
+{% block otherstylesheets %}
     <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
-{% block breadcrumbs %}
-    <ol class="breadcrumb breadcrumb-scv">
-        <li>
-            <a href="{{path('homepage')}}" ><i class="fa fa-home" aria-hidden="true"></i></a>
-        </li>
-        <li class="active">Inscriptos</li>
-    </ol>
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 3, 'submenu': 2}  %}
 {% endblock %}
 
-{% block body %}
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>No-Docentes <small><i class="fa fa-list"></i> Listado del personal no docente de la Facultad. </small></h1>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <a href="#" class="back-subviews">
+                <i class="fa fa-chevron-left"></i> BACK
+            </a>
+            <a href="#" class="close-subviews">
+                <i class="fa fa-times"></i> CLOSE
+            </a>
+            <div class="toolbar-tools pull-right">
+                <!-- start: TOP NAVIGATION MENU -->
+                <ul class="nav navbar-right">
+                    <!-- start: TO-DO DROPDOWN -->
+                    <li class="dropdown">
+                        <a href="{{ path('nodocente_new') }}">
+                            <i class="fa fa-plus"></i> NO-DOCENTE
+                            <div class="tooltip-notification hide">
+                                <div class="tooltip-notification-arrow"></div>
+                                <div class="tooltip-notification-inner">
+                                    <div>
+                                        <div class="semi-bold">
+                                            NO-DOCENTE
+                                        </div>
+                                        <div class="message">
+                                            Agregar Nuevo al Sistema
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- end: TOP NAVIGATION MENU -->
+            </div>
+        </div>
+    </div>
+    <!-- end: TOOLBAR -->
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li class="active">
+                    No-Docentes
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
+{% endblock %}
+
+
+{% block page_content %}
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -23,8 +83,8 @@
 
         <div class="panel-body">
 
-            <table id="usuarios_tabla" class="table table-condensed table-bordered table-striped table-hover">
-                <thead>
+            <table id="nodocentes_tabla" class="table table-condensed table-bordered table-striped table-hover">
+                <thead> 
                     <tr>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">Apellido</th>
@@ -38,104 +98,102 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for noDocente in noDocentes %}
-                    <tr   {% if noDocente.borrado %} class="danger" {% endif %}>
-                        <td class="text-center">{{ noDocente.nombre }}</td>
-                        <td class="text-center">{{ noDocente.apellido }}</td>
-                        <td class="text-center">{{ noDocente.pais }}</td>
-                        <td class="text-center">{{ noDocente.provincia }}</td>
-                        <td class="text-center">{{ noDocente.tipoDocumento }}</td>
-                        <td class="text-center">{{ noDocente.nroDocumento }}</td>
-                        <td class="text-center">
-                            {% if not noDocente.borrado %}
-                                {% if noDocente.registroVacunacion %}
-                                    <a href="{{ path('editar_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                {% else %}
-                                    <a href="{{ path('alta_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                {% endif %}
-                                <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('nodocente_show',{'id': noDocente.id}) }}', 'Ver No docente');">
+                    {% for noDocente in noDocentes %}
+                        <tr   {% if noDocente.borrado %} class="danger" {% endif %}>
+                            <td class="text-center">{{ noDocente.nombre }}</td>
+                            <td class="text-center">{{ noDocente.apellido }}</td>
+                            <td class="text-center">{{ noDocente.pais }}</td>
+                            <td class="text-center">{{ noDocente.provincia }}</td>
+                            <td class="text-center">{{ noDocente.tipoDocumento }}</td>
+                            <td class="text-center">{{ noDocente.nroDocumento }}</td>
+                            <td class="text-center">
+                                {% if not noDocente.borrado %}
+                                    {% if noDocente.registroVacunacion %}
+                                        <a href="{{ path('editar_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
+                                            {% else %}
+                                        <a href="{{ path('alta_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
+                                            {% endif %}
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('nodocente_show',{'id': noDocente.id}) }}', 'Ver No docente');">
                                         <i class="fa fa-binoculars" aria-hidden="true"></i>
-                                </button>
+                                    </button>
 
-                                <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                    <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 
-                                <a href="#" onclick="usuarioDelete('{{ path("nodocente_delete", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                </a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
+                                    <a href="#" onclick="usuarioDelete('{{ path("nodocente_delete", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 {% endblock %}
 
-{% block otherjavascripts %}
+{% block otherJavascript %}
     <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
-        function crearModalView(url, title) {
-            $('#okButton').button('reset');
-            $('#panel-config .modal-footer').show();
-            $('#cancelButton').hide();
-            $('#panel-config .modal-title').html(title);
-            $('#panel-config .modal-body').html("");
-            $('#panel-config .modal-body').load(url, function () {
-                $('#panel-config form').submit(function (event) {
-                    event.preventDefault();
-                    $('#panel-config').modal('toggle');
-                });
-            });
-            $('#panel-config').modal();
-        }
+                                        function crearModalView(url, title) {
+                                            $('#okButton').button('reset');
+                                            $('#panel-config .modal-footer').show();
+                                            $('#cancelButton').hide();
+                                            $('#panel-config .modal-title').html(title);
+                                            $('#panel-config .modal-body').html("");
+                                            $('#panel-config .modal-body').load(url, function () {
+                                                $('#panel-config form').submit(function (event) {
+                                                    event.preventDefault();
+                                                    $('#panel-config').modal('toggle');
+                                                });
+                                            });
+                                            $('#panel-config').modal();
+                                        }
 
-        function usuarioDelete(url) {
-            swal({
-                title: '¿Estas seguro?',
-                text: "Estas por eliminar un no docente del sistema!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Si, Eliminarlo'
-              }).then((result) => {
-                  if (result.value) {
-                      $.post(url, {}).done((data) => {
-                          if (data.success) {
-                              swal('Borrado!', data.message, 'success').then(function () {
-                                  location.reload();
-                              });
-                          } else {
-                              swal('Cuidado!', data.message, 'error');
-                          }
-                      }).fail(() => {
-                          swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
-                      });
-                  }
-              });
-        }
-        $(document).ready(function () {
-            $('#usuarios_tabla').DataTable({
-                "dom": '<".col-md-4">frtip',
-                fnInitComplete: function () {
-                    $('div.col-md-4').html('<a href="{{ path('nodocente_new') }}"><button type="button" class="btn btn-xs btn-primary"><i class="fa fa-user-plus" aria-hidden="true"></i> Nuevo</button></a><br><br>');
-                },
-                "autoWidth": false,
-                "language": {
-                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
-                },
-                "columnDefs": [{
-                        "searchable": false,
-                        "orderable": false,
-                        "targets": [0, 4]
-                    }],
-                "order": [[1, 'asc']],
-                "iDisplayLength": 10,
-            });
-        });
+                                        function usuarioDelete(url) {
+                                            swal({
+                                                title: '¿Estas seguro?',
+                                                text: "Estas por eliminar un no docente del sistema!",
+                                                type: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                cancelButtonText: 'Cancelar',
+                                                confirmButtonText: 'Si, Eliminarlo'
+                                            }).then((result) => {
+                                                if (result.value) {
+                                                    $.post(url, {}).done((data) => {
+                                                        if (data.success) {
+                                                            swal('Borrado!', data.message, 'success').then(function () {
+                                                                location.reload();
+                                                            });
+                                                        } else {
+                                                            swal('Cuidado!', data.message, 'error');
+                                                        }
+                                                    }).fail(() => {
+                                                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                                    });
+                                                }
+                                            });
+                                        }
+
+                                        $(document).ready(function () {
+                                            $('#nodocentes_tabla').DataTable({
+                                                "autoWidth": false,
+                                                "aLengthMenu": [[5, 15, 50, -1], [5, 15, 50, "Todas"]], // change per page values here
+                                                "language": {
+                                                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                                                },
+                                                "columnDefs": [{
+                                                        "searchable": false,
+                                                        "orderable": false,
+                                                        "targets": [6]
+                                                    }],
+                                                "order": [[0, 'asc']],
+                                                "iDisplayLength": 10,
+                                            });
+                                        });
     </script>
 {% endblock %}
