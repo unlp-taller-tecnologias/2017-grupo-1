@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Factorriesgo controller.
@@ -104,14 +105,32 @@ class FactorRiesgoController extends Controller
      */
     public function deleteAction(Request $request, FactorRiesgo $factorRiesgo)
     {
-      $em=$this->getDoctrine()->getManager();
-      try{
-        $em->remove($factorRiesgo);
-        $em->flush();
-        return new JsonResponse(array('success' => true, 'message' => 'El factor de riesgo fue eliminado con éxito'));
-      }catch(\Exception $e){
-        return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar el factor de riesgo del sistema'));
-      }
+        $em=$this->getDoctrine()->getManager();
+        try{
+            $factorRiesgo->setBorrado(TRUE);
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'El factor de riesgo fue eliminado con éxito'));
+        }catch(\Exception $e){
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar el factor de riesgo del sistema'));
+        }
+    }
+
+    /**
+     * Alta de vacuna entity.
+     *
+     * @Route("/{id}/altaFactorriesgo", name="factorriesgo_alta")
+     * @Method("POST")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function altaAction(Request $request, FactorRiesgo $factorRiesgo) {
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $factorRiesgo->setBorrado(FALSE);
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'El factor de riesgo se dio de alta con éxito'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la vacuna del sistema'));
+        }
     }
 
 }

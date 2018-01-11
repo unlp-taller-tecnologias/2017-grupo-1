@@ -14,6 +14,7 @@ use AppBundle\Entity\RegistroVacunacion;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use \Datetime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 
@@ -366,14 +367,33 @@ class NoDocenteController extends Controller
      */
     public function deleteAction(Request $request, NoDocente $noDocente)
     {
-      $em = $this->getDoctrine()->getManager();
-      try {
-          $noDocente->setBorrado(TRUE);
-          $em->flush();
-          return new JsonResponse(array('success' => true, 'message' => 'El no docente fue eliminado con éxito'));
-      } catch (\Exception $e) {
-          return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar el no docente del sistema'));
-      }
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $noDocente->setBorrado(TRUE);
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'El no docente fue eliminado con éxito'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar el no docente del sistema'));
+        }
     }
+
+    /**
+     * Alta de inscripto entity.
+     *
+     * @Route("/{id}/altaNodocente", name="nodocente_alta")
+     * @Method("POST")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function altaAction(Request $request, NoDocente $noDocente) {
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $noDocente->setBorrado(FALSE);
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'El no docente se dio de alta con éxito'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la vacuna del sistema'));
+        }
+    }
+
 
 }

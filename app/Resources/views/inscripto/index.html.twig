@@ -161,6 +161,10 @@
                                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                                 </a>
                                             {% endif %}
+                                        {% else %}
+                                            <a href="#" onclick="inscriptoAlta('{{ path("inscripto_alta", {"id":inscripto.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </a>
                                         {% endif %}  
                                     </td>
                                 </tr>
@@ -193,6 +197,36 @@
                                                         });
                                                         $('#panel-config').modal();
                                                     }
+
+                                                    function inscriptoAlta(url) {
+                                                        swal({
+                                                            title: '¿Estas seguro?',
+                                                            text: "Estas por dar de alta un inscripto del sistema!",
+                                                            type: 'warning',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#3085d6',
+                                                            cancelButtonColor: '#d33',
+                                                            cancelButtonText: 'Cancelar',
+                                                            confirmButtonText: 'Si, Dar de Alta'
+                                                        }).then((result) => {
+                                                            if (result.value) {
+                                                                $.post(url, {}).done((data) => {
+                                                                    if (data.success) {
+                                                                        swal('Agregada!', data.message, 'success').then(function () {
+                                                                            location.reload();
+                                                                        });
+                                                                    } else {
+                                                                        swal('Cuidado!', data.message, 'error');
+                                                                    }
+                                                                }).fail(() => {
+                                                                    swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                                                }
+                                                                );
+                                                            }
+                                                        });
+                                                    }
+
+
                                                     function usuarioDelete(url) {
                                                         swal({
                                                             title: '¿Estas seguro?',

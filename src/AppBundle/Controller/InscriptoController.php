@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use \Datetime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Inscripto controller.
@@ -256,5 +257,23 @@ class InscriptoController extends Controller
                     'inscripto' => $inscripto,
                     'form' => $form->createView(),
         ));
+    }
+
+    /**
+     * Alta de inscripto entity.
+     *
+     * @Route("/{id}/altaInscripto", name="inscripto_alta")
+     * @Method("POST")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function altaAction(Request $request, Inscripto $inscripto) {
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $inscripto->setBorrado(FALSE);
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'El inscripto se dio de alta con éxito'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la vacuna del sistema'));
+        }
     }
 }

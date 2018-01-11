@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 /**
  * Enfermedad controller.
@@ -112,15 +114,32 @@ class EnfermedadController extends Controller
      */
     public function deleteAction(Request $request, Enfermedad $enfermedad)
     {
-      $em=$this->getDoctrine()->getManager();
-      try{
-        $em->remove($enfermedad);
-        $em->flush();
-        return new JsonResponse(array('success' => true, 'message' => 'La enfermedad fue eliminado con éxito'));
-      }catch(\Exception $e){
-        return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la enfermedad del sistema'));
-      }
+        $em=$this->getDoctrine()->getManager();
+        try{
+            $enfermedad->setBorrado(TRUE);
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'La enfermedad fue eliminado con éxito'));
+        }catch(\Exception $e){
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la enfermedad del sistema'));
+        }
     }
 
+    /**
+     * Alta de inscripto entity.
+     *
+     * @Route("/{id}/altaEnfermedad", name="enfermedad_alta")
+     * @Method("POST")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function altaAction(Request $request, Enfermedad $enfermedad) {
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $enfermedad->setBorrado(FALSE);
+            $em->flush();
+            return new JsonResponse(array('success' => true, 'message' => 'La enfermedad se dio de alta con éxito'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => false, 'message' => 'Error al intentar eliminar la vacuna del sistema'));
+        }
+    }
 
 }

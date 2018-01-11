@@ -49,12 +49,22 @@ class FactorRiesgo
      * @Assert\Length(
      *  min=6,
      *  max=255,
-     * minMessage="La descripción del factor de riesgo deberá tener al menos {{limit}} caracteres",
-     * maxMessage="La descripción del factor de riesgo no puede tener más de {{limit}} caracteres"
+     * minMessage="La descripción del factor de riesgo deberá tener al menos 6 caracteres",
+     * maxMessage="La descripción del factor de riesgo no puede tener más de 255 caracteres"
      * )
      */
     private $descripcion;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="borrado", type="boolean", length=1)
+     */
+    public $borrado;
+
+    public function __construct() {
+        $this->borrado = false;
+    }
 
     /**
      * Get id
@@ -113,4 +123,27 @@ class FactorRiesgo
     {
         return $this->descripcion;
     }
+
+    /**
+     * Set borrado
+     *
+     * @param boolean $borrado
+     *
+     * @return Vacuna
+     */
+    public function setBorrado($borrado) {
+        $this->borrado = $borrado;
+
+        return $this;
+    }
+
+    /**
+     * Get borrado
+     *
+     * @return boolean
+     */
+    public function getBorrado() {
+        return $this->borrado;
+    }
+    
 }

@@ -126,17 +126,23 @@
                         </thead>
                         <tbody>
                             {% for enfermedad in enfermedades %}
-                                <tr>
+                                <tr   {% if enfermedad.borrado %} class="danger" {% endif %}>
                                     <td class="text-center">{{ loop.index }}</td>
                                     <td class="text-center">{{ enfermedad.nombre }}</td>
                                     <td class="text-center">{{ enfermedad.descripcion }}</td>
-                                    <td class="text-center">                                   
-                                        <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                        </a>
-                                        <a href="#" onclick="enfermedadDelete('{{ path("enfermedad_delete", {"id":enfermedad.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                        </a>
+                                    <td class="text-center">
+                                        {% if enfermedad.borrado %}
+                                            <a href="#" onclick="enfermedadAlta('{{ path("enfermedad_alta", {"id":enfermedad.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </a>
+                                        {% else %}                                  
+                                            <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </a>
+                                            <a href="#" onclick="enfermedadDelete('{{ path("enfermedad_delete", {"id":enfermedad.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            </a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -153,48 +159,77 @@
     <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script type="text/javascript">
-                                            function enfermedadDelete(url) {
-                                                swal({
-                                                    title: '¿Estas seguro?',
-                                                    text: "Estas por eliminar una enfermedad del sistema!",
-                                                    type: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#3085d6',
-                                                    cancelButtonColor: '#d33',
-                                                    cancelButtonText: 'Cancelar',
-                                                    confirmButtonText: 'Si, Eliminarlo'
-                                                }).then((result) => {
-                                                    if (result.value) {
-                                                        $.post(url, {}).done((data) => {
-                                                            if (data.success) {
-                                                                swal('Borrado!', data.message, 'success').then(function () {
-                                                                    location.reload();
-                                                                });
-                                                            } else {
-                                                                swal('Cuidado!', data.message, 'error');
-                                                            }
-                                                        }).fail(() => {
-                                                            swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
-                                                        });
-                                                    }
-                                                });
-                                            }
+        function enfermedadDelete(url) {
+            swal({
+                title: '¿Estas seguro?',
+                text: "Estas por eliminar una enfermedad del sistema!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, Eliminarlo'
+            }).then((result) => {
+                if (result.value) {
+                    $.post(url, {}).done((data) => {
+                        if (data.success) {
+                            swal('Borrado!', data.message, 'success').then(function () {
+                                location.reload();
+                            });
+                        } else {
+                            swal('Cuidado!', data.message, 'error');
+                        }
+                    }).fail(() => {
+                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                    });
+                }
+            });
+        }
 
-                                            $(document).ready(function () {
-                                                $('#enfermedades_tabla').DataTable({
-                                                    "autoWidth": false,
-                                                    "aLengthMenu": [[5, 15, 50, -1], [5, 15, 50, "Todas"]], // change per page values here
-                                                    "language": {
-                                                        "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
-                                                    },
-                                                    "columnDefs": [{
-                                                            "searchable": false,
-                                                            "orderable": false,
-                                                            "targets": [0, 3]
-                                                        }],
-                                                    "order": [[1, 'asc']],
-                                                    "iDisplayLength": 5,
-                                                });
-                                            });
+        function enfermedadAlta(url) {
+            swal({
+                title: '¿Estas seguro?',
+                text: "Estas por dar de alta una enfermedad del sistema!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, Dar de Alta'
+            }).then((result) => {
+                if (result.value) {
+                    $.post(url, {}).done((data) => {
+                        if (data.success) {
+                            swal('Agregada!', data.message, 'success').then(function () {
+                                location.reload();
+                            });
+                        } else {
+                            swal('Cuidado!', data.message, 'error');
+                        }
+                    }).fail(() => {
+                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                    }
+                    );
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+            $('#enfermedades_tabla').DataTable({
+                "autoWidth": false,
+                "aLengthMenu": [[5, 15, 50, -1], [5, 15, 50, "Todas"]], // change per page values here
+                "language": {
+                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                },
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": [0, 3]
+                    }],
+                "order": [[1, 'asc']],
+                "iDisplayLength": 5,
+            });
+        });
     </script>
 {% endblock %}

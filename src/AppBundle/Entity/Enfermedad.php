@@ -50,11 +50,22 @@ class Enfermedad {
      * @Assert\Length(
      *  min=6,
      *  max=255,
-     *  minMessage="La descripcion de la enfermedad deberá tener al menos {{limit}} caracteres",
-     *  maxMessage="La descripcion de la enfermedad no puede tener más de {{limit}} caracteres"
+     *  minMessage="La descripcion de la enfermedad deberá tener al menos 6 caracteres",
+     *  maxMessage="La descripcion de la enfermedad no puede tener más de 255 caracteres"
      * )
      */
     private $descripcion;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="borrado", type="boolean", length=1)
+     */
+    private $borrado;
+
+    public function __construct() {
+        $this->borrado = false;
+    }
 
     function getId() {
         return $this->id;
@@ -78,6 +89,21 @@ class Enfermedad {
 
     function setDescripcion($descripcion) {
         $this->descripcion = $descripcion;
+    }
+
+    public function setBorrado($borrado) {
+        $this->borrado = $borrado;
+
+        return $this;
+    }
+
+    /**
+     * Get borrado
+     *
+     * @return Visitante
+     */
+    public function getBorrado() {
+        return $this->borrado;
     }
 
 }
