@@ -7,6 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -74,14 +77,19 @@ class UsuarioController extends Controller {
      */
     public function editAction(Request $request, Usuario $usuario) {
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm('AppBundle\Form\UsuarioType', $usuario);
-        $usuarioOriginal = clone $usuario;
-
+        //$form = $this->createForm('AppBundle\Form\UsuarioType', $usuario);
+        // $usuarioOriginal = clone $usuario;
+        $form = $this->createFormBuilder($usuario)
+                ->add('isActive', CheckboxType::class, array(
+                    'required' => false,
+                ))
+                ->add('rol', EntityType::class, array(
+                    'class' => 'AppBundle:Rol',
+                    'multiple' => false,
+                ))
+                ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get("resetPassword")->getData()) {
-                
-            }
             $em->persist($usuario);
             try {
                 $em->flush();
@@ -110,23 +118,25 @@ class UsuarioController extends Controller {
      * @Route("/{id}/cambiarpasswd", name="usuario_resetPasswd")
      * @Method({"GET", "POST"})
      */
-    public function resetPasswordAction(Request $request, Usuario $usuario) {
+    public function resetPasswordAction(Request $request, Usuario $usuario, UserPasswordEncoderInterface $passwordEncoder) {
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm('AppBundle\Form\UsuarioType', $usuario);
-        $usuarioOriginal = clone $usuario;
-
+        $form = $this->createFormBuilder($usuario)
+                ->add('password', PasswordType::class)
+                ->add('repeatpassword', PasswordType::class, array(
+                    'mapped' => false
+                ))
+                ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get("resetPassword")->getData()) {
-                
-            }
+            $password = $passwordEncoder->encodePassword($usuario, $usuario->getPassword());
+            $usuario->setPassword($password);
             $em->persist($usuario);
             try {
                 $em->flush();
-                $this->get('session')->getFlashBag()->add('success', 'El usuario se editó correctamente.');
-                return $this->redirectToRoute("usuario_index");
+                $this->get('session')->getFlashBag()->add('success', 'Se cambió la contraseña correctamente.');
+                return $this->redirectToRoute("logout");
             } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el usuario. Detalle: ' . $e->getMessage());
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido cambiar la contrasña del usuario. Detalle: ' . $e->getMessage());
             }
         }
         if ($form->isSubmitted() && !$form->isValid()) {
@@ -141,7 +151,7 @@ class UsuarioController extends Controller {
                     'entity' => $usuario
         ));
     }
-    
+
     /**
      * Eliminar usuaro del sistema
      * 

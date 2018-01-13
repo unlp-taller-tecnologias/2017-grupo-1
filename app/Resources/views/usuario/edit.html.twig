@@ -116,22 +116,7 @@
             $.fn.bootstrapSwitch.defaults.onText = 'SI';
             $.fn.bootstrapSwitch.defaults.offText = 'NO';
             $.fn.bootstrapSwitch.defaults.offColor = 'danger';
-            $("[name='appbundle_usuario[isActive]']").bootstrapSwitch();
-            /*s $.fn.bootstrapSwitch.defaults.onSwitchChange = function (event, state) {
-             if (state) {
-             $('#appbundle_usuario_password').removeAttr('disabled');
-             $('#appbundle_usuario_passwordConfirm').removeAttr('disabled');
-             $('#appbundle_usuario_password').attr('required', 'required');
-             $('#appbundle_usuario_passwordConfirm').attr('required', 'disabled');
-             
-             } else {
-             $('#appbundle_usuario_password').attr('disabled', 'disabled');
-             $('#appbundle_usuario_passwordConfirm').attr('disabled', 'disabled');
-             $('#appbundle_usuario_password').removeAttr('required');
-             $('#appbundle_usuario_passwordConfirm').removeAttr('required');
-             }
-             };*/
-            //$("[name='appbundle_usuario[resetPassword]']").bootstrapSwitch();
+            $("#form_isActive").bootstrapSwitch();
         });
     </script>
 {% endblock %}
