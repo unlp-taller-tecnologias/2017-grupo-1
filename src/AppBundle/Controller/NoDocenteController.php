@@ -126,6 +126,8 @@ class NoDocenteController extends Controller
             
             $componente->setDosisRecibidas($request->get('dosisRecibidas'.$i));
 
+            $componente->setComentario($request->get('comentario'.$i));
+
             $vacuna = $em->getRepository('AppBundle:Vacuna')->find($request->get('idVacuna'.$i));
             $componente->setVacuna($vacuna);
 
@@ -243,6 +245,8 @@ class NoDocenteController extends Controller
             }
             
             $componente->setDosisRecibidas($request->get('dosisRecibidas'.$i));
+
+            $componente->setComentario($request->get('comentario'.$i));
 
             $vacuna = $em->getRepository('AppBundle:Vacuna')->find($request->get('idVacuna'.$i));
             $componente->setVacuna($vacuna);

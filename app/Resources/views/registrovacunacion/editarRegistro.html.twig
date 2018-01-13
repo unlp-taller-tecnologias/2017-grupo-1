@@ -79,6 +79,11 @@
                                 <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %} />
                             </div>
                         {% endif %}
+
+                        <div class="form-control-static text-extra-large">
+                            <label for="comentario{{ loop.index }}">Comentario</label>
+                            <input type="textarea" class="form-control" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}value="{{componente.comentario}}" {% endif %} {% endfor %} />
+                        </div>
                             
                         <div class="checkbox">
                             <label><input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>Completo </label>
@@ -107,6 +112,11 @@
                                 <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %} />
                             </div>
                         {% endif %}
+
+                        <div class="form-control-static text-extra-large">
+                            <label for="comentario{{ loop.index }}">Comentario</label>
+                            <input type="textarea" class="form-control" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}value="{{componente.comentario}}" {% endif %} {% endfor %} />
+                        </div>
                             
                         <div class="checkbox">
                             <label><input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>Completo </label>

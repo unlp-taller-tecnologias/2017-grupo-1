@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Vacuna;
 use AppBundle\Entity\RegistroVacunacion;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Componente
@@ -59,6 +60,19 @@ class Componente {
      * @ORM\JoinColumn(name="registroVacunacion_id", referencedColumnName="id")
      */
     private $registroVacunacion;
+
+    /**
+     * @var string $comentario
+     *
+     * @ORM\Column(name="comentario", type="string")
+     * @Assert\Length(
+     *  min=6,
+     *  max=255,
+     *  minMessage="El comentario deberá tener al menos 6 caracteres",
+     *  maxMessage="El comentario no puede tener más de 255 caracteres"
+     * )
+     */
+    private $comentario;
 
     function getRegistroVacunacion(): RegistroVacunacion {
         return $this->registroVacunacion;
@@ -149,6 +163,14 @@ class Componente {
      */
     public function getVencimiento() {
         return $this->vencimiento;
+    }
+
+    function setComentario($comentario) {
+        $this->comentario = $comentario;
+    }
+
+    function getComentario(){
+        return $this->comentario;
     }
 
 }
