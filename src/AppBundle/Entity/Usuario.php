@@ -52,9 +52,7 @@ class Usuario implements UserInterface, \Serializable {
      * @Assert\NotBlank(message="El campo contraseña de usuario no puede estar en blanco")
      * @Assert\Length(
      *      min = 6,
-     *      max = 30,
-     *      minMessage = "La contraseña deberá tener al menos {{ limit }} caracteres",
-     *      maxMessage = "La contraseña no puede tener más de {{ limit }} caracteres"
+     *      minMessage = "La contraseña deberá tener al menos {{ limit }} caracteres"
      * )
      */
     private $password;

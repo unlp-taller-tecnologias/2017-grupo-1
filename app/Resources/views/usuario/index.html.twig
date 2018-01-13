@@ -126,8 +126,10 @@
                             {% for usuario in usuarios %}
                                 <tr   {% if not usuario.isActive %} class="danger" {% endif %}>
                                     <td class="text-center">{{ loop.index }}</td>
-                                    <td class="text-center">{{ usuario.username }}</td>
-                                    <td class="text-center"><strong>{{ usuario.getRol().getNombre() }}</strong></td>
+                                    <td class="text-center">{{ usuario.username |capitalize }}</td>
+                                    <td class="text-center">
+                                        <span class="label label-sm   {{  usuario.getRol().getNombre() == 'ADMINISTRADOR'? 'label-primary': 'label-info' }} "><small><em>{{ usuario.getRol().getNombre() }}</em></small></span>
+                                    </td>
                                     <td class="text-center">
                                         {% if usuario.isActive %}
                                             <span class="label label-sm label-success">Activo</span>

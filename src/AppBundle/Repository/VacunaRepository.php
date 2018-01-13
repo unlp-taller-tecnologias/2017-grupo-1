@@ -12,12 +12,14 @@ class VacunaRepository extends \Doctrine\ORM\EntityRepository {
 
     public function getVacunasCalendario() {
         return $this->createQueryBuilder('vacuna')
-                        ->where('vacuna.esObligatoria = true')->getQuery()->getResult();
+                        ->where('vacuna.esObligatoria = true')
+                        ->orderBy('vacuna.nombre', 'ASC')->getQuery()->getResult();
     }
-    
+
     public function getVacunasOptativas() {
         return $this->createQueryBuilder('vacuna')
-                        ->where('vacuna.esObligatoria = false')->getQuery()->getResult();
+                        ->where('vacuna.esObligatoria = false')
+                        ->orderBy('vacuna.nombre', 'ASC')->getQuery()->getResult();
     }
 
 }

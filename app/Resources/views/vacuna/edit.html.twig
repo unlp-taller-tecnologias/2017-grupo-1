@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block  page_slideleft %}
-    {% include 'slide_left.html.twig' with {'menu': 2, 'submenu': 1}  %}
+    {% include 'slide_left.html.twig' with {'menu': 4, 'submenu': vacuna.esObligatoria()? 1:  2 }  %}
 {% endblock %}
 
 {% block toolbar %}
@@ -39,8 +39,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('usuario_index') }}">
-                        Vacunas
+                    <a href="{{ vacuna.esObligatoria()? path('vacuna_obligatorias'):  path('vacuna_optativas') }}">
+                        {{ vacuna.esObligatoria()? 'Vacunas obligatorias':  'Vacunas optativas' }}
                     </a>
                 </li>
                 <li class="active">
@@ -134,7 +134,7 @@
                 </div>
             </div>
             <div class="col-md-9 text-right">
-                <a href="{{ path("vacuna_index") }}" class="btn btn-default">Volver</a>
+                <a href="{{ vacuna.esObligatoria()? path('vacuna_obligatorias'):  path('vacuna_optativas') }}" class="btn btn-default">Volver</a>
                 <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
             </div>
             <div class="hidden">
