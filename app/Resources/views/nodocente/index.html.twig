@@ -112,22 +112,27 @@
                                 {% if not noDocente.borrado %}
                                     {% if noDocente.registroVacunacion %}
                                         <a href="{{ path('editar_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                            {% else %}
+                                    {% else %}
                                         <a href="{{ path('alta_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                            {% endif %}
+                                    {% endif %}
+
                                     <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('nodocente_show',{'id': noDocente.id}) }}', 'Ver No docente');">
                                         <i class="fa fa-binoculars" aria-hidden="true"></i>
                                     </button>
 
-                                    <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 
-                                    <a href="#" onclick="usuarioDelete('{{ path("nodocente_delete", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                    </a>
+                                        <a href="#" onclick="usuarioDelete('{{ path("nodocente_delete", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </a>
+                                    {% endif %}
                                 {% else %}
-                                    <a href="#" onclick="nodocenteAlta('{{ path("nodocente_alta", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </a>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <a href="#" onclick="nodocenteAlta('{{ path("nodocente_alta", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>
