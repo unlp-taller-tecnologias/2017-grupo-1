@@ -6,7 +6,14 @@ use AppBundle\Entity\RegistroVacunacion;
 use AppBundle\Entity\Observacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Entity\Componente;
+use PHPExcel;
+use PHPExcel_IOFactory;
+use \Datetime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Registrovacunacion controller.

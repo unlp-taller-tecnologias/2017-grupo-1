@@ -245,7 +245,7 @@ class InscriptoController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Se importaron '.$cargados.' inscriptos correctamente');
             return $this->redirectToRoute("inscripto_index");
         }else{
-            $this->get('session')->getFlashBag()->add('warning', 'No se han podido importar '.$noCargados.' inscriptos de un total de '.($i-2));
+            $this->get('session')->getFlashBag()->add('warning', 'No se han podido importar '.$noCargados.' inscriptos porque ya existen');
             return $this->redirectToRoute("inscripto_index");
         }
     }
