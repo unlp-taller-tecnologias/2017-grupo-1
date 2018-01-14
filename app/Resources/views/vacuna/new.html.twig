@@ -1,4 +1,9 @@
 {% extends 'base.html.twig' %}
+
+{% block otherstylesheets %}
+    <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
 {% block  page_slideleft %}
     {% include 'slide_left.html.twig' with {'menu': 4, 'submenu': 2}  %}
 {% endblock %}
@@ -130,13 +135,14 @@
         </div>
     </div>
 {% endblock %}
-{% block otherjavascripts %}
+{% block otherJavascript %}
     <script src="{{ asset('vendor/bootstrap-switch-master/dist/js/bootstrap-switch.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $.fn.bootstrapSwitch.defaults.size = 'small';
             $.fn.bootstrapSwitch.defaults.onText = 'SI';
             $.fn.bootstrapSwitch.defaults.offText = 'NO';
+            $.fn.bootstrapSwitch.defaults.offColor = 'danger';
             $("[name='appbundle_vacuna[tieneVencimiento]']").bootstrapSwitch();
             $("[name='appbundle_vacuna[esObligatoria]']").bootstrapSwitch();
         });

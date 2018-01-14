@@ -81,7 +81,7 @@ class VacunaController extends Controller {
             try {
                 $em->flush();
                 $this->get('session')->getFlashBag()->add('success', 'La vacuna se agregó al sistema correctamente.');
-                return $this->redirectToRoute("vacuna_index");
+                return $this->redirectToRoute($vacuna->getEsObligatoria()?'vacuna_obligatorias':"vacuna_optativas");
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', 'No se ha podido agregar la vacuna en el sistema. Detalle: ' . $e->getMessage());
             }
@@ -117,7 +117,7 @@ class VacunaController extends Controller {
             try {
                 $em->flush();
                 $this->get('session')->getFlashBag()->add('success', 'La vacuna se editó al sistema correctamente.');
-                return $this->redirectToRoute("vacuna_index");
+                return $this->redirectToRoute($vacuna->getEsObligatoria()?'vacuna_obligatorias':"vacuna_optativas");
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar la vacuna en el sistema. Detalle: ' . $e->getMessage());
             }
