@@ -23,36 +23,38 @@
             <a href="#" class="close-subviews">
                 <i class="fa fa-times"></i> CLOSE
             </a>
-            <div class="toolbar-tools pull-right">
-                <!-- start: TOP NAVIGATION MENU -->
-                <ul class="nav navbar-right">
-                    <!-- start: TO-DO DROPDOWN -->
-                    <li class="dropdown">
-                        <a href="{{ path('inscripto_new') }}">
-                            <i class="fa fa-user-plus"></i> INSCR&Iacute;PTO
-                        </a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" onclick="$('#excel').click();">
-                            <i class="fa fa-upload" aria-hidden="true"></i> CARGAR EXCEL
-                            <div class="tooltip-notification hide">
-                                <div class="tooltip-notification-arrow"></div>
-                                <div class="tooltip-notification-inner">
-                                    <div>
-                                        <div class="semi-bold">
-                                            INSCR&Iacute;PTOS
-                                        </div>
-                                        <div class="message">
-                                            Importar desde archivo de Excel
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="toolbar-tools pull-right">
+                    <!-- start: TOP NAVIGATION MENU -->
+                    <ul class="nav navbar-right">
+                        <!-- start: TO-DO DROPDOWN -->
+                        <li class="dropdown">
+                            <a href="{{ path('inscripto_new') }}">
+                                <i class="fa fa-user-plus"></i> INSCR&Iacute;PTO
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" onclick="$('#excel').click();">
+                                <i class="fa fa-upload" aria-hidden="true"></i> CARGAR EXCEL
+                                <div class="tooltip-notification hide">
+                                    <div class="tooltip-notification-arrow"></div>
+                                    <div class="tooltip-notification-inner">
+                                        <div>
+                                            <div class="semi-bold">
+                                                INSCR&Iacute;PTOS
+                                            </div>
+                                            <div class="message">
+                                                Importar desde archivo de Excel
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-                <!-- end: TOP NAVIGATION MENU -->
-            </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- end: TOP NAVIGATION MENU -->
+                </div>
+            {% endif %}
         </div>
     </div>
     <!-- end: TOOLBAR -->
