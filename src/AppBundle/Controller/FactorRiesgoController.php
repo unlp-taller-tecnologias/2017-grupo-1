@@ -120,7 +120,6 @@ class FactorRiesgoController extends Controller
      *
      * @Route("/{id}/altaFactorriesgo", name="factorriesgo_alta")
      * @Method("POST")
-     * @Security("has_role('ROLE_ADMIN')")
      */
     public function altaAction(Request $request, FactorRiesgo $factorRiesgo) {
         $em = $this->getDoctrine()->getManager();

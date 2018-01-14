@@ -25,6 +25,7 @@ class InscriptoController extends Controller
 
     /**
      * @Route("/altaExcelView", name="altaExcelView")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function altaExcel(Request $request)
     {
@@ -53,6 +54,7 @@ class InscriptoController extends Controller
      *
      * @Route("/new", name="inscripto_new")
      * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function newAction(Request $request)
     {
@@ -91,6 +93,7 @@ class InscriptoController extends Controller
      *
      * @Route("/{id}/edit", name="inscripto_edit")
      * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(Request $request, Inscripto $inscripto)
     {
@@ -128,6 +131,7 @@ class InscriptoController extends Controller
      *
      * @Route("/{id}/delete", name="inscripto_delete")
      * @Method("POST")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteAction(Request $request, Inscripto $inscripto) {
         $em = $this->getDoctrine()->getManager();
@@ -143,6 +147,7 @@ class InscriptoController extends Controller
 
     /**
      * @Route("/altaExcel", name="altaExcel")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function altaExcelAction(Request $request)
     {
@@ -250,6 +255,7 @@ class InscriptoController extends Controller
      *
      * @Route("/{id}/show", name="inscripto_show")
      * @Method("GET")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function showAction(Request $request, Inscripto $inscripto) {
         $form = $this->createForm('AppBundle\Form\InscriptoType', $inscripto);

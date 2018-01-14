@@ -386,7 +386,6 @@ class NoDocenteController extends Controller
      *
      * @Route("/{id}/altaNodocente", name="nodocente_alta")
      * @Method("POST")
-     * @Security("has_role('ROLE_ADMIN')")
      */
     public function altaAction(Request $request, NoDocente $noDocente) {
         $em = $this->getDoctrine()->getManager();
