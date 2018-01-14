@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
+
 {% block  page_slideleft %}
-    {% include 'slide_left.html.twig' with {'menu': 2, 'submenu': 2}  %}
+    {% include 'slide_left.html.twig' with {'menu': 5, 'submenu': 1}  %}
 {% endblock %}
 
 {% block toolbar %}
@@ -39,47 +40,48 @@
 {% endblock %}
 
 {% block page_content %}
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Editar enfermedad</h1>
-  </div>
-  <div class="panel-body">
-    {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
-    <div class="form-group">
-      <div class="col-md-12">
-        <div class="form-group">
-          <label for="" class="col-md-3 control-label">Nombre</label>
-          <div class="col-md-6">
-            <div class="input-group margin-bottom-sm">
-              <span class="input-group-addon">
-                <i class="fa fa-keyboard-o"></i>
-              </span>
-              {{ form_widget(form.nombre,{'attr':{'class':'form-control'}}) }}
-            </div>
-          </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Editar enfermedad</h1>
         </div>
-      </div>
-      <div class="col-md-12">
-        <div class="form-group">
-          <label for="" class="col-md-3 control-label">Descripcion</label>
-          <div class="col-md-6">
-            <div class="input-group margin-bottom-sm">
-              <span class="input-group-addon">
-                <i class="fa fa-keyboard-o"></i>
-              </span>
-              {{ form_widget(form.descripcion,{'attr':{'class':'form-control'}}) }}
+        <div class="panel-body">
+            {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Nombre</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.nombre,{'attr':{'class':'form-control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="" class="col-md-3 control-label">Descripcion</label>
+                        <div class="col-md-6">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-keyboard-o"></i>
+                                </span>
+                                {{ form_widget(form.descripcion,{'attr':{'class':'form-control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="col-md-9 text-right">
+                <a href="{{ path('enfermedad_index') }}" class="btn btn-default">Descartar</a>
+                <input type="submit" class="btn btn-primary" name="submit" value="Guardar">
+            </div>
+            <div class="hidden">
+                {{form_rest(form)}}
+            </div>
+            {{form_end(form)}}
         </div>
-      </div>
     </div>
-    <div class="col-md-9 text-right">
-      <a href="{{ path('enfermedad_index') }}" class="btn btn-default">Descartar</a>
-      <input type="submit" class="btn btn-primary" name="submit" value="Guardar">
-    </div>
-    <div class="hidden">
-        {{form_rest(form)}}
-    </div>
-    {{form_end(form)}}
-  </div>
 {% endblock %}
