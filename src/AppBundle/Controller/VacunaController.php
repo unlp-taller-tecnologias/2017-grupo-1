@@ -22,6 +22,7 @@ class VacunaController extends Controller {
      *
      * @Route("/obligatorias", name="vacuna_obligatorias")
      * @Method("GET")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function obligatoriasAction() {
         $em = $this->getDoctrine()->getManager();
@@ -36,6 +37,7 @@ class VacunaController extends Controller {
      *
      * @Route("/optativas", name="vacuna_optativas")
      * @Method("GET")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function optativasAction() {
         $em = $this->getDoctrine()->getManager();
@@ -50,6 +52,7 @@ class VacunaController extends Controller {
      *
      * @Route("/todas", name="vacuna_todas")
      * @Method("GET")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function todasAction() {
         $em = $this->getDoctrine()->getManager();
@@ -173,6 +176,7 @@ class VacunaController extends Controller {
      *
      * @Route("/{id}/show", name="vacuna_show")
      * @Method("GET")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function showAction(Request $request, Vacuna $vacuna) {
         $form = $this->createForm('AppBundle\Form\VacunaType', $vacuna);

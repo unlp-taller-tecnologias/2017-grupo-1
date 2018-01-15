@@ -26,21 +26,23 @@
                 <li {% if menu == 1 %} class="open active" {% endif  %}>
                     <a href="{{path('homepage')}}"><i class="fa fa-home"></i> <span class="title"> Inicio </span><span class="label label-default pull-right ">IR</span> </a>
                 </li>
-                <li {% if menu == 2 %} class="open active" {% endif  %}>
-                    <a href="javascript:void(0)"><i class="fa fa-user-circle"></i> <span class="title"> Usuarios </span><i class="icon-arrow"></i> </a>
-                    <ul class="sub-menu">
-                        <li {% if menu == 2 and submenu == 1 %} class="active" {% endif  %}>
-                            <a href="{{path('usuario_index')}}">
-                                <i class="fa fa-list"></i><span class="title"> Listado </span>
-                            </a>
-                        </li>
-                        <li {% if menu == 2 and submenu == 2 %} class="active" {% endif  %}>
-                            <a href="{{path('usuario_new')}}">
-                                <i class="fa fa-user-plus"></i><span class="title"> Nuevo </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li {% if menu == 2 %} class="open active" {% endif  %}>
+                        <a href="javascript:void(0)"><i class="fa fa-user-circle"></i> <span class="title"> Usuarios </span><i class="icon-arrow"></i> </a>
+                        <ul class="sub-menu">
+                            <li {% if menu == 2 and submenu == 1 %} class="active" {% endif  %}>
+                                <a href="{{path('usuario_index')}}">
+                                    <i class="fa fa-list"></i><span class="title"> Listado </span>
+                                </a>
+                            </li>
+                            <li {% if menu == 2 and submenu == 2 %} class="active" {% endif  %}>
+                                <a href="{{path('usuario_new')}}">
+                                    <i class="fa fa-user-plus"></i><span class="title"> Nuevo </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
                 <li {% if menu == 3 %} class="open active" {% endif  %}>
                     <a href="javascript:void(0)"><i class="fa fa-users"></i> <span class="title"> Inscr&iacute;ptos / No-docentes </span><i class="icon-arrow"></i> </a>
                     <ul class="sub-menu">
@@ -56,33 +58,38 @@
                         </li>
                     </ul>
                 </li>
-                <li {% if menu == 4 %} class="open active" {% endif  %}>
-                    <a href="javascript:void(0)"><i class="fa fa-medkit"></i> <span class="title"> Vacunas </span><i class="icon-arrow"></i> </a>
-                    <ul class="sub-menu">
-                        <li  {% if menu == 4 and submenu == 1 %} class="active" {% endif  %}>
-                            <a href="{{path('vacuna_obligatorias')}}">
-                                <i class="fa fa-list"></i><span class="title"> Obligatorias </span>
-                                <span class="label label-default pull-right"><i class="fa fa-calendar"></i> NACIONAL</span>
-                            </a>
-                        </li>
-                        <li {% if menu == 4 and submenu == 2 %} class="active" {% endif  %}>
-                            <a href="{{path('vacuna_optativas')}}">
-                                <i class="fa fa-list"></i><span class="title"> Optativas </span>
-                            </a>
-                        </li>
-                        <li {% if menu == 4 and submenu == 3 %} class="active" {% endif  %}>
-                            <a href="{{path('vacuna_todas')}}">
-                                <i class="fa fa-list"></i><span class="title"> Todas </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li {% if menu == 5 %} class="open active" {% endif  %}>
-                    <a href="{{ path('enfermedad_index') }}"><i class="fa fa-hospital-o"></i> <span class="title"> Enfermedades </span></a>
-                </li>
-                <li {% if menu == 6 %} class="open active" {% endif  %}>
-                    <a href="{{ path('factorriesgo_index') }}"><i class="fa fa-heartbeat"></i> <span class="title"> Factores de Riesgo </span> </a>
-                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li {% if menu == 4 %} class="open active" {% endif  %}>
+                        <a href="javascript:void(0)"><i class="fa fa-medkit"></i> <span class="title"> Vacunas </span><i class="icon-arrow"></i> </a>
+                        <ul class="sub-menu">
+                            <li  {% if menu == 4 and submenu == 1 %} class="active" {% endif  %}>
+                                <a href="{{path('vacuna_obligatorias')}}">
+                                    <i class="fa fa-list"></i><span class="title"> Obligatorias </span>
+                                    <span class="label label-default pull-right"><i class="fa fa-calendar"></i> NACIONAL</span>
+                                </a>
+                            </li>
+                            <li {% if menu == 4 and submenu == 2 %} class="active" {% endif  %}>
+                                <a href="{{path('vacuna_optativas')}}">
+                                    <i class="fa fa-list"></i><span class="title"> Optativas </span>
+                                </a>
+                            </li>
+                            <li {% if menu == 4 and submenu == 3 %} class="active" {% endif  %}>
+                                <a href="{{path('vacuna_todas')}}">
+                                    <i class="fa fa-list"></i><span class="title"> Todas </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                
+                    <li {% if menu == 5 %} class="open active" {% endif  %}>
+                        <a href="{{ path('enfermedad_index') }}"><i class="fa fa-hospital-o"></i> <span class="title"> Enfermedades </span></a>
+                    </li>
+
+                    <li {% if menu == 6 %} class="open active" {% endif  %}>
+                        <a href="{{ path('factorriesgo_index') }}"><i class="fa fa-heartbeat"></i> <span class="title"> Factores de Riesgo </span> </a>
+                    </li>
+                {% endif %}
+                
                 <li {% if menu == 7 %} class="open active" {% endif  %}>
                     <a href="javascript:void(0)"><i class="fa fa-pie-chart"></i> <span class="title"> Reportes </span><i class="icon-arrow"></i> </a>
                     <ul class="sub-menu">

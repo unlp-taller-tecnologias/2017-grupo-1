@@ -23,31 +23,33 @@
             <a href="#" class="close-subviews">
                 <i class="fa fa-times"></i> CLOSE
             </a>
-            <div class="toolbar-tools pull-right">
-                <!-- start: TOP NAVIGATION MENU -->
-                <ul class="nav navbar-right">
-                    <!-- start: TO-DO DROPDOWN -->
-                    <li class="dropdown">
-                        <a href="{{ path('nodocente_new') }}">
-                            <i class="fa fa-user-plus"></i> NO-DOCENTE
-                            <div class="tooltip-notification hide">
-                                <div class="tooltip-notification-arrow"></div>
-                                <div class="tooltip-notification-inner">
-                                    <div>
-                                        <div class="semi-bold">
-                                            NO-DOCENTE
-                                        </div>
-                                        <div class="message">
-                                            Agregar Nuevo al Sistema
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="toolbar-tools pull-right">
+                    <!-- start: TOP NAVIGATION MENU -->
+                    <ul class="nav navbar-right">
+                        <!-- start: TO-DO DROPDOWN -->
+                        <li class="dropdown">
+                            <a href="{{ path('nodocente_new') }}">
+                                <i class="fa fa-user-plus"></i> NO-DOCENTE
+                                <div class="tooltip-notification hide">
+                                    <div class="tooltip-notification-arrow"></div>
+                                    <div class="tooltip-notification-inner">
+                                        <div>
+                                            <div class="semi-bold">
+                                                NO-DOCENTE
+                                            </div>
+                                            <div class="message">
+                                                Agregar Nuevo al Sistema
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-                <!-- end: TOP NAVIGATION MENU -->
-            </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- end: TOP NAVIGATION MENU -->
+                </div>
+            {% endif %}
         </div>
     </div>
     <!-- end: TOOLBAR -->
@@ -110,22 +112,27 @@
                                 {% if not noDocente.borrado %}
                                     {% if noDocente.registroVacunacion %}
                                         <a href="{{ path('editar_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                            {% else %}
+                                    {% else %}
                                         <a href="{{ path('alta_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                            {% endif %}
+                                    {% endif %}
+
                                     <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('nodocente_show',{'id': noDocente.id}) }}', 'Ver No docente');">
                                         <i class="fa fa-binoculars" aria-hidden="true"></i>
                                     </button>
 
-                                    <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <a href="{{ path('nodocente_edit', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 
-                                    <a href="#" onclick="usuarioDelete('{{ path("nodocente_delete", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
-                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                    </a>
+                                        <a href="#" onclick="usuarioDelete('{{ path("nodocente_delete", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </a>
+                                    {% endif %}
                                 {% else %}
-                                    <a href="#" onclick="nodocenteAlta('{{ path("nodocente_alta", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </a>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <a href="#" onclick="nodocenteAlta('{{ path("nodocente_alta", {"id":noDocente.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>
