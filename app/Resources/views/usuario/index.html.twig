@@ -78,36 +78,6 @@
                 <div class="panel-heading">
                     <i class="clip-bars"></i>
                     <h4 class="panel-title">Listado <span class="text-bold">de Usuarios</span></h4>
-                    <div class="panel-tools">
-                        <div class="dropdown">
-                            <a data-toggle="dropdown" class="btn btn-xs dropdown-toggle btn-transparent-grey">
-                                <i class="fa fa-cog"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-light pull-right" role="menu">
-                                <li>
-                                    <a class="panel-collapse collapses" href="#"><i class="fa fa-angle-up"></i> <span>Collapse</span> </a>
-                                </li>
-                                <li>
-                                    <a class="panel-refresh" href="#">
-                                        <i class="fa fa-refresh"></i> <span>Refresh</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="panel-config" href="#panel-config" data-toggle="modal">
-                                        <i class="fa fa-wrench"></i> <span>Configurations</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="panel-expand" href="#">
-                                        <i class="fa fa-expand"></i> <span>Fullscreen</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <a class="btn btn-xs btn-link panel-close" href="#">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
                 </div>
                 <div class="panel-body">
                     <table  id="usuarios_tabla" class="table table-condensed  table-bordered table-striped table-hover ">
@@ -141,6 +111,9 @@
                                     </td>
                                     <td>
                                         <div class="text-center">
+                                            <a href="{{ path('usuario_resetPasswd', { 'id': usuario.id }) }}" class="btn btn-xs  btn-green " data-placement="top" data-original-title="Cambiar contraseña">
+                                                <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                            </a>
                                             <a href="{{ path('usuario_edit', { 'id': usuario.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
