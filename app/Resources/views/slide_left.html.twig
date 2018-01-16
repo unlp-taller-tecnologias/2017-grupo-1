@@ -80,7 +80,7 @@
                             </li>
                         </ul>
                     </li>
-                
+
                     <li {% if menu == 5 %} class="open active" {% endif  %}>
                         <a href="{{ path('enfermedad_index') }}"><i class="fa fa-hospital-o"></i> <span class="title"> Enfermedades </span></a>
                     </li>
@@ -89,23 +89,23 @@
                         <a href="{{ path('factorriesgo_index') }}"><i class="fa fa-heartbeat"></i> <span class="title"> Factores de Riesgo </span> </a>
                     </li>
                 {% endif %}
-                
+
                 <li {% if menu == 7 %} class="open active" {% endif  %}>
                     <a href="javascript:void(0)"><i class="fa fa-pie-chart"></i> <span class="title"> Reportes </span><i class="icon-arrow"></i> </a>
                     <ul class="sub-menu">
                         <li {% if menu == 7 and submenu == 1 %} class="active" {% endif  %}>
-                            <a href="{{path('vacuna_optativas')}}">
-                                <i class="fa fa-pie-chart"></i><span class="title"> Reporte 1 </span>
+                            <a href="{{path('quien_cumple_grafico')}}">
+                                <i class="fa fa-pie-chart"></i><span class="title"> Grafico de personas que cumplen con el calendario nacional de vacunacion </span>
                             </a>
                         </li>
                         <li {% if menu == 7 and submenu == 2 %} class="active" {% endif  %}>
-                            <a href="{{path('vacuna_optativas')}}">
-                                <i class="fa fa-pie-chart"></i><span class="title"> Reporte 2 </span>
+                            <a href="{{path('dosis_recibidas')}}">
+                                <i class="fa fa-pie-chart"></i><span class="title"> Grafico de personas que poseen una cantidad de dosis especificas de vacunas a seleccion </span>
                             </a>
                         </li>
                         <li {% if menu == 7 and submenu == 3 %} class="active" {% endif  %}>
-                            <a href="{{path('vacuna_optativas')}}">
-                                <i class="fa fa-pie-chart"></i><span class="title"> Reporte 3 </span>
+                            <a href="{{path('reporte_index')}}">
+                                <i class="fa fa-pie-chart"></i><span class="title"> Listado de personas que cumplen el calendario de vacunacion </span>
                             </a>
                         </li>
                     </ul>

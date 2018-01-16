@@ -9,7 +9,7 @@
 		<table id="usuarios_tabla" class="table table-condensed table-bordered table-striped table-hover">
 			<tr>
 			{% for info in data %}
-				{% if loop.index is divisible by(10) %}
+				{% if loop.index-1 is divisible by(10) %}
 				</tr>
 				<tr>
 				{% endif %}
