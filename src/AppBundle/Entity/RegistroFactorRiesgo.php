@@ -4,7 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\FactorRiesgo;
-use AppBundle\Entity\RegistroVacunacion;
+use AppBundle\Entity\Visitante;
 
 /**
  * RegistroFactorRiesgo
@@ -39,12 +39,12 @@ class RegistroFactorRiesgo {
     protected $factorRiesgo;
 
     /**
-     * @var RegistroVacunacion
+     * @var Visitante
      * 
-     * @ORM\ManyToOne(targetEntity="RegistroVacunacion", inversedBy="registroFactoresRiesgo")
-     * @ORM\JoinColumn(name="registroVacunacion_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Visitante", inversedBy="registroFactoresRiesgo")
+     * @ORM\JoinColumn(name="propietario_id", referencedColumnName="id")
      */
-    protected $registroVacunacion;
+    protected $propietario;
 
     /**
      * Get id
@@ -59,8 +59,12 @@ class RegistroFactorRiesgo {
         return $this->observacion;
     }
 
-    function getFactorRiesgo(): FactorRiesgo {
-        return $this->factorRiesgo;
+    function getPropietario(): Visitante {
+        return $this->propietario;
+    }
+
+    function setPropietario(Visitante $propietario) {
+        $this->propietario = $propietario;
     }
 
     function getRegistroVacunacion(): RegistroVacunacion {
@@ -73,10 +77,6 @@ class RegistroFactorRiesgo {
 
     function setFactorRiesgo(FactorRiesgo $factorRiesgo) {
         $this->factorRiesgo = $factorRiesgo;
-    }
-
-    function setRegistroVacunacion(RegistroVacunacion $registroVacunacion) {
-        $this->registroVacunacion = $registroVacunacion;
     }
 
 }

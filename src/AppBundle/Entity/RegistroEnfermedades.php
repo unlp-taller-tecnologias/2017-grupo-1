@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use AppBundle\Entity\RegistroVacunacion;
+use AppBundle\Entity\Visitante;
 use AppBundle\Entity\Enfermedad;
 
 /**
@@ -45,12 +45,12 @@ class RegistroEnfermedades {
     protected $observacion;
 
     /**
-     * @var RegistroVacunacion
+     * @var Visitante
      * 
-     * @ORM\ManyToOne(targetEntity="RegistroVacunacion", inversedBy="registroEnfermedades")
-     * @ORM\JoinColumn(name="registroVacunacion_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Visitante", inversedBy="registroEnfermedades")
+     * @ORM\JoinColumn(name="propietario_id", referencedColumnName="id")
      */
-    protected $registroVacunacion;
+    protected $propietario;
 
     /**
      * @var Enfermedad
@@ -83,17 +83,12 @@ class RegistroEnfermedades {
      *
      * @return \DateTime
      */
-
     function getFechaFin(): datetime {
         return $this->fechaFin;
     }
 
     function getObservacion() {
         return $this->observacion;
-    }
-
-    function getRegistroVacunacion(): RegistroVacunacion {
-        return $this->registroVacunacion;
     }
 
     function getEnfermedad(): Enfermedad {
@@ -126,12 +121,16 @@ class RegistroEnfermedades {
         $this->observacion = $observacion;
     }
 
-    function setRegistroVacunacion(RegistroVacunacion $registroVacunacion) {
-        $this->registroVacunacion = $registroVacunacion;
-    }
-
     function setEnfermedad(Enfermedad $enfermedad) {
         $this->enfermedad = $enfermedad;
+    }
+
+    function getPropietario(): Visitante {
+        return $this->propietario;
+    }
+
+    function setPropietario(Visitante $propietario) {
+        $this->propietario = $propietario;
     }
 
 }

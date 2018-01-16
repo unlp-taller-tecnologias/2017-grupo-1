@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Entity\RegistroVacunacion;
+use AppBundle\Entity\RegistroEnfermedades;
+use AppBundle\Entity\RegistroFactorRiesgo;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Visitante
@@ -216,6 +219,25 @@ abstract class Visitante {
      * @ORM\Column(name="fechaNacimiento", type="date", nullable=true)
      */
     protected $fechaNacimiento;
+
+    /**
+     * @var ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="RegistroEnfermedades", mappedBy="propietario")
+     */
+    protected $registroEnfermedades;
+
+    /**
+     * @var ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="RegistroFactorRiesgo", mappedBy="propietario")
+     */
+    protected $registroFactoresRiesgo;
+
+    public function __construct() {
+        $this->registroEnfermedades = new ArrayCollection();
+        $this->registroFactoresRiesgo = new ArrayCollection();
+    }
 
     /**
      * @var boolean
@@ -490,8 +512,7 @@ abstract class Visitante {
      *
      * @return fechaNacimiento
      */
-    public function setFechaNacimiento($fechaNacimiento)
-    {
+    public function setFechaNacimiento($fechaNacimiento) {
         $this->fechaNacimiento = $fechaNacimiento;
 
         return $this;
@@ -502,9 +523,52 @@ abstract class Visitante {
      *
      * @return date
      */
-    public function getFechaNacimiento()
-    {
+    public function getFechaNacimiento() {
         return $this->fechaNacimiento;
+    }
+
+    /**
+     * 
+     */
+    public function addRegEnfermedad(RegistroEnfermedades $registroEnfermedad) {
+        $this->registroEnfermedades->add($registroEnfermedad);
+    }
+
+    /**
+     * 
+     */
+    public function removeRegEnfermedad(RegistroEnfermedades $registroEnfermedad) {
+        return $this->registroEnfermedades->removeElement($registroEnfermedad);
+    }
+
+    /**
+     * 
+     */
+    public function addRegFacRiesgo(RegistroFactorRiesgo $registroRiesgo) {
+        $this->registroFactoresRiesgo->add($registroRiesgo);
+    }
+
+    /**
+     * 
+     */
+    public function removeRegFacRiesgo(RegistroFactorRiesgo $registroRiesgo) {
+        return $this->registroFactoresRiesgo->removeElement($registroRiesgo);
+    }
+
+    function getRegistroFactoresRiesgo(): ArrayCollection {
+        return $this->registroFactoresRiesgo;
+    }
+
+    function setRegistroFactoresRiesgo(ArrayCollection $registroFactoresRiesgo) {
+        $this->registroFactoresRiesgo = $registroFactoresRiesgo;
+    }
+
+    function getRegistroEnfermedades(): ArrayCollection {
+        return $this->registroEnfermedades;
+    }
+
+    function setRegistroEnfermedades(ArrayCollection $registroEnfermedades) {
+        $this->registroEnfermedades = $registroEnfermedades;
     }
 
 }

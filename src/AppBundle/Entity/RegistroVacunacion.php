@@ -8,8 +8,7 @@ use AppBundle\Entity\Componente;
 use AppBundle\Entity\Usuario;
 use AppBundle\Entity\Visitante;
 use AppBundle\Entity\Observacion;
-use AppBundle\Entity\RegistroEnfermedades;
-use AppBundle\Entity\RegistroFactorRiesgo;
+
 
 /**
  * RegistroVacunacion
@@ -85,25 +84,11 @@ class RegistroVacunacion {
      */
     private $componentes;
 
-    /**
-     * @var ArrayCollection
-     * 
-     * @ORM\OneToMany(targetEntity="RegistroEnfermedades", mappedBy="registroVacunacion")
-     */
-    protected $registroEnfermedades;
-
-    /**
-     * @var ArrayCollection
-     * 
-     * @ORM\OneToMany(targetEntity="RegistroFactorRiesgo", mappedBy="registroVacunacion")
-     */
-    protected $registroFactoresRiesgo;
+  
 
     public function __construct() {
         $this->componentes = new ArrayCollection();
         $this->observaciones = new ArrayCollection();
-        $this->registroEnfermedades = new ArrayCollection();
-        $this->registroFactoresRiesgo = new ArrayCollection();
     }
 
     /**
@@ -132,50 +117,6 @@ class RegistroVacunacion {
      */
     public function removeObservacion(Observacion $observacion) {
         return $this->observaciones->removeElement($observacion);
-    }
-
-    /**
-     * 
-     */
-    public function addRegEnfermedad(RegistroEnfermedades $registroEnfermedad) {
-        $this->registroEnfermedades->add($registroEnfermedad);
-    }
-
-    /**
-     * 
-     */
-    public function removeRegEnfermedad(RegistroEnfermedades $registroEnfermedad) {
-        return $this->registroEnfermedades->removeElement($registroEnfermedad);
-    }
-
-    /**
-     * 
-     */
-    public function addRegFacRiesgo(RegistroFactorRiesgo $registroRiesgo) {
-        $this->registroFactoresRiesgo->add($registroRiesgo);
-    }
-
-    /**
-     * 
-     */
-    public function removeRegFacRiesgo(RegistroFactorRiesgo $registroRiesgo) {
-        return $this->registroFactoresRiesgo->removeElement($registroRiesgo);
-    }
-
-    function getRegistroFactoresRiesgo(): ArrayCollection {
-        return $this->registroFactoresRiesgo;
-    }
-
-    function setRegistroFactoresRiesgo(ArrayCollection $registroFactoresRiesgo) {
-        $this->registroFactoresRiesgo = $registroFactoresRiesgo;
-    }
-
-    function getRegistroEnfermedades(): ArrayCollection {
-        return $this->registroEnfermedades;
-    }
-
-    function setRegistroEnfermedades(ArrayCollection $registroEnfermedades) {
-        $this->registroEnfermedades = $registroEnfermedades;
     }
 
     function getComponentes() {

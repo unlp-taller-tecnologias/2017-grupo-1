@@ -1,8 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block otherstylesheets %}
-    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block  page_slideleft %}
@@ -13,7 +12,7 @@
     <div class="toolbar row">
         <div class="col-sm-6 hidden-xs">
             <div class="page-header">
-                <h1>Registro de vacunacion</h1>
+                <h1>Registro de Vacunaci&oacute;n <small><i class="fa fa-user-circle"></i> <strong>{{visitante.apellido | upper}}</strong> {{visitante.nombre | lower}}. </small></h1>
             </div>
         </div>
         <div class="col-sm-6 col-xs-12">
@@ -25,6 +24,40 @@
             </a>
             <div class="toolbar-tools pull-right">
                 <!-- start: TOP NAVIGATION MENU -->
+                <ul class="nav navbar-right">
+                    <!-- start: TO-DO DROPDOWN -->
+                    <li class="dropdown">
+                        <a href="#">
+                            <form style="margin-bottom: 0px;">
+                                <input type="checkbox" name="prueba"/>
+                            </form>
+                            CUMPLE
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="{{ path('vacuna_new') }}">
+                            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> VOLVER
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="{{ path('vacuna_new') }}">
+                            <i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> GUARDAR
+                            <div class="tooltip-notification hide">
+                                <div class="tooltip-notification-arrow"></div>
+                                <div class="tooltip-notification-inner">
+                                    <div>
+                                        <div class="semi-bold">
+                                            REGISTRO
+                                        </div>
+                                        <div class="message">
+                                            Guardar registro de vacunaci&oacute;n
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
                 <!-- end: TOP NAVIGATION MENU -->
             </div>
         </div>
@@ -53,115 +86,206 @@
 {% endblock %}
 
 {% block page_content %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title text-center">Registro de vacunacion de <strong>{{ visitante.nombre }} {{visitante.apellido }}</strong></h3>
-        </div>
 
+    <div class="row">
+        <form  enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("alta_registro_action", {'id': visitante.id}) }}" method="POST">
+            <div class="col-lg-9 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Vacunas <span class="text-bold"> del Calendario Nacional</span></h4>
+                    </div>
+                    <!-- INICIO DEL FORM -->
+                    <div class="panel-body">
+                        <table id="vacunas_calendario" class="table  table-condensed table-bordered table-striped table-hover">
+                            <thead>
+                                <tr class="bg-primary ">
+                                    <th class="text-center text-white">Vacuna</th>
+                                    <th class="text-center text-white col-md-1">&Uacute;ltima D&oacute;sis</th>
+                                    <th class="text-center text-white col-md-1">Vencimiento</th>
+                                    <th class="text-center text-white col-md-1">Completa</th>
+                                    <th class="text-center text-white col-md-6">Comentario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vacuna in vacunas_obligatorias %}
+                                    <tr>
+                                        <td class="text-center">
+                                            {{vacuna.nombre}}
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control text-center" name="dosisRecibidas{{ loop.index }}" />
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <input name="cumple{{ loop.index }}" type="checkbox">
+                                        </td>
+                                        <td class="text-center"> 
+                                            <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" ></textarea>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Vacunas <span class="text-bold">Optativas</span></h4>
+                    </div>
+                    <!-- INICIO DEL FORM -->
+                    <div class="panel-body">
 
-        <!-- INICIO DEL FORM -->
-        <div class="panel-body">
-            <form class="form-inline" enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("alta_registro_action") }}" method="POST">
-                <input type="hidden" name="idVisitante" value="{{visitante.id}}">
-
-
-                <!-- VACUNAS PERTENECIENTES AL CALENDARIO NACIONAL -->
-                <h2>Vacunas del Calendario Nacional</h2>
-                {% for vacuna in vacunas %}
-                    {% if vacuna.esObligatoria %}
-                        <div class="form-control-static text-extra-large" style="width: 200px;">
-                            <label for="dosisRecibidas{{ loop.index }}"><h4>{{vacuna.nombre}}: </h4> </label>
+                        <table id="vacunas_optativas" class="table  table-condensed table-bordered table-striped table-hover">
+                            <thead>
+                                <tr class="bg-info">
+                                    <th class="text-center">Vacuna</th>
+                                    <th class="text-center col-md-1">&Uacute;ltima D&oacute;sis</th>
+                                    <th class="text-center col-md-1">Vencimiento</th>
+                                    <th class="text-center col-md-1">Completa</th>
+                                    <th class="text-center col-md-6">Comentario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vacuna in vacunas_optativas %}
+                                    <tr>
+                                        <td class="text-center">
+                                            {{vacuna.nombre}}
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" />
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <input name="cumple{{ loop.index }}" type="checkbox">
+                                        </td>
+                                        <td class="text-center"> 
+                                            <textarea  class="form-control" rows="1" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" ></textarea>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Comentarios <span class="text-bold"> del registro de vacunaci&oacute;n</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="observacionPrivada">Observacion Privada:</label>
+                            <textarea class="form-control" rows="5" style="width: 100%;" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL"></textarea>
                         </div>
-
-                        <div class="form-control-static text-extra-large">
-                            <label for="dosisRecibidas{{ loop.index }}">Dosis recibidas: </label>
-                            <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" placeholder="Dosis Recibidas"/>
+                        <div class="form-group">
+                            <label for="observacionPublica">Observacion Publica:</label>
+                            <textarea class="form-control" rows="5" style="width: 100%;"  name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL"></textarea>
                         </div>
-
-                        {% if vacuna.tieneVencimiento %}
-                            <div class="form-control-static text-extra-large">
-                                <label for="vencimiento{{ loop.index }}">Vencimiento</label>
-                                <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Listado <span class="text-bold"> de enfermedades</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <table id="reg_vac_enfermedades" class="table  table-bordered table-striped table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-center col-md-1">
+                                        <a href="#" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                                    </th>
+                                    <th class="text-center">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for enfermedad in enfermedades  %}
+                                    <tr>
+                                        <td class="text-center">{{ loop.index }}</td>
+                                        <td class="text-center">{{ enfermedad.nombre }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Listado <span class="text-bold"> de factores de riesgo</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <table id="reg_vac_factoresriesgo" class="table  table-bordered table-striped table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-center col-md-1">
+                                        <a href="#" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                                    </th>
+                                    <th class="text-center">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for factor_riesgo in factores_riesgo  %}
+                                    <tr>
+                                        <td class="text-center">{{ loop.index }}</td>
+                                        <td class="text-center">{{ factor_riesgo.nombre }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Controles <span class="text-bold"> del registro de vacunaci&oacute;n</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group text-center">
+                            <label for="reg_val_cumple">Cumple con el registro</label>
+                            <div class="col-md-12">
+                                <input class="form-control" id="reg_val_cumple" name="cumple" type="checkbox"> 
                             </div>
-                        {% endif %}
-
-                        <div class="form-control-static text-extra-large">
-                            <label for="comentario{{ loop.index }}">Comentario</label>
-                            <input type="textarea" class="form-control" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" />
+                            <div class="clearfix"></div>
                         </div>
-                            
-                        <div class="checkbox">
-                            <label><input name="cumple{{ loop.index }}" type="checkbox"> Completa </label>
-                        </div>
-
-                        <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
-                        <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
-                        <br>
-                    {% endif %}
-                {% endfor %}
-                <!-- FIN DE LAS VACUNAS PERTENECIENTES AL CALENDARIO NACIONAL -->
-
-                <!-- OTRAS VACUNAS -->
-                <h2>Otras vacunas</h2>
-                {% for vacuna in vacunas %}
-                    {% if not vacuna.esObligatoria %}
-                        <div class="form-control-static text-extra-large" style="width: 200px;">
-                            <label for="dosisRecibidas{{ loop.index }}"><h4>{{vacuna.nombre}}: </h4> </label>
-                        </div>
-
-                        <div class="form-control-static text-extra-large">
-                            <label for="dosisRecibidas{{ loop.index }}">Dosis recibidas: </label>
-                            <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" placeholder="Dosis Recibidas"/>
-                        </div>
-
-                        {% if vacuna.tieneVencimiento %}
-                            <div class="form-control-static text-extra-large">
-                                <label for="vencimiento{{ loop.index }}">Vencimiento</label>
-                                <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
+                        <div class="form-group">
+                            <input type="hidden" name="idVisitante" value="{{visitante.id}}">
+                            <div class="text-center">
+                                <a href="{{app.request.headers.get('referer')}}" class="btn btn-default" >Volver</a>
+                                <input class="btn btn-primary" type="submit" name="submit" value="Guardar">    
                             </div>
-                        {% endif %}
 
-                        <div class="form-control-static text-extra-large">
-                            <label for="comentario{{ loop.index }}">Comentario</label>
-                            <input type="textarea" class="form-control" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" />
                         </div>
-                            
-                        <div class="checkbox">
-                            <label><input name="cumple{{ loop.index }}" type="checkbox"> Completa </label>
-                        </div>
-
-                        <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
-                        <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
-                        <br>
-                    {% endif %}
-                {% endfor %}
-                <!-- FIN DE LAS OTRAS VACUNAS -->
-
-
-                <!-- OBSERVACIONES PUBLICAS Y PRIVADAS -->
-                <br><br><br>
-                <div class="form-group">
-                    <label for="comment">Observacion Privada:</label>
-                    <textarea class="form-control" rows="5" cols="50" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL"></textarea>
+                    </div>
                 </div>
-                <br><br>
-                <div class="form-group">
-                    <label for="comment">Observacion Publica:</label>
-                    <textarea class="form-control" rows="5" cols="50" name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL"></textarea>
-                </div>
-                <br>
-                <!-- FIN OBSERVACIONES PUBLICAS Y PRIVADAS -->
-
-                <div class="checkbox">
-                    <label><input name="cumple" type="checkbox"> Cumple el registro de vacunacion</label>
-                </div>
-                <br><br>
-                <a href="{{app.request.headers.get('referer')}}" class="btn btn-default" >Volver</a>
-                <input class="btn btn-primary" type="submit" name="submit" value="Guardar">          
-            </form>
-        </div>
-        <!-- FIN DEL FORM -->
-
-
+            </div>
+        </form>
     </div>
+{% endblock %}
+
+{% block otherJavascript %}
+    <script src="{{ asset('vendor/bootstrap-switch-master/dist/js/bootstrap-switch.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $.fn.bootstrapSwitch.defaults.size = 'small';
+            $.fn.bootstrapSwitch.defaults.onText = 'SI';
+            $.fn.bootstrapSwitch.defaults.offText = 'NO';
+            $.fn.bootstrapSwitch.defaults.offColor = 'danger';
+            $("form input[type=checkbox]").bootstrapSwitch();
+        });
+    </script>
 {% endblock %}
