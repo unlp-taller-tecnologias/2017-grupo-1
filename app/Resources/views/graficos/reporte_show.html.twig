@@ -2,7 +2,6 @@
 
 {% block page_content %}
 {% set i = 0 %}
-{% set vact = vac[i] %}
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3>Personas que cumplen el calendario de vacunacion</h3>
@@ -22,21 +21,34 @@
 			</tr>
 			{% for item in data %}
 			    <tr>
-			    	<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						{% for comp in item.registroVacunacion.componentes if vm<2 %}
-							{% if comp.vacuna.id >= vact.id %}
-							  {% if comp.vacuna.id == vact.id %}
-									{{comp.fechaVencimiento}}
+			    	<td>
+							{% if item.nroFicha is defined %}
+								{{item.nroFicha}}
+							{% else %}
+								No posee
+							{% endif %}
+						</td>
+						<td>
+							{{item.nroDocumento}}
+						</td>
+						<td>
+							{{item.nombre}}
+						</td>
+						<td>
+							{{item.apellido}}
+						</td>
+						<td>{{item.provincia}}</td>
+						<td>{{item.partido}}</td>
+						{% for comp in item.registroVacunacion.componentes if i<2 %}
+							{% if comp.vacuna.id >= vac[i].id %}
+								<td>
+							  {% if comp.vacuna.id == vac[i].id and comp.vencimiento != null %}
+									{{comp.vencimiento}}
 								{% else %}
-									No se registro una fecha de vencimiento para {{vact.nombre}}
+									No se registro una fecha de vencimiento para {{vac[i].nombre}}
 								{% endif %}
-								{% i=i+1 %}
-								{% vact %}
+								{% set i=i+1 %}
+								</td>
 							{% endif %}
 						{% endfor %}
 			    </tr>
@@ -44,4 +56,31 @@
 		</table>
 	</div>
 </div>
+{% endblock %}
+
+{% block otherJavascript %}
+<script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+<script type="text/javascript">
+$(document).ready( function(){
+	$('#inscriptos_tabla').DataTable({
+			/*  "dom": '<".col-md-4">frtip',
+			 fnInitComplete: function () {
+			 $('div.col-md-4').html('<button type="button" class="btn btn-xs btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Importar Excel de Inscriptos</button> <div class="collapse" id="collapseExample"><br><div class="card card-body"><div class="container"><form class="form-inline" enctype="multipart/form-data" name="formHosp"action="{{path ("altaExcel") }}" method="POST"><div class="form-group"><input type="file" name="excel"class="form-control" id="excel"></div><button type="submit" class="btn btn-default">Importar</button></form></div></div></div><br><br>');
+			 },*/
+			"autoWidth": false,
+			"aLengthMenu": [[5, 20, 50, 100, -1], [5, 20, 50, 100, "Todas"]], // change per page values here
+			"language": {
+					"url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+			},
+			"columnDefs": [{
+							"searchable": false,
+							"orderable": false,
+							"targets": [0, 9]
+					}],
+			"order": [[1, 'asc']],
+			"iDisplayLength": 20,
+		});
+	});
+</script>
 {% endblock %}

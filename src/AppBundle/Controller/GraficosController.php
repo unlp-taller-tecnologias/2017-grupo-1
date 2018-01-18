@@ -235,11 +235,15 @@ class GraficosController extends Controller{
      */
 
     public function reporteShow(Request $request){
-      $vac=$request->get('vac');
-      exit(var_dump($vac));
+      $v=$request->get('vac');
+      if($v==NULL){
+        $this->get('session')->getFlashBag()->add('error', 'No se seleccionaron vacunas para mostrar el vencimiento.');
+        return $this->redirectToRoute('reporte_index');
+      }
       $em=$this->getDoctrine()->getManager();
       $insc=$em->getRepository('AppBundle:Inscripto')->findAll();
       $ndoc=$em->getRepository('AppBundle:NoDocente')->findAll();
+      $vac=$em->getRepository('AppBundle:Vacuna')->findBy(array('id'=>$v));
       $visit=array_merge($insc,$ndoc);
       $values=array();
       foreach($visit as $data){
@@ -249,7 +253,8 @@ class GraficosController extends Controller{
         }
       }
       return $this->render('graficos/reporte_show.html.twig',array(
-        'data'=>$values
+        'data'=>$values,
+        'vac'=>$vac
       ));
     }
 
