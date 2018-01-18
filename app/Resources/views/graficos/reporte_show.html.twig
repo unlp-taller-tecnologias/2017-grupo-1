@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block page_content %}
+{% set i = 0 %}
+{% set vact = vac[i] %}
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3>Personas que cumplen el calendario de vacunacion</h3>
@@ -8,14 +10,37 @@
 	<div class="panel-body">
 		<table id="usuarios_tabla" class="table table-condensed table-bordered table-striped table-hover">
 			<tr>
-			{% for info in data %}
-				{% if loop.index-1 is divisible by(10) %}
-				</tr>
-				<tr>
-				{% endif %}
-				<td>{{ info.nroDocumento }}</td>
-			{% endfor %}
+				<th>Numero de ficha</th>
+				<th>Numero de documento</th>
+				<th>Nombre</th>
+				<th>Apellido</th>
+				<th>Provincia de procedencia</th>
+				<th>Municipio de procedencia</th>
+				{% for item in vac %}
+				    <th>Fecha de vencimiento de {{item.nombre}}</th>
+				{% endfor %}
 			</tr>
+			{% for item in data %}
+			    <tr>
+			    	<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						{% for comp in item.registroVacunacion.componentes if vm<2 %}
+							{% if comp.vacuna.id >= vact.id %}
+							  {% if comp.vacuna.id == vact.id %}
+									{{comp.fechaVencimiento}}
+								{% else %}
+									No se registro una fecha de vencimiento para {{vact.nombre}}
+								{% endif %}
+								{% i=i+1 %}
+								{% vact %}
+							{% endif %}
+						{% endfor %}
+			    </tr>
+			{% endfor %}
 		</table>
 	</div>
 </div>

@@ -138,7 +138,7 @@ class GraficosController extends Controller{
       $dosisR=$request->get('dosis');
       if($vacunas==NULL||empty($vacunas)){
         $this->get('session')->getFlashBag()->add('error', 'No se seleccionaron vacunas para mostrar el grafico.');
-        return $this->redirectToRoute("dosis_recibidas"); 
+        return $this->redirectToRoute("dosis_recibidas");
       }
       $dosis=array();
       $lastV=$vacunas[count($vacunas)-1];
@@ -156,7 +156,7 @@ class GraficosController extends Controller{
       }
       if(empty($dosis)){
         $this->get('session')->getFlashBag()->add('error', 'No se seleccionaron vacunas para mostrar el grafico.');
-        return $this->redirectToRoute("dosis_recibidas"); 
+        return $this->redirectToRoute("dosis_recibidas");
       }
       $em=$this->getDoctrine()->getManager();
       $ranges=$this->rangeArray();
@@ -175,8 +175,8 @@ class GraficosController extends Controller{
 		           WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) > 64 OR TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) > 64 THEN '65+'
                ELSE 'Invalido'
 	           END as rango
-             FROM visitante INNER JOIN registro_vacunacion ON visitante.registroVacunacion_id=registro_vacunacion.id 
-             WHERE ".$where." 
+             FROM visitante INNER JOIN registro_vacunacion ON visitante.registroVacunacion_id=registro_vacunacion.id
+             WHERE ".$where."
              GROUP BY CASE
                WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 15 AND 19 OR TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 15 AND 19 THEN '15-19'
                WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaActualizacion) BETWEEN 20 AND 24 OR TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) BETWEEN 20 AND 24 THEN '20-24'
@@ -230,20 +230,40 @@ class GraficosController extends Controller{
     }
 
     /**
-     * @Route("/reporte",name="reporte_index")
-     * @Method({"GET"})
+     * @Route("/reporte",name="reporte_show")
+     * @Method({"POST"})
      */
 
-    public function reporteIndex(){
+    public function reporteShow(Request $request){
+      $vac=$request->get('vac');
+      exit(var_dump($vac));
       $em=$this->getDoctrine()->getManager();
-      $sql="SELECT nroDocumento FROM visitante INNER JOIN registro_vacunacion ON (visitante.registroVacunacion_id=registro_vacunacion.id) WHERE cumple=1";
-      $stm=$em->getConnection()->prepare($sql);
-      $stm->execute();
-      $values=$stm->fetchAll();
+      $insc=$em->getRepository('AppBundle:Inscripto')->findAll();
+      $ndoc=$em->getRepository('AppBundle:NoDocente')->findAll();
+      $visit=array_merge($insc,$ndoc);
+      $values=array();
+      foreach($visit as $data){
+        $rvd=$data->getRegistroVacunacion();
+        if($rvd!=NULL&&$rvd->getCumple()==1){
+          $values[]=$data;
+        }
+      }
       return $this->render('graficos/reporte_show.html.twig',array(
         'data'=>$values
       ));
     }
 
+    /**
+     * @Route("/reporteIndex",name="reporte_index")
+     * @Method({"GET"})
+     */
+
+    public function reporteIndex(){
+      $em=$this->getDoctrine()->getManager();
+      $vac=$em->getRepository('AppBundle:Vacuna')->findBy(array('tieneVencimiento'=>1));
+      return $this->render('graficos/reporte_index.html.twig',array(
+        'vac'=>$vac
+      ));
+    }
 
 }
