@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Inscripto;
 use AppBundle\Entity\Componente;
 use AppBundle\Entity\RegistroVacunacion;
+use AppBundle\Entity\NoCargado;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -188,7 +189,8 @@ class InscriptoController extends Controller
             $i = 2;
             $noCargados = 0;
             $cargados = 0;
-            while ($i != 33){
+            $arrNoCargados = array ();
+            while ($i != 3){
                 if ($sheet->getCell('A'.$i)->getValue() != ''){
                     $ficha = $sheet->getCell('A'.$i)->getValue();
                     
@@ -233,6 +235,15 @@ class InscriptoController extends Controller
                         $cargados = $cargados + 1;
                     } catch (\Exception $e) {
                         $noCargados = $noCargados + 1;
+
+                        $noCargado = new NoCargado();
+                        $noCargado->setNombre($nombre);
+                        $noCargado->setApellido($apellido);
+                        $noCargado->setFicha($ficha);
+                        $noCargado->setDni($documento);
+                        $noCargado->setMotivo($e->getMessage());
+
+                        $arrNoCargados[] = $noCargado;
                         $em = $this->getDoctrine()->resetManager();
                     }
                     $i = $i + 1;
@@ -245,8 +256,9 @@ class InscriptoController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Se importaron '.$cargados.' inscriptos correctamente');
             return $this->redirectToRoute("inscripto_index");
         }else{
-            $this->get('session')->getFlashBag()->add('warning', 'No se han podido importar '.$noCargados.' inscriptos porque ya existen');
-            return $this->redirectToRoute("inscripto_index");
+            return $this->render('inscripto/noCargados.html.twig', array(
+            'noCargados' => $arrNoCargados,
+        ));
         }
     }
 

@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block otherstylesheets %}
+    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 3, 'submenu': 1}  %}
+{% endblock %}
+
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>Inscr&iacute;ptos <small><i class="fa fa-list"></i> Listado de los inscr&iacute;ptos </small></h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: TOOLBAR -->
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li class="active">
+                    Inscr&iacute;ptos
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
+{% endblock %}
+
+{% block page_content  %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="clip-bars"></i>
+                    <h2 class="panel-title">Listado de los inscr&iacute;ptos que no se han podido importar al sistema.</h2>
+                </div>
+                <div class="panel-body">
+                    <table id="inscriptos_tabla" class="table table-condensed table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Nro ficha</th>
+                                <th class="text-center">Nombre</th>
+                                <th class="text-center">Apellido</th>
+                                <th class="text-center">Nro documento</th>
+                                <th class="text-center">Motivo</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for inscripto in noCargados %}
+                                <tr>
+                                    <td class="text-center">{{ loop.index }}</td>
+                                    <td class="text-center">{{ inscripto.ficha }}</td>
+                                    <td class="text-center">{{ inscripto.nombre }}</td>
+                                    <td class="text-center">{{ inscripto.apellido }}</td>
+                                    <td class="text-center">{{ inscripto.dni }}</td>
+                                    <td class="text-center">{{ inscripto.motivo }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="">
+                        <a href="{{ path("inscripto_index") }}" class="btn btn-default" >Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block otherJavascript %}
+    <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            
+            $('#inscriptos_tabla').DataTable({
+                "autoWidth": false,
+                "aLengthMenu": [[5, 20, 50, 100, -1], [5, 20, 50, 100, "Todas"]], // change per page values here
+                "language": {
+                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                },
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": [0, 5]
+                    }],
+                "order": [[1, 'asc']],
+                "iDisplayLength": 10,
+            });
+        });
+    </script>
+{% endblock %}
