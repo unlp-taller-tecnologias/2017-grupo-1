@@ -254,7 +254,8 @@ class GraficosController extends Controller{
       }
       return $this->render('graficos/reporte_show.html.twig',array(
         'data'=>$values,
-        'vac'=>$vac
+        'vac'=>$vac,
+        'vselec'=>count($v)
       ));
     }
 
