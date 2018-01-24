@@ -202,25 +202,8 @@
                         <i class="clip-bars"></i>
                         <h4 class="panel-title">Listado <span class="text-bold"> de enfermedades</span></h4>
                     </div>
-                    <div class="panel-body">
-                        <table id="reg_vac_enfermedades" class="table  table-bordered table-striped table-hover table-condensed">
-                            <thead>
-                                <tr>
-                                    <th class="text-center col-md-1">
-                                        <a href="#" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></a>
-                                    </th>
-                                    <th class="text-center">Nombre</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for enfermedad in enfermedades  %}
-                                    <tr>
-                                        <td class="text-center">{{ loop.index }}</td>
-                                        <td class="text-center">{{ enfermedad.nombre }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <div id="regenfermedades_content" class="panel-body">
+                        {% include 'registroenfermedades/listado.ajax.html.twig' with {'regenfermedades': visitante.getRegistroEnfermedades() }  %}
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -229,24 +212,7 @@
                         <h4 class="panel-title">Listado <span class="text-bold"> de factores de riesgo</span></h4>
                     </div>
                     <div class="panel-body">
-                        <table id="reg_vac_factoresriesgo" class="table  table-bordered table-striped table-hover table-condensed">
-                            <thead>
-                                <tr>
-                                    <th class="text-center col-md-1">
-                                        <a href="#" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></a>
-                                    </th>
-                                    <th class="text-center">Nombre</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for factor_riesgo in factores_riesgo  %}
-                                    <tr>
-                                        <td class="text-center">{{ loop.index }}</td>
-                                        <td class="text-center">{{ factor_riesgo.nombre }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        {% include 'factorriesgo/listado.ajax.html.twig' with {'regfactores_riesgo': visitante.getRegistroFactoresRiesgo() }  %}
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -280,7 +246,66 @@
 {% block otherJavascript %}
     <script src="{{ asset('vendor/bootstrap-switch-master/dist/js/bootstrap-switch.min.js') }}"></script>
     <script>
+        function crearModalEdit(url, title, urlTarget, targetContent) {
+            $('#okButton').button('reset');
+            $('#panel-config .modal-footer *').show();
+            $('#panel-config .modal-title').html(title);
+            $('#panel-config .modal-body').html("");
+            $('#okButton').html('listo');
+            $('#panel-config .modal-body').load(url, function () {
+                $('#panel-config form').submit(function (event) {
+                    event.preventDefault();
+                    $.post(url, $('#panel-config form').serialize(), function (data) {
+                        if (data.success === 1) {
+                            toastr['success'](data.message, '');
+                            targetContent.html('');
+                            targetContent.load(urlTarget);
+                        } else {
+                            toastr['error'](data.message, '');
+                        }
+                    });
+                });
+            });
+            $('#panel-config').modal();
+        }
+
+        function crearModalView(url, title) {
+            $('#okButton').button('reset');
+            $('#panel-config .modal-footer').show();
+            $('#cancelButton').hide();
+            $('#panel-config .modal-title').html(title);
+            $('#panel-config .modal-body').html("");
+            $('#panel-config .modal-body').load(url, function () {
+                $('#panel-config form').submit(function (event) {
+                    event.preventDefault();
+                    $('#panel-config').modal('toggle');
+                });
+            });
+            $('#panel-config').modal();
+        }
+
+        function regenfermedadesNew() {
+            crearModalEdit(
+                    "{{ path('regenfermedad_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
+                    "Nuevo Registro de Enfermedad", //Título del panel
+                    "{{path('regenfermedades_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
+                    $("#regenfermedades_content"), //Elemento DOM en donde actualizar
+                    );
+        }
+
+        function regenfermedadesView(urlTarget) {
+            $('#cancelButton').hide(); //Modal
+            crearModalView(
+                    urlTarget, //URL para obtener el contenido inicial del panel
+                    "Ver Registro de Enfermedad", //Título del panel
+                    );
+            $('#cancelButton').hide();
+        }
+
         $(document).ready(function () {
+            $('#okButton').on('click', function () {
+                $('#panel-config form').submit();
+            });
             $.fn.bootstrapSwitch.defaults.size = 'small';
             $.fn.bootstrapSwitch.defaults.onText = 'SI';
             $.fn.bootstrapSwitch.defaults.offText = 'NO';

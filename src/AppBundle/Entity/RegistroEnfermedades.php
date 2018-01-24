@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Visitante;
 use AppBundle\Entity\Enfermedad;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * RegistroEnfermedades
@@ -27,13 +28,20 @@ class RegistroEnfermedades {
      * @var datetime
      * 
      * @ORM\Column(name="fechaInicio", type="datetime")
+     * @Assert\NotBlank(
+     *      message="Se debe seleccionar una fecha de inicio de la enfermedad registrada."
+     * )
+     * @Assert\DateTime(
+     *      message="El campo fecha de inicio debe ser del tipo fecha."
+     * )
      */
     protected $fechaInicio;
 
     /**
      * @var datetime
      * 
-     * @ORM\Column(name="fechaFin", type="datetime")
+     * @ORM\Column(name="fechaFin", type="datetime", nullable=true)
+     * 
      */
     protected $fechaFin;
 
@@ -49,6 +57,9 @@ class RegistroEnfermedades {
      * 
      * @ORM\ManyToOne(targetEntity="Visitante", inversedBy="registroEnfermedades")
      * @ORM\JoinColumn(name="propietario_id", referencedColumnName="id")
+     * @Assert\NotNull(
+     *      message="Se debe seleccionar una propietario del registro de enfermedad."
+     * )
      */
     protected $propietario;
 
@@ -57,6 +68,9 @@ class RegistroEnfermedades {
      * 
      * @ORM\ManyToOne(targetEntity="Enfermedad")
      * @ORM\JoinColumn(name="enfermedad_id", referencedColumnName="id")
+     * @Assert\NotNull( 
+     *      message="Se debe seleccionar una enfermedad del sistema."
+     * )
      */
     protected $enfermedad;
 
@@ -74,7 +88,7 @@ class RegistroEnfermedades {
      *
      * @return \DateTime
      */
-    function getFechaInicio(): datetime {
+    function getFechaInicio() {
         return $this->fechaInicio;
     }
 
@@ -83,7 +97,7 @@ class RegistroEnfermedades {
      *
      * @return \DateTime
      */
-    function getFechaFin(): datetime {
+    function getFechaFin() {
         return $this->fechaFin;
     }
 
@@ -91,7 +105,7 @@ class RegistroEnfermedades {
         return $this->observacion;
     }
 
-    function getEnfermedad(): Enfermedad {
+    function getEnfermedad() {
         return $this->enfermedad;
     }
 
@@ -125,7 +139,7 @@ class RegistroEnfermedades {
         $this->enfermedad = $enfermedad;
     }
 
-    function getPropietario(): Visitante {
+    function getPropietario() {
         return $this->propietario;
     }
 

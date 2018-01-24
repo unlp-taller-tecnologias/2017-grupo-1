@@ -22,8 +22,6 @@
         <div class="panel-heading">
             <h3 class="panel-title">Registro de vacunacion de <strong>{{ inscripto.nombre }} {{inscripto.apellido }}</strong></h3>
         </div>
-
-
         <div class="panel-body">
             <form class="form" enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("alta_registro_action", {'id': inscripto.id}) }}" method="POST">
                 <input type="hidden" name="idInscripto" value="{{inscripto.id}}">

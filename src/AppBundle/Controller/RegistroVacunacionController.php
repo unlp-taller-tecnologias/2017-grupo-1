@@ -37,8 +37,6 @@ class RegistroVacunacionController extends Controller {
                     'visitante' => $visitante,
                     'vacunas_optativas' => $vacunas_optativas,
                     'vacunas_obligatorias' => $vacunas_obligatorias,
-                    'enfermedades' => array(),
-                    'factores_riesgo' => array(),
         ));
     }
 

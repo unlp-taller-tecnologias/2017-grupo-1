@@ -15,8 +15,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(fields={"legajo"}, message="Ya existe un inscripto con este nro de legajo.")
  * message="This nroFicha is already in use on that host."
  */
-class Inscripto extends Visitante
-{
+class Inscripto extends Visitante {
+
     /**
      * @var int
      *
@@ -54,14 +54,12 @@ class Inscripto extends Visitante
      */
     protected $fechaInscripcion;
 
-
     /**
      * Get id
      *
      * @return int
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -72,8 +70,7 @@ class Inscripto extends Visitante
      *
      * @return Inscripto
      */
-    public function setNroFicha($nroFicha)
-    {
+    public function setNroFicha($nroFicha) {
         $this->nroFicha = $nroFicha;
 
         return $this;
@@ -84,8 +81,7 @@ class Inscripto extends Visitante
      *
      * @return string
      */
-    public function getNroFicha()
-    {
+    public function getNroFicha() {
         return $this->nroFicha;
     }
 
@@ -96,8 +92,7 @@ class Inscripto extends Visitante
      *
      * @return Inscripto
      */
-    public function setLegajo($legajo)
-    {
+    public function setLegajo($legajo) {
         $this->legajo = $legajo;
 
         return $this;
@@ -108,8 +103,7 @@ class Inscripto extends Visitante
      *
      * @return string
      */
-    public function getLegajo()
-    {
+    public function getLegajo() {
         return $this->legajo;
     }
 
@@ -120,8 +114,7 @@ class Inscripto extends Visitante
      *
      * @return fechaInscripcion
      */
-    public function setFechaInscripcion($fechaInscripcion)
-    {
+    public function setFechaInscripcion($fechaInscripcion) {
         $this->fechaInscripcion = $fechaInscripcion;
 
         return $this;
@@ -132,14 +125,16 @@ class Inscripto extends Visitante
      *
      * @return string
      */
-    public function getFechaInscripcion()
-    {
+    public function getFechaInscripcion() {
         return $this->fechaInscripcion;
     }
-    
-    public function getTipo()
-    {
+
+    public function getTipo() {
         return 'Inscripto';
     }
-}
 
+    public function __toString() {
+        return $this->getNombre();
+    }
+
+}

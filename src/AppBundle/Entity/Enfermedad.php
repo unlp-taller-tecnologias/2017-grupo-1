@@ -105,5 +105,9 @@ class Enfermedad {
     public function getBorrado() {
         return $this->borrado;
     }
+    
+      public function __toString() {
+        return $this->getNombre();
+    }
 
 }

@@ -1,0 +1,44 @@
+<form class="form-horizontal">
+    <div class="form-group">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="" class="col-md-3 control-label">Propietario: </label>
+                <div class="col-md-6">
+                    <p class="form-control-static">{{entity.getPropietario().getApellido | upper}},  {{ entity.getPropietario().getNombre() | capitalize}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="" class="col-md-3 control-label">Fecha Inicio: </label>
+                <div class="col-md-6">
+                    <p class="form-control-static">{{entity.getFechaInicio | date('d/m/Y')}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="" class="col-md-3 control-label">Fecha Fin: </label>
+                <div class="col-md-6">
+                    <p class="form-control-static">{{entity.getFechaFin | date('d/m/Y')}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="" class="col-md-3 control-label">Enfermedad: </label>
+                <div class="col-md-6">
+                    <p class="form-control-static">{{entity.getEnfermedad().getNombre() | upper }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="" class="col-md-3 control-label">Comentario: </label>
+                <div class="col-md-6">
+                    <p class="form-control-static">{{entity.getObservacion()  | capitalize }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

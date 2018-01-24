@@ -555,15 +555,15 @@ abstract class Visitante {
         return $this->registroFactoresRiesgo->removeElement($registroRiesgo);
     }
 
-    function getRegistroFactoresRiesgo(): ArrayCollection {
+    function getRegistroFactoresRiesgo() {
         return $this->registroFactoresRiesgo;
     }
 
-    function setRegistroFactoresRiesgo(ArrayCollection $registroFactoresRiesgo) {
+    function setRegistroFactoresRiesgo(Arra $registroFactoresRiesgo) {
         $this->registroFactoresRiesgo = $registroFactoresRiesgo;
     }
 
-    function getRegistroEnfermedades(): ArrayCollection {
+    function getRegistroEnfermedades() {
         return $this->registroEnfermedades;
     }
 
