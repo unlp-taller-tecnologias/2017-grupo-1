@@ -29,7 +29,7 @@
                     <li class="dropdown">
                         <a href="#">
                             <form style="margin-bottom: 0px;">
-                                <input type="checkbox" name="prueba"/>
+                                <input type="checkbox" name="prueba" {% if registrovacunacion.cumple %} checked {% endif %}/>
                             </form>
                             CUMPLE
                         </a>
@@ -88,7 +88,7 @@
 {% block page_content %}
 
     <div class="row">
-        <form  enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("alta_registro_action", {'id': visitante.id}) }}" method="POST">
+        <form  enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("editar_registro_action", {'id': visitante.id}) }}" method="POST">
             <div class="col-lg-9 col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -114,21 +114,22 @@
                                             <td class="text-center">
                                                 {{vacuna.nombre}}
                                             </td>
+                                            <input type="hidden" name="idComponente{{loop.index}}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
                                             <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
                                             <td class="text-center">
-                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control text-center" value="0" name="dosisRecibidas{{ loop.index }}" />
+                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control text-center" name="dosisRecibidas{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %} /> 
                                             </td>
                                             <td class="text-center">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
+                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %}/>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <input name="cumple{{ loop.index }}" type="checkbox">
+                                                <input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>
                                             </td>
                                             <td class="text-center"> 
-                                                <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" ></textarea>
+                                                <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario">{% for componente in componentes %}{% if componente.vacuna.id == vacuna.id %}{{componente.comentario}}{% endif %}{% endfor %}</textarea>
                                             </td>
                                         </tr>
                                     {% endif %}
@@ -159,24 +160,25 @@
                                 {% for vacuna in vacunas %}
                                     {% if not vacuna.esObligatoria %}
                                         <tr>
+                                            <input type="hidden" name="idComponente{{loop.index}}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
                                             <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
                                             <td class="text-center">
                                                 {{vacuna.nombre}}
                                             </td>
                                             <td class="text-center">
-                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" value="0" />
+                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %} />
                                             </td>
                                             <td class="text-center">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
+                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento"  {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %}/>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <input name="cumple{{ loop.index }}" type="checkbox">
+                                                <input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>
                                             </td>
                                             <td class="text-center"> 
-                                                <textarea  class="form-control" rows="1" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" ></textarea>
+                                                <textarea  class="form-control" rows="1" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}value="{{componente.comentario}}" {% endif %} {% endfor %}></textarea>
                                             </td>
                                         </tr>
                                     {% endif %}
@@ -230,7 +232,7 @@
                         <div class="form-group text-center">
                             <label for="reg_val_cumple">Cumple con el registro</label>
                             <div class="col-md-12">
-                                <input class="form-control" id="reg_val_cumple" name="cumple" type="checkbox"> 
+                                <input class="form-control" id="reg_val_cumple" name="cumple" type="checkbox"{% if registrovacunacion.cumple %} checked {% endif %}> 
                             </div>
                             <div class="clearfix"></div>
                         </div>

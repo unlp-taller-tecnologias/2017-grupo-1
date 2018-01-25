@@ -31,12 +31,12 @@ class RegistroVacunacionController extends Controller {
      */
     public function altaRegistro(Request $request, Visitante $visitante) {
         $em = $this->getDoctrine()->getManager();
-        $vacunas_obligatorias = $em->getRepository('AppBundle:Vacuna')->findByEsObligatoria(TRUE);
-        $vacunas_optativas = $em->getRepository('AppBundle:Vacuna')->findByEsObligatoria(FALSE);
+        $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
+        $cantVacunas = sizeof($vacunas);
         return $this->render('registrovacunacion/altaRegistro.html.twig', array(
                     'visitante' => $visitante,
-                    'vacunas_optativas' => $vacunas_optativas,
-                    'vacunas_obligatorias' => $vacunas_obligatorias,
+                    'vacunas' => $vacunas,
+                    'cantVacunas' => $cantVacunas,
         ));
     }
 
@@ -49,10 +49,6 @@ class RegistroVacunacionController extends Controller {
     public function altaRegistroAction(Request $request, Visitante $visitante) {
         $em = $this->getDoctrine()->getManager();
         $registrovacunacion = new registrovacunacion();
-        //$visitante = $em->getRepository('AppBundle:Visitante')->find($request->get('idVisitante'));
-        // El usuario que creo la observacion, todavia no estan hechas la sesiones.
-        //$idIsuario = $this->getUser()->getId();
-        //$usuario = $em->getRepository('AppBundle:Usuario')->find($idIsuario);
         $usuario = $this->getUser();
         $registrovacunacion->setPropietario($visitante);
         $registrovacunacion->setCreador($usuario);
@@ -83,6 +79,7 @@ class RegistroVacunacionController extends Controller {
             $em->persist($observacionPrivada);
         }
         $cantVacunas = $request->get('cantVacunas');
+
         for ($i = 1; $i <= $cantVacunas; $i++) {
             $componente = new Componente();
             if ($request->get('vencimiento' . $i) != '') {
@@ -94,7 +91,6 @@ class RegistroVacunacionController extends Controller {
             } else {
                 $componente->setCumple(FALSE);
             }
-            //$componente->setDosisRecibidas($request->get('dosisRecibidas'.$i));
             $componente->setDosisRecibidas($request->get('dosisRecibidas' . $i) == '' ? NULL : $request->get('dosisRecibidas' . $i));
             $componente->setComentario($request->get('comentario' . $i));
             $vacuna = $em->getRepository('AppBundle:Vacuna')->find($request->get('idVacuna' . $i));
@@ -133,20 +129,21 @@ class RegistroVacunacionController extends Controller {
         $registrovacunacion = $visitante->getRegistroVacunacion();
         $componentes = $registrovacunacion->getComponentes();
         $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
+        $cantVacunas = sizeof($vacunas);
         $observaciones = $registrovacunacion->getObservaciones();
 
-        return $this->render('registrovacunacion/editarRegistro.html.twig', array('observaciones' => $observaciones, 'visitante' => $visitante, 'vacunas' => $vacunas, 'registrovacunacion' => $registrovacunacion, 'componentes' => $componentes));
+        return $this->render('registrovacunacion/editarRegistro_1.html.twig', array('observaciones' => $observaciones, 'visitante' => $visitante, 'vacunas' => $vacunas, 'registrovacunacion' => $registrovacunacion, 'cantVacunas'=>$cantVacunas, 'componentes' => $componentes));
     }
 
     /**
      * Editar registro action
      *
-     * @Route("/editarRegistroAction", name="editar_registro_action")
+     * @Route("/{id}/editarRegistroAction", name="editar_registro_action")
      * @Method("POST")
      */
-    public function editarRegistroAction(Request $request) {
+    public function editarRegistroAction(Request $request, Visitante $visitante) {
         $em = $this->getDoctrine()->getManager();
-        $visitante = $em->getRepository('AppBundle:Visitante')->find($request->get("idVisitante"));
+        $usuario = $this->getUser();
         $registrovacunacion = $visitante->getRegistroVacunacion($request->get("idRegistro"));
 
         date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -157,10 +154,6 @@ class RegistroVacunacionController extends Controller {
         } else {
             $registrovacunacion->setCumple(FALSE);
         }
-
-        // El usuario que creo la observacion, todavia no estan hechas la sesiones.
-        $idIsuario = $this->getUser()->getId();
-        $usuario = $em->getRepository('AppBundle:Usuario')->find($idIsuario);
 
         // Creo las observaciones
         if ($request->get('observacionPublica') != '') {
@@ -187,6 +180,7 @@ class RegistroVacunacionController extends Controller {
 
         $cantVacunas = $request->get('cantVacunas');
 
+        
         for ($i = 1; $i <= $cantVacunas; $i++) {
             if ($request->get("idComponente" . $i)) {
                 $componente = $em->getRepository('AppBundle:Componente')->find($request->get("idComponente" . $i));
