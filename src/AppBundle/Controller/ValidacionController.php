@@ -72,8 +72,8 @@ class ValidacionController extends Controller {
                         'entity' => $visitante
             ));
         }
-        return $this->render('validacion/login.html.twig', array(
-                    'error' => $error
+        return $this->render('validacion/conregistro.html.twig', array(
+                    'entity' => $visitante
         ));
     }
 
