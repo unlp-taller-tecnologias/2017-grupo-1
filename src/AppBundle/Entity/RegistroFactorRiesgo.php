@@ -59,7 +59,7 @@ class RegistroFactorRiesgo {
         return $this->observacion;
     }
 
-    function getPropietario(): Visitante {
+    function getPropietario() {
         return $this->propietario;
     }
 
@@ -67,7 +67,7 @@ class RegistroFactorRiesgo {
         $this->propietario = $propietario;
     }
 
-    function getRegistroVacunacion(): RegistroVacunacion {
+    function getRegistroVacunacion() {
         return $this->registroVacunacion;
     }
 
