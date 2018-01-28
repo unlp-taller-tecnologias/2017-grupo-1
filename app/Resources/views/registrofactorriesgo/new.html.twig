@@ -1,0 +1,34 @@
+{{ form_start(form, {'attr':{'class':'form-horizontal', 'novalidate': 'novalidate'} } ) }}
+<div class="form-group">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="" class="col-md-3 control-label">Factor de Riesgo</label>
+            <div class="col-md-6">
+                <div class="input-group margin-bottom-sm">
+                    <span class="input-group-addon">
+                        <i class="fa fa-hand-o-right"></i>
+                    </span>
+                    {{ form_widget(form.factorRiesgo,{'attr':{'class':'form-control'} }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="" class="col-md-3 control-label">Comentario</label>
+            <div class="col-md-6">
+                <div class="input-group margin-bottom-sm">
+                    <span class="input-group-addon">
+                        <i class="fa fa-keyboard-o"></i>
+                    </span>
+                    {{ form_widget(form.observacion,{'attr':{'class':'form-control', 'rows':5} }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hidden">
+    <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
+    {{ form_rest(form) }}
+</div>
+{{ form_end(form) }}

@@ -1,8 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block otherstylesheets %}
-    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block  page_slideleft %}
@@ -13,7 +12,7 @@
     <div class="toolbar row">
         <div class="col-sm-6 hidden-xs">
             <div class="page-header">
-                <h1>Registro de vacunacion</h1>
+                <h1>Registro de Vacunaci&oacute;n <small><i class="fa fa-user-circle"></i> <strong>{{visitante.apellido | upper}}</strong> {{visitante.nombre | lower}}. </small></h1>
             </div>
         </div>
         <div class="col-sm-6 col-xs-12">
@@ -25,6 +24,40 @@
             </a>
             <div class="toolbar-tools pull-right">
                 <!-- start: TOP NAVIGATION MENU -->
+                <ul class="nav navbar-right">
+                    <!-- start: TO-DO DROPDOWN -->
+                    <li class="dropdown">
+                        <a href="#">
+                            <form style="margin-bottom: 0px;">
+                                <input type="checkbox" name="prueba" {% if registrovacunacion.cumple %} checked {% endif %}/>
+                            </form>
+                            CUMPLE
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="{{ path('vacuna_new') }}">
+                            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> VOLVER
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="{{ path('vacuna_new') }}">
+                            <i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> GUARDAR
+                            <div class="tooltip-notification hide">
+                                <div class="tooltip-notification-arrow"></div>
+                                <div class="tooltip-notification-inner">
+                                    <div>
+                                        <div class="semi-bold">
+                                            REGISTRO
+                                        </div>
+                                        <div class="message">
+                                            Guardar registro de vacunaci&oacute;n
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
                 <!-- end: TOP NAVIGATION MENU -->
             </div>
         </div>
@@ -53,135 +86,240 @@
 {% endblock %}
 
 {% block page_content %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title text-center">Editar Registro de vacunacion de <strong>{{ visitante.nombre }} {{visitante.apellido }}</strong></h3>
-        </div>
 
-        <div class="panel-body">
-            <form class="form-inline" enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("editar_registro_action") }}" method="POST">
-                <input type="hidden" name="idVisitante" value="{{visitante.id}}">
-                <input type="hidden" name="idRegistro" value="{{registrovacunacion.id}}">
-                <h2>Vacunas del Calendario Nacional</h2>
-                {% for vacuna in vacunas %}
-                    {% if vacuna.esObligatoria %}
-                        <div class="form-control-static text-extra-large" style="width: 200px;">
-                            <label for="dosisRecibidas{{ loop.index }}"><h4>{{vacuna.nombre}}: </h4> </label>
-                        </div>
-                        <div class="form-control-static text-extra-large">
-                            <label for="dosisRecibidas{{ loop.index }}">Dosis recibidas: </label>
-                            <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" placeholder="Dosis Recibidas"{% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %}required />
-                        </div>
-
-                        {% if vacuna.tieneVencimiento %}
-                            <div class="form-control-static text-extra-large">
-                                <label for="vencimiento{{ loop.index }}">Vencimiento</label>
-                                <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %} />
-                            </div>
-                        {% endif %}
-
-                        <div class="form-control-static text-extra-large">
-                            <label for="comentario{{ loop.index }}">Comentario</label>
-                            <input type="textarea" class="form-control" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}value="{{componente.comentario}}" {% endif %} {% endfor %} />
-                        </div>
-                            
-                        <div class="checkbox">
-                            <label><input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>Completo </label>
-                        </div>
-
-                        <input type="hidden" name="idComponente{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
-                        <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
-                        <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
-                        <br>
-                    {% endif %}
-                {% endfor %}
-                <h2>Otras vacunas</h2>
-                {% for vacuna in vacunas %}
-                    {% if not vacuna.esObligatoria %}
-                        <div class="form-control-static text-extra-large" style="width: 200px;">
-                            <label for="dosisRecibidas{{ loop.index }}"><h4>{{vacuna.nombre}}: </h4> </label>
-                        </div>
-                        <div class="form-control-static text-extra-large">
-                            <label for="dosisRecibidas{{ loop.index }}">Dosis recibidas: </label>
-                            <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" placeholder="Dosis Recibidas"{% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %}required />
-                        </div>
-
-                        {% if vacuna.tieneVencimiento %}
-                            <div class="form-control-static text-extra-large">
-                                <label for="vencimiento{{ loop.index }}">Vencimiento</label>
-                                <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %} />
-                            </div>
-                        {% endif %}
-
-                        <div class="form-control-static text-extra-large">
-                            <label for="comentario{{ loop.index }}">Comentario</label>
-                            <input type="textarea" class="form-control" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}value="{{componente.comentario}}" {% endif %} {% endfor %} />
-                        </div>
-                            
-                        <div class="checkbox">
-                            <label><input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>Completo </label>
-                        </div>
-
-                        <input type="hidden" name="idComponente{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
-                        <input type="hidden" name="cantVacunas" value="{{ loop.index }}">
-                        <input type="hidden" name="idVacuna{{ loop.index }}" value="{{vacuna.id}}">
-                        <br>
-                    {% endif %}
-                {% endfor %}
-
-                 <!-- OBSERVACIONES PUBLICAS Y PRIVADAS -->
-                <br><br><br>
-                <div class="form-group">
-                    <label for="comment">Observacion Privada:</label>
-                    <textarea class="form-control" rows="5" cols="50" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL"></textarea>
-                </div>
-                <br><br>
-                <div class="form-group">
-                    <label for="comment">Observacion Publica:</label>
-                    <textarea class="form-control" rows="5" cols="50" name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL"></textarea>
-                </div>
-                <br>
-                <!-- FIN OBSERVACIONES PUBLICAS Y PRIVADAS -->
-
-                <div class="checkbox">
-                    <label><input name="cumple" type="checkbox" {% if registrovacunacion.cumple %} checked {% endif %}> Cumple el registro de vacunacion</label>
-                </div>
-                <br><br>
-                {% if visitante.tipo == "Inscripto" %}
-                    <a href="{{path ("inscripto_index") }}" class="btn btn-default" >Volver</a>
-                {% else %}
-                    <a href="{{path ("nodocente_index") }}" class="btn btn-default" >Volver</a>
-                {% endif %}
-                <input class="btn btn-primary" type="submit" name="submit" value="Guardar">          
-            </form>
-        
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="">
-                        <h3>Observaciones</h3>
+    <div class="row">
+        <form  enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("editar_registro_action", {'id': visitante.id}) }}" method="POST">
+            <div class="col-lg-9 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Vacunas <span class="text-bold"> del Calendario Nacional</span></h4>
                     </div>
-                    {% for observacion in observaciones %}
-                        {% if observacion.esPrivada %}
-                            <div class="panel panel-danger">
-                                <div class="panel-heading">
-                                    <p class="col-lg-11">Observacion Privada Creada el {{ observacion.fechaCreacion | date('d/m/Y')}} Por el usuario {{ observacion.creadoPor.username }}</p>
-                                    <a href="{{ path('eliminar_observacion', { 'id': observacion.id, 'idVisitante': visitante.id }) }}"><p class="col-lg-1">Eliminar</p></a><br>
-                                </div>
-                        {% else %}
-                            <div class="panel panel-info">
-                                <div class="panel-heading">
-                                    <p class="col-lg-11">Observacion Privada Creada el {{ observacion.fechaCreacion | date('d/m/Y')}} Por el usuario {{ observacion.creadoPor.username }}</p>
-                                    <a href="{{ path('eliminar_observacion', { 'id': observacion.id, 'idVisitante': visitante.id }) }}"><p class="col-lg-1">Eliminar</p></a><br>
-                                </div>
-                        {% endif %}
-                                <div class="panel-body">
-                                    {{ observacion.contenido }}
-                                </div>
-                            </div>
-                    {% endfor %}
+                    <!-- INICIO DEL FORM -->
+                    <div class="panel-body">
+                        <table id="vacunas_calendario" class="table  table-condensed table-bordered table-striped table-hover">
+                            <thead>
+                                <tr class="bg-primary ">
+                                    <th class="text-center text-white">Vacuna</th>
+                                    <th class="text-center text-white col-md-1">&Uacute;ltima D&oacute;sis</th>
+                                    <th class="text-center text-white col-md-1">Vencimiento</th>
+                                    <th class="text-center text-white col-md-1">Completa</th>
+                                    <th class="text-center text-white col-md-6">Comentario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vacuna in vacunas %}
+                                    {% if vacuna.esObligatoria %}
+                                        <tr>
+                                            <td class="text-center">
+                                                {{vacuna.nombre}}
+                                            </td>
+                                            <input type="hidden" name="idComponente{{loop.index}}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
+                                            <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
+                                            <td class="text-center">
+                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control text-center" name="dosisRecibidas{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %} /> 
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %}/>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>
+                                            </td>
+                                            <td class="text-center"> 
+                                                <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario">{% for componente in componentes %}{% if componente.vacuna.id == vacuna.id %}{{componente.comentario}}{% endif %}{% endfor %}</textarea>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Vacunas <span class="text-bold">Optativas</span></h4>
+                    </div>
+                    <!-- INICIO DEL FORM -->
+                    <div class="panel-body">
+
+                        <table id="vacunas_optativas" class="table  table-condensed table-bordered table-striped table-hover">
+                            <thead>
+                                <tr class="bg-info">
+                                    <th class="text-center">Vacuna</th>
+                                    <th class="text-center col-md-1">&Uacute;ltima D&oacute;sis</th>
+                                    <th class="text-center col-md-1">Vencimiento</th>
+                                    <th class="text-center col-md-1">Completa</th>
+                                    <th class="text-center col-md-6">Comentario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vacuna in vacunas %}
+                                    {% if not vacuna.esObligatoria %}
+                                        <tr>
+                                            <input type="hidden" name="idComponente{{loop.index}}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
+                                            <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
+                                            <td class="text-center">
+                                                {{vacuna.nombre}}
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %} />
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento"  {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %}/>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>
+                                            </td>
+                                            <td class="text-center"> 
+                                                <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario">{% for componente in componentes %}{% if componente.vacuna.id == vacuna.id %}{{componente.comentario}}{% endif %}{% endfor %}</textarea>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="col-md-12 col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Comentarios <span class="text-bold"> del registro de vacunaci&oacute;n</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="observacionPrivada">Observacion Privada:</label>
+                            <textarea class="form-control" rows="5" style="width: 100%;" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="observacionPublica">Observacion Publica:</label>
+                            <textarea class="form-control" rows="5" style="width: 100%;"  name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Listado <span class="text-bold"> de enfermedades</span></h4>
+                    </div>
+                    <div id="regenfermedades_content" class="panel-body">
+                        {% include 'registroenfermedades/listado.ajax.html.twig' with {'regenfermedades': visitante.getRegistroEnfermedades() }  %}
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Listado <span class="text-bold"> de factores de riesgo</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        {% include 'factorriesgo/listado.ajax.html.twig' with {'regfactores_riesgo': visitante.getRegistroFactoresRiesgo() }  %}
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Controles <span class="text-bold"> del registro de vacunaci&oacute;n</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group text-center">
+                            <label for="reg_val_cumple">Cumple con el registro</label>
+                            <div class="col-md-12">
+                                <input class="form-control" id="reg_val_cumple" name="cumple" type="checkbox"{% if registrovacunacion.cumple %} checked {% endif %}> 
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="idVisitante" value="{{visitante.id}}">
+                            <input type="hidden" name="cantVacunas" value="{{ cantVacunas }}">
+                            <div class="text-center">
+                                <a href="{{app.request.headers.get('referer')}}" class="btn btn-default" >Volver</a>
+                                <input class="btn btn-primary" type="submit" name="submit" value="Guardar">    
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block otherJavascript %}
+    <script src="{{ asset('vendor/bootstrap-switch-master/dist/js/bootstrap-switch.min.js') }}"></script>
+    <script>
+        function crearModalEdit(url, title, urlTarget, targetContent) {
+            $('#okButton').button('reset');
+            $('#panel-config .modal-footer *').show();
+            $('#panel-config .modal-title').html(title);
+            $('#panel-config .modal-body').html("");
+            $('#okButton').html('listo');
+            $('#panel-config .modal-body').load(url, function () {
+                $('#panel-config form').submit(function (event) {
+                    event.preventDefault();
+                    $.post(url, $('#panel-config form').serialize(), function (data) {
+                        if (data.success === 1) {
+                            toastr['success'](data.message, '');
+                            targetContent.html('');
+                            targetContent.load(urlTarget);
+                        } else {
+                            toastr['error'](data.message, '');
+                        }
+                    });
+                });
+            });
+            $('#panel-config').modal();
+        }
+
+        function crearModalView(url, title) {
+            $('#okButton').button('reset');
+            $('#panel-config .modal-footer').show();
+            $('#cancelButton').hide();
+            $('#panel-config .modal-title').html(title);
+            $('#panel-config .modal-body').html("");
+            $('#panel-config .modal-body').load(url, function () {
+                $('#panel-config form').submit(function (event) {
+                    event.preventDefault();
+                    $('#panel-config').modal('toggle');
+                });
+            });
+            $('#panel-config').modal();
+        }
+
+        function regenfermedadesNew() {
+            crearModalEdit(
+                    "{{ path('regenfermedad_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
+                    "Nuevo Registro de Enfermedad", //Título del panel
+                    "{{path('regenfermedades_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
+                    $("#regenfermedades_content"), //Elemento DOM en donde actualizar
+                    );
+        }
+
+        function regenfermedadesView(urlTarget) {
+            $('#cancelButton').hide(); //Modal
+            crearModalView(
+                    urlTarget, //URL para obtener el contenido inicial del panel
+                    "Ver Registro de Enfermedad", //Título del panel
+                    );
+            $('#cancelButton').hide();
+        }
+
+        $(document).ready(function () {
+            $('#okButton').on('click', function () {
+                $('#panel-config form').submit();
+            });
+            $.fn.bootstrapSwitch.defaults.size = 'small';
+            $.fn.bootstrapSwitch.defaults.onText = 'SI';
+            $.fn.bootstrapSwitch.defaults.offText = 'NO';
+            $.fn.bootstrapSwitch.defaults.offColor = 'danger';
+            $("form input[type=checkbox]").bootstrapSwitch();
+        });
+    </script>
 {% endblock %}

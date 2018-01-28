@@ -79,4 +79,12 @@ class RegistroFactorRiesgo {
         $this->factorRiesgo = $factorRiesgo;
     }
 
+    function getFactorRiesgo() {
+        return $this->factorRiesgo;
+    }
+
+    function __toString() {
+        return $this->getFactorRiesgo()->getNombre();
+    }
+
 }

@@ -74,4 +74,21 @@ class RegistroEnfermedadesController extends Controller {
         ));
     }
 
+    /**
+     * Eliminar un registro de enfermedad de un visitante
+     *
+     * @Route("/{id}/delete", name="regenfermedades_delete")
+     * @Method("POST")
+     */
+    public function deleteAction(Request $request, RegistroEnfermedades $regenfermedad) {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($regenfermedad);
+        try {
+            $em->flush();
+            return new JsonResponse(array('success' => 1, 'message' => 'El registro de enfermedad se agregó al sistema correctamente.'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => 0, 'message' => 'No se pudo eliminar el registro de enfermedades.'));
+        }
+    }
+
 }

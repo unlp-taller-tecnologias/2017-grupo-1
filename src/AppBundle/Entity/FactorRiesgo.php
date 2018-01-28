@@ -14,10 +14,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(
  *  fields={"nombre"},
  *  message="El nombre del factor de riesgo ya se encuentra registrado en el sistema"
- *)
+ * )
  */
-class FactorRiesgo
-{
+class FactorRiesgo {
+
     /**
      * @var int
      *
@@ -71,8 +71,7 @@ class FactorRiesgo
      *
      * @return int
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -83,8 +82,7 @@ class FactorRiesgo
      *
      * @return FactorRiesgo
      */
-    public function setNombre($nombre)
-    {
+    public function setNombre($nombre) {
         $this->nombre = $nombre;
 
         return $this;
@@ -95,8 +93,7 @@ class FactorRiesgo
      *
      * @return string
      */
-    public function getNombre()
-    {
+    public function getNombre() {
         return $this->nombre;
     }
 
@@ -107,8 +104,7 @@ class FactorRiesgo
      *
      * @return FactorRiesgo
      */
-    public function setDescripcion($descripcion)
-    {
+    public function setDescripcion($descripcion) {
         $this->descripcion = $descripcion;
 
         return $this;
@@ -119,8 +115,7 @@ class FactorRiesgo
      *
      * @return string
      */
-    public function getDescripcion()
-    {
+    public function getDescripcion() {
         return $this->descripcion;
     }
 
@@ -145,5 +140,9 @@ class FactorRiesgo
     public function getBorrado() {
         return $this->borrado;
     }
-    
+
+    function __toString() {
+        return $this->getNombre();
+    }
+
 }

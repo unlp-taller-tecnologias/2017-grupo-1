@@ -1,22 +1,33 @@
 <table id="enfermedades_listado" class="table  table-bordered table-striped table-hover table-condensed">
     <thead>
         <tr>
-            <th class="text-center col-md-1">
-                <a href="#" onclick="regenfermedadesNew();" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></a>
+            <th class="text-center col-md-3">
+                <a href="#" onclick="regenfermedadesNew();" class="btn btn-orange"><i class="fa fa-plus" aria-hidden="true"></i></a>
             </th>
             <th class="text-center">Nombre</th>
         </tr>
     </thead>
     <tbody>
-        {% for regenfermedad in regenfermedades  %}
+        {% if  regenfermedades  is not  defined or regenfermedades | length == 0 %}
             <tr>
-                <td class="text-center">
-                    <a href="#" onclick="regenfermedadesView('{{ path('regenfermedades_show', { 'id': regenfermedad.id }) }}');"  class="btn btn-xs  btn-primary " data-placement="top" data-original-title="Ver registro de enfermedad">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </a>
+                <td class="text-center" colspan="2">
+                    <i>(vac&iacute;o)</i>
                 </td>
-                <td class="text-center">{{ regenfermedad.enfermedad.nombre }}</td>
             </tr>
-        {% endfor %}
+        {% else %}
+            {% for regenfermedad in regenfermedades  %}
+                <tr>
+                    <td class="text-center">
+                        <a href="#" onclick="regenfermedadesView('{{ path('regenfermedades_show', { 'id': regenfermedad.id }) }}');"  class="btn btn-xs  btn-primary " data-placement="top" data-original-title="Ver registro de enfermedad">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" onclick="regenfermedadesDelete('{{ path('regenfermedades_delete', { 'id': regenfermedad.id }) }}');"  class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver registro de enfermedad">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                    <td class="text-center">{{ regenfermedad.enfermedad.nombre }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
     </tbody>
 </table>

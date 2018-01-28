@@ -2,6 +2,7 @@
 
 {% block otherstylesheets %}
     <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block  page_slideleft %}
@@ -27,16 +28,16 @@
                 <ul class="nav navbar-right">
                     <!-- start: TO-DO DROPDOWN -->
                     <li class="dropdown">
+                        <a href="{{ path('vacuna_new') }}">
+                            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> VOLVER
+                        </a>
+                    </li>
+                    <li class="dropdown">
                         <a href="#">
                             <form style="margin-bottom: 0px;">
                                 <input type="checkbox" name="prueba"/>
                             </form>
                             CUMPLE
-                        </a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="{{ path('vacuna_new') }}">
-                            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> VOLVER
                         </a>
                     </li>
                     <li class="dropdown">
@@ -112,27 +113,27 @@
                                     {% if vacuna.esObligatoria %}
                                         <tr>
                                             <td class="text-center">
-                                                {{vacuna.nombre}}
+                                                <strong>{{vacuna.nombre}}</strong> <i><small> ({{vacuna.abreviatura}})</small></i>
                                             </td>
-                                            <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
-                                            <td class="text-center">
-                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control text-center" value="0" name="dosisRecibidas{{ loop.index }}" />
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <input name="cumple{{ loop.index }}" type="checkbox">
-                                            </td>
-                                            <td class="text-center"> 
-                                                <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" ></textarea>
-                                            </td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
+                                    <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
+                                    <td class="text-center">
+                                        <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control text-center" value="0" name="dosisRecibidas{{ loop.index }}" />
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <input name="cumple{{ loop.index }}" type="checkbox">
+                                    </td>
+                                    <td class="text-center"> 
+                                        <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" ></textarea>
+                                    </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -159,28 +160,28 @@
                                 {% for vacuna in vacunas %}
                                     {% if not vacuna.esObligatoria %}
                                         <tr>
-                                            <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
-                                            <td class="text-center">
-                                                {{vacuna.nombre}}
-                                            </td>
-                                            <td class="text-center">
-                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" value="0" />
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <input name="cumple{{ loop.index }}" type="checkbox">
-                                            </td>
-                                            <td class="text-center"> 
-                                                <textarea  class="form-control" rows="1" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" ></textarea>
-                                            </td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
+                                    <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
+                                    <td class="text-center">
+                                        <strong>{{vacuna.nombre}}</strong> <i><small> ({{vacuna.abreviatura}})</small></i>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" value="0" />
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" />
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <input name="cumple{{ loop.index }}" type="checkbox">
+                                    </td>
+                                    <td class="text-center"> 
+                                        <textarea  class="form-control" rows="1" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario" ></textarea>
+                                    </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -217,8 +218,8 @@
                         <i class="clip-bars"></i>
                         <h4 class="panel-title">Listado <span class="text-bold"> de factores de riesgo</span></h4>
                     </div>
-                    <div class="panel-body">
-                        {% include 'factorriesgo/listado.ajax.html.twig' with {'regfactores_riesgo': visitante.getRegistroFactoresRiesgo() }  %}
+                    <div id="regfactorriesgo_content"  class="panel-body">
+                        {% include 'registrofactorriesgo/listado.ajax.html.twig' with {'regfactorriesgo': visitante.getRegistroFactoresRiesgo() }  %}
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -252,6 +253,7 @@
 
 {% block otherJavascript %}
     <script src="{{ asset('vendor/bootstrap-switch-master/dist/js/bootstrap-switch.min.js') }}"></script>
+    <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
     <script>
         function crearModalEdit(url, title, urlTarget, targetContent) {
             $('#okButton').button('reset');
@@ -298,6 +300,75 @@
                     "{{path('regenfermedades_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
                     $("#regenfermedades_content"), //Elemento DOM en donde actualizar
                     );
+        }
+
+        function regfactorriesgoNew() {
+            crearModalEdit(
+                    "{{ path('regfactorriesgo_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
+                    "Nuevo Registro de Factor de Riesgo", //Título del panel
+                    "{{path('regfactorriesgo_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
+                    $("#regfactorriesgo_content"), //Elemento DOM en donde actualizar
+                    );
+        }
+
+        function regenfermedadesDelete(url) {
+            targetContent = $('#regenfermedades_content');
+            swal({
+                title: '¿Estas seguro?',
+                text: "Estas por eliminar un registro de enfermedad del sistema!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, Eliminarla'
+            }).then((result) => {
+                if (result.value) {
+                    $.post(url, {}).done((data) => {
+                        if (data.success) {
+                            swal('Borrado!', data.message, 'success').then(function () {
+                                targetContent.html('');
+                                targetContent.load("{{path('regenfermedades_de', {'id': visitante.id }) }}");
+                            });
+                        } else {
+                            swal('Cuidado!', data.message, 'error');
+                        }
+                    }).fail(() => {
+                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                    }
+                    );
+                }
+            });
+        }
+        
+          function regfactorriesgoDelete(url) {
+            targetContent = $('#regfactorriesgo_content');
+            swal({
+                title: '¿Estas seguro?',
+                text: "Estas por eliminar un registro de factor de riesdo del sistema!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, Eliminarla'
+            }).then((result) => {
+                if (result.value) {
+                    $.post(url, {}).done((data) => {
+                        if (data.success) {
+                            swal('Borrado!', data.message, 'success').then(function () {
+                                targetContent.html('');
+                                targetContent.load("{{path('regfactorriesgo_de', {'id': visitante.id }) }}");
+                            });
+                        } else {
+                            swal('Cuidado!', data.message, 'error');
+                        }
+                    }).fail(() => {
+                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                    }
+                    );
+                }
+            });
         }
 
         function regenfermedadesView(urlTarget) {
