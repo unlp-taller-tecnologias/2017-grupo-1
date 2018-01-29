@@ -44,3 +44,9 @@ tr.danger > td{
 span.bootstrap-switch-label{
     width: 38px !important;
 }
+#regvac_avatar{
+    width: 120px;
+}
+#regvac_infovisitante div.panel-body > div{
+    margin: 0px;
+}

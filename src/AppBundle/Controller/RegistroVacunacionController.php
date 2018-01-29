@@ -132,7 +132,7 @@ class RegistroVacunacionController extends Controller {
         $cantVacunas = sizeof($vacunas);
         $observaciones = $registrovacunacion->getObservaciones();
 
-        return $this->render('registrovacunacion/editarRegistro_1.html.twig', array('observaciones' => $observaciones, 'visitante' => $visitante, 'vacunas' => $vacunas, 'registrovacunacion' => $registrovacunacion, 'cantVacunas'=>$cantVacunas, 'componentes' => $componentes));
+        return $this->render('registrovacunacion/editarRegistro.html.twig', array('observaciones' => $observaciones, 'visitante' => $visitante, 'vacunas' => $vacunas, 'registrovacunacion' => $registrovacunacion, 'cantVacunas'=>$cantVacunas, 'componentes' => $componentes));
     }
 
     /**
