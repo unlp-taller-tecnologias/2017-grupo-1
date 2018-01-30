@@ -9,7 +9,6 @@ use AppBundle\Entity\Usuario;
 use AppBundle\Entity\Visitante;
 use AppBundle\Entity\Observacion;
 
-
 /**
  * RegistroVacunacion
  *
@@ -83,8 +82,6 @@ class RegistroVacunacion {
      * @ORM\OneToMany(targetEntity="Componente", mappedBy="registroVacunacion")
      */
     private $componentes;
-
-  
 
     public function __construct() {
         $this->componentes = new ArrayCollection();
@@ -232,6 +229,24 @@ class RegistroVacunacion {
 
     function setActualizadoPor(Usuario $actualizadoPor) {
         $this->actualizadoPor = $actualizadoPor;
+    }
+
+    function getObservacionPublica() {
+        foreach ($this->getObservaciones() as $observacion) {
+            if (!$observacion->getEsPrivada()) {
+                return $observacion;
+            }
+        }
+        return NULL;
+    }
+
+    function getObservacionPrivada() {
+        foreach ($this->getObservaciones() as $observacion) {
+            if ($observacion->getEsPrivada()) {
+                return $observacion;
+            }
+        }
+        return NULL;
     }
 
 }

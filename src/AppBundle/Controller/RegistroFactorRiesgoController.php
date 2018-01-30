@@ -66,10 +66,9 @@ class RegistroFactorRiesgoController extends Controller {
      * @Route("/{id}/show", name="regfactorriesgo_show")
      * @Method("GET")
      */
-    public function showAction(Request $request, RegistroFactorRiesgo $regenfermedad) {
-        return $this->render('registroenfermedades/show.html.twig', array(
-                    'regenfermedad' => $regenfermedad,
-                    'entity' => $regenfermedad,
+    public function showAction(Request $request, RegistroFactorRiesgo $regfactorriesgo) {
+        return $this->render('registrofactorriesgo/show.html.twig', array(
+                    'entity' => $regfactorriesgo,
         ));
     }
 

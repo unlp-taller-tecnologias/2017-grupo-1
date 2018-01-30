@@ -10,33 +10,17 @@
         </div>
         <div class="col-md-12">
             <div class="form-group">
-                <label for="" class="col-md-3 control-label">Fecha Inicio: </label>
+                <label for="" class="col-md-3 control-label">Factor de Riesgo: </label>
                 <div class="col-md-6">
-                    <p class="form-control-static">{{entity.getFechaInicio | date('d/m/Y')}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="form-group"> 
-                <label for="" class="col-md-3 control-label">Fecha Fin: </label>
-                <div class="col-md-6">
-                    <p class="form-control-static">{{entity.getFechaFin? entity.getFechaFin | date('d/m/Y'):'---'}}</p>
+                    <p class="form-control-static">{{entity.getFactorRiesgo().getNombre() | upper }}</p>
                 </div>
             </div>
         </div>
         <div class="col-md-12">
             <div class="form-group">
-                <label for="" class="col-md-3 control-label">Enfermedad: </label>
+                <label for="" class="col-md-3 control-label">Observaci&oacute;n: </label>
                 <div class="col-md-6">
-                    <p class="form-control-static">{{entity.getEnfermedad().getNombre() | upper }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="" class="col-md-3 control-label">Comentario: </label>
-                <div class="col-md-6">
-                    <p class="form-control-static">{{entity.getObservacion()  | capitalize }}</p>
+                    <p class="form-control-static">{{entity.getObservacion() == ''?'---':  entity.getObservacion() | capitalize }}</p>
                 </div>
             </div>
         </div>
