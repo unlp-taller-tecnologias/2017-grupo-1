@@ -1,7 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block otherstylesheets %}
-		<link href="{{asset('vendor/datatables.net-buttons-bs/css/buttons.bootstrap.css')}}">
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 7, 'submenu': 3}  %}
+{% endblock %}
+
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>Listado de cumplimiento <small><i class="fa fa-user-plus"></i> Listado de personas que cumplen el calendario obligatorio. </small></h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: TOOLBAR -->
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li>
+									<a href="{{ path('reporte_index') }}">
+										 Seleccion de vacunas para ver su vencimiento
+									</a>
+                </li>
+								<li class="active">
+										Listado de personas que cumplen con el calendario obligatorio
+								</li>
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
 {% endblock %}
 
 {% block page_content %}
@@ -14,14 +49,14 @@
 		<table id="usuarios_tabla" class="table table-condensed table-bordered table-striped table-hover">
 			<thead>
 			<tr>
-				<th>Numero de ficha</th>
-				<th>Numero de documento</th>
-				<th>Nombre</th>
-				<th>Apellido</th>
-				<th>Provincia de procedencia</th>
-				<th>Municipio de procedencia</th>
+				<th class="text-center">Numero de ficha</th>
+				<th class="text-center">Numero de documento</th>
+				<th class="text-center">Nombre</th>
+				<th class="text-center">Apellido</th>
+				<th class="text-center">Provincia de procedencia</th>
+				<th class="text-center">Municipio de procedencia</th>
 				{% for item in vac %}
-				    <th>Fecha de vencimiento de {{item.nombre}}</th>
+				    <th class="text-center">Fecha de vencimiento de {{item.nombre}}</th>
 				{% endfor %}
 			</tr>
 		</thead>
@@ -29,27 +64,27 @@
 			{% for item in data %}
 				{% set i = 0 %}
 			    <tr>
-		    		<td>
+		    		<td class="text-center">
 							{% if item.nroFicha is defined %}
 								{{item.nroFicha}}
 							{% else %}
 								No posee
 							{% endif %}
 						</td>
-						<td>
+						<td class="text-center">
 							{{item.nroDocumento}}
 						</td>
-						<td>
+						<td class="text-center">
 							{{item.nombre}}
 						</td>
-						<td>
+						<td class="text-center">
 							{{item.apellido}}
 						</td>
-						<td>{{item.provincia}}</td>
-						<td>{{item.partido}}</td>
+						<td class="text-center">{{item.provincia}}</td>
+						<td class="text-center">{{item.partido}}</td>
 						{% for comp in item.registroVacunacion.componentes if i<vselec %}
 							{% if comp.vacuna.id >= vac[i].id %}
-								<td>
+								<td class="text-center">
 									{% if comp.vacuna.id == vac[i].id and comp.vencimiento != NULL %}
 										{{comp.vencimiento|date('d-m-Y') }}
 									{% else %}
@@ -61,7 +96,7 @@
 						{% endfor %}
 						{% if i<vselec %}
 						{% for i in 1..vselec if i<vselec %}
-								<td>No se ha registrado un vencimiento</td>
+								<td class="text-center">No se ha registrado un vencimiento</td>
 						{% endfor %}
 						{% endif %}
 			    </tr>
@@ -86,14 +121,21 @@
 <script type="text/javascript">
 $(document).ready( function(){
 	$('#usuarios_tabla').DataTable({
+		"autoWidth": true,
+		"aLengthMenu": [[5, 15, 50, -1], [5, 15, 50, "Todas"]], // change per page values here
 		"language": {
 				"url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
 		},
-		"bFilter":false,
-		dom: 'Bfrtip',
+/*		dom: 'Bfrtip',
     buttons: [
         'pdf'
-    ]
+    ],*/
+		"columnDefs": [{
+						"searchable": false,
+						"orderable": false,
+						"targets": [0]
+				}],
+		"order": [[0, 'asc']],
 	});
 });
 </script>

@@ -93,9 +93,14 @@ class GraficosController extends Controller{
                WHEN TIMESTAMPDIFF(YEAR,fechaNacimiento,fechaCreacion) > 64 THEN '65+'
  	           END
              ORDER BY cumple DESC";
-      $stm=$em->getConnection()->prepare($sql);
-      $stm->execute();
-      $values=$stm->fetchAll();
+      try {
+        $stm=$em->getConnection()->prepare($sql);
+        $stm->execute();
+        $values=$stm->fetchAll();
+      } catch (\Exception $e) {
+        $this->get('session')->getFlashBag()->add('error','Ha habido un problema en la base de datos');
+        return $this->redirectToRoute('homepage');
+      }
       $isThereData=false;
       foreach($values as $value){
         if($value['rango']!='Invalido'){
@@ -193,18 +198,23 @@ class GraficosController extends Controller{
           ";
           $sql2=str_replace('>=', '<', $sql1);
           $isThereData=false;
-          $stm1=$em->getConnection()->prepare($sql1);
-          $stm2=$em->getConnection()->prepare($sql2);
-          $i=1;
-          foreach ($dosis as $vacuna => $dose) {
-            $stm1->bindValue(":vacuna$i",$vacuna);
-            $stm1->bindValue(":dosis$i",$dose);
-            $stm2->bindValue(":vacuna$i",$vacuna);
-            $stm2->bindValue(":dosis$i",$dose);
-            $i++;
+          try {
+            $stm1=$em->getConnection()->prepare($sql1);
+            $stm2=$em->getConnection()->prepare($sql2);
+            $i=1;
+            foreach ($dosis as $vacuna => $dose) {
+              $stm1->bindValue(":vacuna$i",$vacuna);
+              $stm1->bindValue(":dosis$i",$dose);
+              $stm2->bindValue(":vacuna$i",$vacuna);
+              $stm2->bindValue(":dosis$i",$dose);
+              $i++;
+            }
+            $stm1->execute();
+            $stm2->execute();
+          } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('error','Ha habido un problema en la base de datos');
+            return $this->redirectToRoute('dosis_recibidas');
           }
-          $stm1->execute();
-          $stm2->execute();
           $values=$stm1->fetchAll();
           foreach($values as $value){
             if($value['rango']!='Invalido'){
@@ -220,7 +230,6 @@ class GraficosController extends Controller{
             }
           }
           if(!$isThereData){
-
             $this->get('session')->getFlashBag()->add('error', 'No existen datos suficientes para mostrar el grafico de personas que recibieron dosis para las vacunas seleccionadas.');
             return $this->redirectToRoute("dosis_recibidas");
           }

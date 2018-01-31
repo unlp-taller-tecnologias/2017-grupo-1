@@ -1,75 +1,80 @@
 {% extends 'base.html.twig' %}
 
+{% block otherstylesheets %}
+    <link href="{{ asset('vendor/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 7, 'submenu': 3}  %}
+{% endblock %}
+
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>Reportes <small><i class="fa fa-user-plus"></i> Seleccion de vacunas para mostrar vencimiento. </small></h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: TOOLBAR -->
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li class="active">
+                    Seleccion de vacunas para ver su vencimiento
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
+{% endblock %}
+
 {% block page_content %}
   <div class="panel">
     <div class="panel-heading">
-      <h3>Seleccione 2 vacunas para mostrar</h3>
+      <h3>Mostrar <strong>Vencimiento</strong> De </h3>
     </div>
     <div class="panel-body">
-      <form class="" action="{{path('reporte_show')}}" method="post">
-        <table>
-          <thead>
-            <tr>
-              <th>Vacuna</th>
-              <th>¿Mostrar vencimiento?</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in vac %}
-              <tr>
-                <td>{{item.nombre}}</td>
-                <td>
-                  <input type="checkbox" name="vac[]" value="{{item.id}}" onclick="total()">
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        <input type="submit" value="Ver resultados">
+      <form class="" action="{{path('reporte_show')}}" method="post" class="form-horizontal">
+        <div class="form-group">
+        {% for item in vac %}
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="" class="col-md-3 control-label">{{item.nombre}}</label>
+              <div class="col-md-6">
+                <div class="input-group margin-bottom-sm">
+                  <input type="checkbox" name="vac[]" value="{{item.id}}">
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="col-md-9 text-right">
+          <input class="btn btn-primary" type="submit" value="Ver resultados">
+        </div>
       </form>
-
     </div>
   </div>
 {% endblock %}
 {% block otherJavascript %}
-  <script type="text/javascript">
-
-  function hideExtra(elements){
-    for(var i=0;i<elements.length;i++){
-      if(!elements[i].checked){
-        elements[i].parentElement.parentElement.style="display:none";
-      }
-
-    }
-    localStorage.setItem("moreThan2",true);
-  }
-
-  function showExtra(elements){
-    for(var i=0;i<elements.length;i++){
-        elements[i].parentElement.parentElement.style="";
-    }
-    localStorage.setItem("moreThan2",false);
-  }
-
-  function total(){
-      var elements=document.getElementsByName('vac[]');
-      var total=0;
-      var i=0;
-      while(total<2&&i<elements.length){
-        if(elements[i].checked){
-          total++;
-        }
-        i++;
-      }
-      if(total==2){
-        hideExtra(elements);
-      }
-      else{
-        if(localStorage.getItem('moreThan2')){
-          showExtra(elements);
-        }
-      }
-    }
-    localStorage.setItem('moreThan2',false);
+  <script src="{{ asset('vendor/bootstrap-switch-master/dist/js/bootstrap-switch.min.js') }}"></script>
+  <script>
+    $(document).ready(function () {
+        $.fn.bootstrapSwitch.defaults.size = 'small';
+        $.fn.bootstrapSwitch.defaults.onText = 'SI';
+        $.fn.bootstrapSwitch.defaults.offText = 'NO';
+        $.fn.bootstrapSwitch.defaults.offColor = 'danger';
+        $("[name='vac[]']").bootstrapSwitch();
+    });
   </script>
 {% endblock %}

@@ -1,5 +1,44 @@
 {% extends "base.html.twig" %}
 
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 7, 'submenu': 2}  %}
+{% endblock %}
+
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>Reportes <small>Grafico de personas que recibieron dosis elegidas anteriormente. </small></h1>
+            </div>
+        </div>
+    </div>
+    <!-- end: TOOLBAR -->
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li>
+                  <a href="{{ path('dosis_recibidas')}}">
+                    Seleccion de dosis necesarias
+                  </a>
+                </li>
+                <li class="active">
+                  Grafico de dosis recibidas
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
+{% endblock %}
+
 {% block page_content %}
   <div class="panel">
     <div class="panel-heading">
