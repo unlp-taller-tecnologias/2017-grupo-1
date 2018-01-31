@@ -190,11 +190,14 @@
                 <div id="regvac_infovisitante" class="panel panel-default">
                     <div class="panel-heading">
                         <i class="clip-bars"></i>
-                        <h4 class="panel-title">Propietario/a <span class="text-bold"> del registro de vacunaci&oacute;n</span></h4>
+                        <h4 class="panel-title">Propietari@ <span class="text-bold"> del registro de vacunaci&oacute;n</span></h4>
                     </div>
                     <div class="panel-body">
                         <div class="col-md-5 text-center">
-                            <img id="regvac_avatar" src="{{ asset('images/avatar4.png') }}" alt="Avatar">
+                            <img class="img-thumbnail" id="regvac_avatar" src="{{ asset('images/avatar4.png') }}" alt="Avatar">
+                            <div class="form-group text-right">
+                                <a class="btn btn-xs btn-grey" href="{{ path('inscripto_show', {'id': visitante.id} )}}"><i class="fa fa-plus" aria-hidden="true"></i> Info</a>
+                            </div>
                         </div>
                         <div class="col-md-7 col-md-offset-5">
                             <div class="form-group">
@@ -205,10 +208,10 @@
                                 <label class="control-label">Documento:</label>
                                 <p class="form-control-static">{{visitante.tipoDocumento | upper}} {{visitante.nroDocumento | number_format(0,',','.') }}</p>
                             </div>
+
                         </div>
                     </div>
                 </div>
-
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="clip-bars"></i>
@@ -427,6 +430,15 @@
                                 crearModalView(
                                         urlTarget, //URL para obtener el contenido inicial del panel
                                         "Ver Registro de Enfermedad", //Título del panel
+                                        );
+                                $('#cancelButton').hide();
+                            }
+
+                            function regfactorriesgoView(urlTarget) {
+                                $('#cancelButton').hide(); //Modal
+                                crearModalView(
+                                        urlTarget, //URL para obtener el contenido inicial del panel
+                                        "Ver Registro de Factor de Riesgo", //Título del panel
                                         );
                                 $('#cancelButton').hide();
                             }

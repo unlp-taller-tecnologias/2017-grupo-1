@@ -12,7 +12,7 @@
     <div class="toolbar row">
         <div class="col-sm-6 hidden-xs">
             <div class="page-header">
-                <h1>Registro de Vacunaci&oacute;n <small><i class="fa fa-user-circle"></i> <strong>{{visitante.apellido | upper}}</strong> {{visitante.nombre | lower}}. </small></h1>
+                <h1>Registro de Vacunaci&oacute;n <small><i class="fa fa-id-card-o"></i> Edici&oacute;n del registro</h1>
             </div>
         </div>
         <div class="col-sm-6 col-xs-12">
@@ -27,20 +27,20 @@
                 <ul class="nav navbar-right">
                     <!-- start: TO-DO DROPDOWN -->
                     <li class="dropdown">
+                        <a href="{{path('inscripto_index')}}">
+                            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> VOLVER
+                        </a>
+                    </li>
+                    <li class="dropdown">
                         <a href="#">
                             <form style="margin-bottom: 0px;">
-                                <input type="checkbox" name="prueba" {% if registrovacunacion.cumple %} checked {% endif %}/>
+                                <input class="normal_button" type="checkbox" name="general_cumple" {% if registrovacunacion.cumple %} checked {% endif %}/>
                             </form>
                             CUMPLE
                         </a>
                     </li>
                     <li class="dropdown">
-                        <a href="{{ path('vacuna_new') }}">
-                            <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i> VOLVER
-                        </a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="{{ path('vacuna_new') }}">
+                        <a href="#" onclick="regvac_submit();">
                             <i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> GUARDAR
                             <div class="tooltip-notification hide">
                                 <div class="tooltip-notification-arrow"></div>
@@ -114,26 +114,26 @@
                                             <td class="text-center">
                                                 {{vacuna.nombre}}
                                             </td>
-                                            <input type="hidden" name="idComponente{{loop.index}}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
-                                            <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
-                                            <td class="text-center">
-                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control text-center" name="dosisRecibidas{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %} /> 
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %}/>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>
-                                            </td>
-                                            <td class="text-center"> 
-                                                <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario">{% for componente in componentes %}{% if componente.vacuna.id == vacuna.id %}{{componente.comentario}}{% endif %}{% endfor %}</textarea>
-                                            </td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
+                                    <input type="hidden" name="idComponente{{loop.index}}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
+                                    <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
+                                    <td class="text-center">
+                                        <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control text-center" name="dosisRecibidas{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %} /> 
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %}/>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <input class="mini_button" name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>
+                                    </td>
+                                    <td class="text-center"> 
+                                        <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario">{% for componente in componentes %}{% if componente.vacuna.id == vacuna.id %}{{componente.comentario}}{% endif %}{% endfor %}</textarea>
+                                    </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -160,35 +160,59 @@
                                 {% for vacuna in vacunas %}
                                     {% if not vacuna.esObligatoria %}
                                         <tr>
-                                            <input type="hidden" name="idComponente{{loop.index}}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
-                                            <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
-                                            <td class="text-center">
-                                                {{vacuna.nombre}}
-                                            </td>
-                                            <td class="text-center">
-                                                <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %} />
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                    <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento"  {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %}/>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <input name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>
-                                            </td>
-                                            <td class="text-center"> 
-                                                <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario">{% for componente in componentes %}{% if componente.vacuna.id == vacuna.id %}{{componente.comentario}}{% endif %}{% endfor %}</textarea>
-                                            </td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
+                                    <input type="hidden" name="idComponente{{loop.index}}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.id}}" {% endif %} {% endfor %}>
+                                    <input type="hidden" name="idVacuna{{loop.index}}" value="{{ vacuna.id }}">
+                                    <td class="text-center">
+                                        {{vacuna.nombre}}
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="number" id="dosisRecibidas{{ loop.index }}" class="form-control" name="dosisRecibidas{{ loop.index }}" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} value="{{componente.dosisRecibidas}}" {% endif %} {% endfor %} />
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input type="date" class="form-control" name="vencimiento{{ loop.index }}" id="vencimiento{{ loop.index }}" placeholder="vencimiento"  {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %} {% if componente.vencimiento %}value="{{ componente.vencimiento | date("Y-m-d")}}"{% endif %} {% endif %} {% endfor %}/>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <input class="mini_button" name="cumple{{ loop.index }}" type="checkbox" {% for componente in componentes %} {% if componente.vacuna.id == vacuna.id %}{% if componente.cumple %} checked {% endif %} {% endif %} {% endfor %}>
+                                    </td>
+                                    <td class="text-center"> 
+                                        <textarea  class="form-control" rows="1" style="width: 100%;" name="comentario{{ loop.index }}" id="comentario{{ loop.index }}" placeholder="comentario">{% for componente in componentes %}{% if componente.vacuna.id == vacuna.id %}{{componente.comentario}}{% endif %}{% endfor %}</textarea>
+                                    </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             <div class="col-md-12 col-lg-3">
+                <div id="regvac_infovisitante" class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Propietari@ <span class="text-bold"> del registro de vacunaci&oacute;n</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-5 text-center">
+                            <img class="img-thumbnail" id="regvac_avatar" src="{{ asset('images/avatar4.png') }}" alt="Avatar">
+                            <div class="form-group text-right">
+                                <a class="btn btn-xs btn-grey" href="{{ path('inscripto_show', {'id': visitante.id} )}}"><i class="fa fa-plus" aria-hidden="true"></i> Info</a>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-md-offset-5">
+                            <div class="form-group">
+                                <label class="control-label">Nombre completo:</label>
+                                <p class="form-control-static">{{visitante.apellido | upper}}, {{visitante.nombre | capitalize}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Documento:</label>
+                                <p class="form-control-static">{{visitante.tipoDocumento | upper}} {{visitante.nroDocumento | number_format(0,',','.') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="clip-bars"></i>
@@ -197,11 +221,11 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="observacionPrivada">Observacion Privada:</label>
-                            <textarea class="form-control" rows="5" style="width: 100%;" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL"></textarea>
+                            <textarea class="form-control" rows="5" style="width: 100%;" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL">{{registrovacunacion.getObservacionPrivada?registrovacunacion.getObservacionPrivada.getContenido | capitalize:''}}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="observacionPublica">Observacion Publica:</label>
-                            <textarea class="form-control" rows="5" style="width: 100%;"  name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL"></textarea>
+                            <textarea class="form-control" rows="5" style="width: 100%;"  name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL">{{registrovacunacion.getObservacionPublica?registrovacunacion.getObservacionPublica.getContenido | capitalize:''}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -219,8 +243,8 @@
                         <i class="clip-bars"></i>
                         <h4 class="panel-title">Listado <span class="text-bold"> de factores de riesgo</span></h4>
                     </div>
-                    <div class="panel-body">
-                        {% include 'registrofactorriesgo/listado.ajax.html.twig' with {'regfactores_riesgo': visitante.getRegistroFactoresRiesgo() }  %}
+                    <div  id="regfactorriesgo_content" class="panel-body">
+                        {% include 'registrofactorriesgo/listado.ajax.html.twig' with {'regfactorriesgo': visitante.getRegistroFactoresRiesgo() }  %}
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -232,7 +256,7 @@
                         <div class="form-group text-center">
                             <label for="reg_val_cumple">Cumple con el registro</label>
                             <div class="col-md-12">
-                                <input class="form-control" id="reg_val_cumple" name="cumple" type="checkbox"{% if registrovacunacion.cumple %} checked {% endif %}> 
+                                <input class="form-control normal_button" id="reg_val_cumple" name="cumple" type="checkbox"{% if registrovacunacion.cumple %} checked {% endif %}> 
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -240,8 +264,8 @@
                             <input type="hidden" name="idVisitante" value="{{visitante.id}}">
                             <input type="hidden" name="cantVacunas" value="{{ cantVacunas }}">
                             <div class="text-center">
-                                <a href="{{app.request.headers.get('referer')}}" class="btn btn-default" >Volver</a>
-                                <input class="btn btn-primary" type="submit" name="submit" value="Guardar">    
+                                <a href="{{path('inscripto_index')}}" class="btn btn-default" >Volver</a>
+                                <input  id="regvac_submit"  class="btn btn-primary" type="submit" name="submit" value="Guardar">    
                             </div>
 
                         </div>
@@ -255,71 +279,184 @@
 {% block otherJavascript %}
     <script src="{{ asset('vendor/bootstrap-switch-master/dist/js/bootstrap-switch.min.js') }}"></script>
     <script>
-        function crearModalEdit(url, title, urlTarget, targetContent) {
-            $('#okButton').button('reset');
-            $('#panel-config .modal-footer *').show();
-            $('#panel-config .modal-title').html(title);
-            $('#panel-config .modal-body').html("");
-            $('#okButton').html('listo');
-            $('#panel-config .modal-body').load(url, function () {
-                $('#panel-config form').submit(function (event) {
-                    event.preventDefault();
-                    $.post(url, $('#panel-config form').serialize(), function (data) {
-                        if (data.success === 1) {
-                            toastr['success'](data.message, '');
-                            targetContent.html('');
-                            targetContent.load(urlTarget);
-                        } else {
-                            toastr['error'](data.message, '');
-                        }
-                    });
-                });
-            });
-            $('#panel-config').modal();
-        }
+                            /**
+                             *  Sincronizacion de botones cumple
+                             * */
+                            var cumple_ini = '';
+                            $('input[name="general_cumple"]').on('switchChange.bootstrapSwitch', function (event, state) {
+                                if (cumple_ini != 'cumple') {
+                                    cumple_ini = 'general_cumple';
+                                    $('input[name="cumple"]').bootstrapSwitch('toggleState');
+                                } else {
+                                    cumple_ini = '';
+                                }
+                            });
 
-        function crearModalView(url, title) {
-            $('#okButton').button('reset');
-            $('#panel-config .modal-footer').show();
-            $('#cancelButton').hide();
-            $('#panel-config .modal-title').html(title);
-            $('#panel-config .modal-body').html("");
-            $('#panel-config .modal-body').load(url, function () {
-                $('#panel-config form').submit(function (event) {
-                    event.preventDefault();
-                    $('#panel-config').modal('toggle');
-                });
-            });
-            $('#panel-config').modal();
-        }
+                            $('input[name="cumple"]').on('switchChange.bootstrapSwitch', function (event, state) {
+                                if (cumple_ini != 'general_cumple') {
+                                    cumple_ini = 'cumple';
+                                    $('input[name="general_cumple"]').bootstrapSwitch('toggleState');
+                                } else {
+                                    cumple_ini = '';
+                                }
+                            });
+                            /**
+                             *****************************************************************************************************************************************
+                             *  */
 
-        function regenfermedadesNew() {
-            crearModalEdit(
-                    "{{ path('regenfermedad_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
-                    "Nuevo Registro de Enfermedad", //Título del panel
-                    "{{path('regenfermedades_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
-                    $("#regenfermedades_content"), //Elemento DOM en donde actualizar
-                    );
-        }
+                            function regvac_submit() {
+                                $('#regvac_submit').click();
+                            }
 
-        function regenfermedadesView(urlTarget) {
-            $('#cancelButton').hide(); //Modal
-            crearModalView(
-                    urlTarget, //URL para obtener el contenido inicial del panel
-                    "Ver Registro de Enfermedad", //Título del panel
-                    );
-            $('#cancelButton').hide();
-        }
+                            function crearModalEdit(url, title, urlTarget, targetContent) {
+                                $('#okButton').button('reset');
+                                $('#panel-config .modal-footer *').show();
+                                $('#panel-config .modal-title').html(title);
+                                $('#panel-config .modal-body').html("");
+                                $('#okButton').html('listo');
+                                $('#panel-config .modal-body').load(url, function () {
+                                    $('#panel-config form').submit(function (event) {
+                                        event.preventDefault();
+                                        $.post(url, $('#panel-config form').serialize(), function (data) {
+                                            if (data.success === 1) {
+                                                toastr['success'](data.message, '');
+                                                targetContent.html('');
+                                                targetContent.load(urlTarget);
+                                            } else {
+                                                toastr['error'](data.message, '');
+                                            }
+                                        });
+                                    });
+                                });
+                                $('#panel-config').modal();
+                            }
 
-        $(document).ready(function () {
-            $('#okButton').on('click', function () {
-                $('#panel-config form').submit();
-            });
-            $.fn.bootstrapSwitch.defaults.size = 'small';
-            $.fn.bootstrapSwitch.defaults.onText = 'SI';
-            $.fn.bootstrapSwitch.defaults.offText = 'NO';
-            $.fn.bootstrapSwitch.defaults.offColor = 'danger';
-            $("form input[type=checkbox]").bootstrapSwitch();
-        });
+                            function crearModalView(url, title) {
+                                $('#okButton').button('reset');
+                                $('#panel-config .modal-footer').show();
+                                $('#cancelButton').hide();
+                                $('#panel-config .modal-title').html(title);
+                                $('#panel-config .modal-body').html("");
+                                $('#panel-config .modal-body').load(url, function () {
+                                    $('#panel-config form').submit(function (event) {
+                                        event.preventDefault();
+                                        $('#panel-config').modal('toggle');
+                                    });
+                                });
+                                $('#panel-config').modal();
+                            }
+
+                            function regenfermedadesNew() {
+                                crearModalEdit(
+                                        "{{ path('regenfermedad_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
+                                        "Nuevo Registro de Enfermedad", //Título del panel
+                                        "{{path('regenfermedades_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
+                                        $("#regenfermedades_content"), //Elemento DOM en donde actualizar
+                                        );
+                            }
+
+                            function regfactorriesgoNew() {
+                                crearModalEdit(
+                                        "{{ path('regfactorriesgo_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
+                                        "Nuevo Registro de Factor de Riesgo", //Título del panel
+                                        "{{path('regfactorriesgo_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
+                                        $("#regfactorriesgo_content"), //Elemento DOM en donde actualizar
+                                        );
+                            }
+
+                            function regenfermedadesDelete(url) {
+                                targetContent = $('#regenfermedades_content');
+                                swal({
+                                    title: '¿Estas seguro?',
+                                    text: "Estas por eliminar un registro de enfermedad del sistema!",
+                                    type: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    cancelButtonText: 'Cancelar',
+                                    confirmButtonText: 'Si, Eliminarla'
+                                }).then((result) => {
+                                    if (result.value) {
+                                        $.post(url, {}).done((data) => {
+                                            if (data.success) {
+                                                swal('Borrado!', data.message, 'success').then(function () {
+                                                    targetContent.html('');
+                                                    targetContent.load("{{path('regenfermedades_de', {'id': visitante.id }) }}");
+                                                });
+                                            } else {
+                                                swal('Cuidado!', data.message, 'error');
+                                            }
+                                        }).fail(() => {
+                                            swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                        }
+                                        );
+                                    }
+                                });
+                            }
+
+                            function regfactorriesgoDelete(url) {
+                                targetContent = $('#regfactorriesgo_content');
+                                swal({
+                                    title: '¿Estas seguro?',
+                                    text: "Estas por eliminar un registro de factor de riesdo del sistema!",
+                                    type: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    cancelButtonText: 'Cancelar',
+                                    confirmButtonText: 'Si, Eliminarla'
+                                }).then((result) => {
+                                    if (result.value) {
+                                        $.post(url, {}).done((data) => {
+                                            if (data.success) {
+                                                swal('Borrado!', data.message, 'success').then(function () {
+                                                    targetContent.html('');
+                                                    targetContent.load("{{path('regfactorriesgo_de', {'id': visitante.id }) }}");
+                                                });
+                                            } else {
+                                                swal('Cuidado!', data.message, 'error');
+                                            }
+                                        }).fail(() => {
+                                            swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                        }
+                                        );
+                                    }
+                                });
+                            }
+
+                            function regenfermedadesView(urlTarget) {
+                                $('#cancelButton').hide(); //Modal
+                                crearModalView(
+                                        urlTarget, //URL para obtener el contenido inicial del panel
+                                        "Ver Registro de Enfermedad", //Título del panel
+                                        );
+                                $('#cancelButton').hide();
+                            }
+
+                            function regfactorriesgoView(urlTarget) {
+                                $('#cancelButton').hide(); //Modal
+                                crearModalView(
+                                        urlTarget, //URL para obtener el contenido inicial del panel
+                                        "Ver Registro de Factor de Riesgo", //Título del panel
+                                        );
+                                $('#cancelButton').hide();
+                            }
+
+                            $(document).ready(function () {
+                                $('#okButton').on('click', function () {
+                                    $('#panel-config form').submit();
+                                });
+                                $.fn.bootstrapSwitch.defaults.size = 'mini';
+                                $.fn.bootstrapSwitch.defaults.onText = 'SI';
+                                $.fn.bootstrapSwitch.defaults.offText = 'NO';
+                                $.fn.bootstrapSwitch.defaults.offColor = 'danger';
+                                $.fn.bootstrapSwitch.defaults.onColor = 'success';
+                                $("form input[type=checkbox].mini_button").bootstrapSwitch();
+                                $.fn.bootstrapSwitch.defaults.size = 'small';
+                                $("form input[type=checkbox].small_button").bootstrapSwitch();
+                                $.fn.bootstrapSwitch.defaults.size = 'normal';
+                                $("form input[type=checkbox].normal_button").bootstrapSwitch();
+
+                            });
     </script>
 {% endblock %}

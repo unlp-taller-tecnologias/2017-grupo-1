@@ -123,16 +123,22 @@ class RegistroVacunacionController extends Controller {
      * @Route("/{id}/editarRegistro", name="editar_registro")
      * @Method("GET")
      */
-    public function editarRegistro(Request $request) {
+    public function editarRegistro(Request $request, Visitante $visitante) {
         $em = $this->getDoctrine()->getManager();
-        $visitante = $em->getRepository('AppBundle:Visitante')->find($request->get("id"));
+       // $visitante = $em->getRepository('AppBundle:Visitante')->find($request->get("id"));
         $registrovacunacion = $visitante->getRegistroVacunacion();
         $componentes = $registrovacunacion->getComponentes();
         $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
         $cantVacunas = sizeof($vacunas);
         $observaciones = $registrovacunacion->getObservaciones();
-
-        return $this->render('registrovacunacion/editarRegistro.html.twig', array('observaciones' => $observaciones, 'visitante' => $visitante, 'vacunas' => $vacunas, 'registrovacunacion' => $registrovacunacion, 'cantVacunas'=>$cantVacunas, 'componentes' => $componentes));
+        return $this->render('registrovacunacion/editarRegistro.html.twig', array(
+                    'observaciones' => $observaciones,
+                    'visitante' => $visitante,
+                    'vacunas' => $vacunas,
+                    'registrovacunacion' => $registrovacunacion,
+                    'cantVacunas' => $cantVacunas,
+                    'componentes' => $componentes
+        ));
     }
 
     /**
@@ -154,7 +160,6 @@ class RegistroVacunacionController extends Controller {
         } else {
             $registrovacunacion->setCumple(FALSE);
         }
-
         // Creo las observaciones
         if ($request->get('observacionPublica') != '') {
             $observacionPublica = new Observacion();
@@ -180,7 +185,7 @@ class RegistroVacunacionController extends Controller {
 
         $cantVacunas = $request->get('cantVacunas');
 
-        
+
         for ($i = 1; $i <= $cantVacunas; $i++) {
             if ($request->get("idComponente" . $i)) {
                 $componente = $em->getRepository('AppBundle:Componente')->find($request->get("idComponente" . $i));
@@ -224,7 +229,7 @@ class RegistroVacunacionController extends Controller {
                 return $this->redirectToRoute("nodocente_index", array('id' => $request->get("idVisitante")));
             }
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el registro. Detalle: ' . $e->getMessage());
+            $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el registro. Detalle: ' /*. $e->getMessage()*/);
         }
 
         return $this->render('registrovacunacion/index.html.twig', array('registroVacunacion' => $registroVacunacion, 'vacunas' => $vacunas));
