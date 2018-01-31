@@ -1,95 +1,321 @@
-{{ form_start(form, {'attr':{'class':'form-horizontal'} }) }}
-{{ form_errors(form)}}
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Nro ficha:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getNroFicha() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Legajo:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getLegajo() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Fecha de inscripcion:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getFechaInscripcion() | date('Y-m-d')}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Nombre:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getNombre() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Apellido:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getApellido() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Email:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getEmail() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Pais:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getPais() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Provincia:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getProvincia() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Localidad:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getLocalidad() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Codigo Postal:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getCodigoPostal() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Tipo documento:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getTipoDocumento() | capitalize}}</p>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-md-3 control-label "><strong><em>Nro documento:</em></strong></label>
-    <div class="col-sm-9">
-        <p class="form-control-static text-extra-large">{{ inscripto.getNroDocumento() | capitalize}}</p>
-    </div>
-</div>
-{% if inscripto.registroVacunacion %}
-    {% for componente in inscripto.registroVacunacion.componentes %}
-        <div class="form-group">
-            <label class="col-md-3 control-label "><strong><em>{{ componente.vacuna.getNombre() }}:</em></strong></label>
-            <div class="col-sm-9">
-                <p class="form-control-static text-extra-large">Dosis Recibidas: {{componente.getDosisRecibidas() | capitalize }} Completa: {% if componente.cumple == 1 %} SI {% else %} NO {% endif %}</p>
+{% extends 'base.html.twig' %}
+
+{% block otherstylesheets %}
+    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('vendor/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 3, 'submenu': 1}  %}
+{% endblock %}
+
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>Inscr&iacute;ptos <small><i class="fa fa-list"></i> Detalle del inscr&iacute;pto. </small></h1>
             </div>
         </div>
-    {% endfor %}
-    <div class="form-group">
-        <label class="col-md-3 control-label "><strong><em>Cumple el Registro de Vacunacion</em></strong></label>
-        <div class="col-sm-9">
-            <p class="form-control-static text-extra-large">{% if inscripto.registroVacunacion.cumple == 1 %} SI {% else %} NO {% endif %}</p>
+        <div class="col-sm-6 col-xs-12">
+            <a href="#" class="back-subviews">
+                <i class="fa fa-chevron-left"></i> BACK
+            </a>
+            <a href="#" class="close-subviews">
+                <i class="fa fa-times"></i> CLOSE
+            </a>
         </div>
     </div>
-{% endif %}
-<div class="hidden">
-    {{ form_rest(form) }}
-    <input type="submit" value="Submit">
+    <!-- end: TOOLBAR -->
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('inscripto_index') }}">
+                        <i class="fa fa-users"></i> Inscr&iacute;ptos
+                    </a>
+                </li>
+                <li class="active">
+                    Ver Detalle
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
+{% endblock %}
+
+{% block page_content  %}
+    <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                <h1 class="panel-title"><strong>{{ inscripto.apellido }}, {{inscripto.nombre }}</strong></h1>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-offset-3">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Nro Ficha</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                         <p class="text-extra-large">{{ inscripto.getNroFicha() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Email</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                     <p class="text-extra-large">{{ inscripto.getEmail() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if inscripto.legajo %}
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Legajo</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                         <p class="text-extra-large">{{ inscripto.getLegajo() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Fecha Inscripcion</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                         <p class="text-extra-large">{{ inscripto.getFechaInscripcion() | date('Y-m-d')}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Fecha Nacimiento</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                         <p class="text-extra-large">{{ inscripto.getFechaNacimiento() | date('Y-m-d')}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Pais</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                        <p class="form-control-static text-extra-large">{{ inscripto.getPais() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Provincia</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                         <p class="text-extra-large">{{ inscripto.getProvincia() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Partido</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                        <p class="text-extra-large">{{ inscripto.getPartido() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Localidad</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                        <p class="text-extra-large">{{ inscripto.getLocalidad() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Codigo Postal</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                         <p class="text-extra-large">{{ inscripto.getCodigoPostal() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Tipo Documento</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group margin-bottom-sm">
+                                        <p class="text-extra-large">{{ inscripto.getTipoDocumento() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label "><strong><em>Nro Documento</em></strong></label>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <p class="text-extra-large">{{ inscripto.getNroDocumento() | capitalize}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if inscripto.registroVacunacion %}
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="" class="col-md-3 control-label">
+                                        <button type="button" class="btn btn-info"  data-toggle="collapse" data-target="#calendario">Ver Vacunas del Calendario Nacional</button>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="" class="col-md-3 control-label">
+                                        <button type="button" class="btn btn-info"  data-toggle="collapse" data-target="#optativas">Ver Vacunas Optativas</button>
+                                    </label>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                        <div id="calendario" class="collapse">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">Vacunas <span class="text-bold"> del Calendario Nacional</span></h4>
+                                    </div>
+                                    <!-- INICIO DEL FORM -->
+                                    <div class="panel-body">
+                                        <table id="vacunas_calendario" class="table  table-condensed table-bordered table-striped table-hover">
+                                            <thead>
+                                                <tr class="bg-primary ">
+                                                    <th class="text-center text-white">Vacuna</th>
+                                                    <th class="text-center text-white col-md-1">&Uacute;ltima D&oacute;sis</th>
+                                                    <th class="text-center text-white col-md-1">Vencimiento</th>
+                                                    <th class="text-center text-white col-md-1">Completa</th>
+                                                    <th class="text-center text-white col-md-6">Comentario</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for componente in inscripto.registroVacunacion.componentes %}
+                                                    {% if componente.vacuna.esObligatoria %}
+                                                        <tr>
+                                                            <td class="text-center">
+                                                                {{componente.vacuna.nombre}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{componente.dosisRecibidas}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <div class="input-group">
+                                                                    {% if componente.vencimiento %}
+                                                                        {{ componente.vencimiento | date('d/m/Y') }}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {% if componente.cumple %}
+                                                                    Si
+                                                                {% else %}
+                                                                    No
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="text-center"> 
+                                                                {{componente.comentario}}
+                                                            </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="optativas" class="collapse">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <i class="clip-bars"></i>
+                                        <h4 class="panel-title">Vacunas <span class="text-bold">Optativas</span></h4>
+                                    </div>
+                                    <!-- INICIO DEL FORM -->
+                                    <div class="panel-body">
+
+                                        <table id="vacunas_optativas" class="table  table-condensed table-bordered table-striped table-hover">
+                                            <thead>
+                                                <tr class="bg-info">
+                                                    <th class="text-center">Vacuna</th>
+                                                    <th class="text-center col-md-1">&Uacute;ltima D&oacute;sis</th>
+                                                    <th class="text-center col-md-1">Vencimiento</th>
+                                                    <th class="text-center col-md-1">Completa</th>
+                                                    <th class="text-center col-md-6">Comentario</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for componente in inscripto.registroVacunacion.componentes %}
+                                                    {% if not componente.vacuna.esObligatoria %}
+                                                        <tr>
+                                                            <td class="text-center">
+                                                                {{componente.vacuna.nombre}}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{componente.dosisRecibidas}}
+                                                            </td>
+                                                           <td class="text-center">
+                                                                <div class="input-group">
+                                                                    {% if componente.vencimiento %}
+                                                                        {{ componente.vencimiento | date('d/m/Y') }}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {% if componente.cumple %}
+                                                                    Si
+                                                                {% else %}
+                                                                    No
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="text-center"> 
+                                                                {{componente.comentario}}
+                                                            </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="col-md-9 text-right">
+                        <a href="{{ path("inscripto_index") }}" class="btn btn-default" >Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{{ form_end(form) }}
+{% endblock %}

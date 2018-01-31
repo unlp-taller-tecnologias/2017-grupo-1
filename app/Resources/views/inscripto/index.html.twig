@@ -114,12 +114,10 @@
                                         {% if not inscripto.borrado %}
                                             {% if inscripto.registroVacunacion %}
                                                 <a href="{{ path('editar_registro', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                                    {% else %}
+                                            {% else %}
                                                 <a href="{{ path('alta_registro', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
-                                                    {% endif %}
-                                            <button type="button" class="btn btn-xs btn-primary" onclick="crearModalView('{{ path('inscripto_show',{'id': inscripto.id}) }}', 'Ver inscripto');">
-                                                <i class="fa fa-binoculars" aria-hidden="true"></i>
-                                            </button>
+                                            {% endif %}
+                                             <a href="{{ path('inscripto_show', {'id': inscripto.id} )}}"><button type="button" class="btn btn-xs btn-info"><i class="fa fa-binoculars" aria-hidden="true"></i></button></a>
                                             {% if is_granted('ROLE_ADMIN') %}  
                                                 <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}">
                                                     <button type="button" class="btn btn-xs btn-warning">
