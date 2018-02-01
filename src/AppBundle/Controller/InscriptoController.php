@@ -190,7 +190,7 @@ class InscriptoController extends Controller
             $noCargados = 0;
             $cargados = 0;
             $arrNoCargados = array ();
-            while ($i != 3){
+            while ($continuar){
                 if ($sheet->getCell('A'.$i)->getValue() != ''){
                     $ficha = $sheet->getCell('A'.$i)->getValue();
                     
@@ -241,7 +241,7 @@ class InscriptoController extends Controller
                         $noCargado->setApellido($apellido);
                         $noCargado->setFicha($ficha);
                         $noCargado->setDni($documento);
-                        $noCargado->setMotivo($e->getMessage());
+                        $noCargado->setMotivo("La persona ya se encuentra en el sistema");
 
                         $arrNoCargados[] = $noCargado;
                         $em = $this->getDoctrine()->resetManager();
@@ -256,8 +256,11 @@ class InscriptoController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Se importaron '.$cargados.' inscriptos correctamente');
             return $this->redirectToRoute("inscripto_index");
         }else{
+        	$total = (sizeof($arrNoCargados) + sizeof($cargados));
             return $this->render('inscripto/noCargados.html.twig', array(
             'noCargados' => $arrNoCargados,
+            'cargados' => $cargados,
+            'total' => $total
         ));
         }
     }
@@ -266,14 +269,12 @@ class InscriptoController extends Controller
      * Show a inscripto entity.
      *
      * @Route("/{id}/show", name="inscripto_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function showAction(Request $request, Inscripto $inscripto) {
-        $form = $this->createForm('AppBundle\Form\InscriptoType', $inscripto);
         return $this->render('inscripto/show.html.twig', array(
-                    'inscripto' => $inscripto,
-                    'form' => $form->createView(),
+                    'inscripto' => $inscripto
         ));
     }
 
