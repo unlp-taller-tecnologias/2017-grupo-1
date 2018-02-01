@@ -256,7 +256,7 @@ class InscriptoController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Se importaron '.$cargados.' inscriptos correctamente');
             return $this->redirectToRoute("inscripto_index");
         }else{
-        	$total = (sizeof($arrNoCargados) + sizeof($cargados));
+        	$total = (sizeof($arrNoCargados) + sizeof($cargados)) -1;
             return $this->render('inscripto/noCargados.html.twig', array(
             'noCargados' => $arrNoCargados,
             'cargados' => $cargados,
