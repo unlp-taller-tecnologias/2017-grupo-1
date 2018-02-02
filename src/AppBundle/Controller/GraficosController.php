@@ -16,6 +16,16 @@ use AppBundle\Entity\Vacuna;
 
 class GraficosController extends Controller{
 
+    private function itHasOnlyNumbers($data){
+      $regEx="/^[0-9]+$/";
+      foreach($data as $info){
+        if(!preg_match($reg,$info)){
+          return false;
+        }
+      }
+      return true;
+    }
+
     private function rangeArray(){
       $numbers=array('SI'=>0,'NO'=>0);
       $ranges=array(
@@ -140,9 +150,22 @@ class GraficosController extends Controller{
      */
     public function dosisRecibidasGraficoIndexAction(Request $request){
       $vacunas=$request->get('vacunas');
-      $dosisR=$request->get('dosis');
       if($vacunas==NULL||empty($vacunas)){
         $this->get('session')->getFlashBag()->add('error', 'No se seleccionaron vacunas para mostrar el grafico.');
+        return $this->redirectToRoute("dosis_recibidas");
+      }
+      elseif(!$this->itHasOnlyNumbers($vacunas)){
+        //SI PASA ESTO, ES GRAVE! (No tanto,)
+        $this->get('session')->getFlashBag()->add('error', 'Ha habido un error en el sistema. Intente nuevamente');
+        return $this->redirectToRoute("dosis_recibidas");
+      }
+      $dosisR=$request->get('dosis');
+      if($dosisR==NULL||empty($dosisR)){
+        $this->get('session')->getFlashBag()->add('error', 'No se ingresaron dosis para poder mostrar el grafico.');
+        return $this->redirectToRoute("dosis_recibidas");
+      }
+      elseif(!$this->itHasOnlyNumbers($dosisR)){
+        $this->get('session')->getFlashBag()->add('error', 'No deben ingresarse caracteres que no sean numeros a la cantidad de dosis.');
         return $this->redirectToRoute("dosis_recibidas");
       }
       $dosis=array();

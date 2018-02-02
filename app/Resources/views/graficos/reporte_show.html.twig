@@ -126,14 +126,17 @@ $(document).ready( function(){
 		"language": {
 				"url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
 		},
-/*		dom: 'Bfrtip',
+		dom: 'Bfrtip',
     buttons: [
-        'pdf'
-    ],*/
+      {
+        extend: 'pdf',
+        text: 'Exportar a PDF',
+      }
+    ],
+    "searching": false,
 		"columnDefs": [{
-						"searchable": false,
-						"orderable": false,
-						"targets": [0]
+						"orderable": true,
+						"targets": [0,5+{{vselec}}]
 				}],
 		"order": [[0, 'asc']],
 	});
