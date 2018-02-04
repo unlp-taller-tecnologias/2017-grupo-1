@@ -213,7 +213,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default">
+
+                <!--
+                            <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="clip-bars"></i>
                         <h4 class="panel-title">Comentarios <span class="text-bold"> del registro de vacunaci&oacute;n</span></h4>
@@ -221,14 +223,15 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="observacionPrivada">Observacion Privada:</label>
-                            <textarea class="form-control" rows="5" style="width: 100%;" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL">{{registrovacunacion.getObservacionPrivada?registrovacunacion.getObservacionPrivada.getContenido | capitalize:''}}</textarea>
+                            <textarea class="form-control" rows="5" style="width: 100%;" name="observacionPrivada" id="observacionPrivada" placeholder="OPCIONAL"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="observacionPublica">Observacion Publica:</label>
-                            <textarea class="form-control" rows="5" style="width: 100%;"  name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL">{{registrovacunacion.getObservacionPublica?registrovacunacion.getObservacionPublica.getContenido | capitalize:''}}</textarea>
+                            <textarea class="form-control" rows="5" style="width: 100%;"  name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL"></textarea>
                         </div>
                     </div>
                 </div>
+                -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="clip-bars"></i>
@@ -248,6 +251,38 @@
                     </div>
                 </div>
                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Comentarios <span class="text-bold"> P&uacute;blicos</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <div id="comentarios_publicos_content">
+                            {{ render(controller('AppBundle\\Controller\\ObservacionController::getObservacionPublicaAction', { 'regvacunacion': visitante.getRegistroVacunacion().getId() }    )) }}
+                        </div>
+                        <div class="form-group text-right">
+                            <a href="#" onclick="observacionPublicaNew();" class="btn btn-orange">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Comentarios <span class="text-bold"> P&uacute;blicos</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <blockquote class="blockquote-reverse">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                            <footer>Creado el 14/01/2018 14hs 25m  <cite title="Source Title"> por Administrador</cite></footer>
+                        </blockquote>
+                        <blockquote class="blockquote-reverse">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                            <footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="panel panel-default hidden">
                     <div class="panel-heading">
                         <i class="clip-bars"></i>
                         <h4 class="panel-title">Controles <span class="text-bold"> del registro de vacunaci&oacute;n</span></h4>
@@ -279,184 +314,193 @@
 {% block otherJavascript %}
     <script src="{{ asset('vendor/bootstrap-switch-master/dist/js/bootstrap-switch.min.js') }}"></script>
     <script>
-                            /**
-                             *  Sincronizacion de botones cumple
-                             * */
-                            var cumple_ini = '';
-                            $('input[name="general_cumple"]').on('switchChange.bootstrapSwitch', function (event, state) {
-                                if (cumple_ini != 'cumple') {
-                                    cumple_ini = 'general_cumple';
-                                    $('input[name="cumple"]').bootstrapSwitch('toggleState');
-                                } else {
-                                    cumple_ini = '';
+                                /**
+                                 *  Sincronizacion de botones cumple
+                                 * */
+                                var cumple_ini = '';
+                                $('input[name="general_cumple"]').on('switchChange.bootstrapSwitch', function (event, state) {
+                                    if (cumple_ini != 'cumple') {
+                                        cumple_ini = 'general_cumple';
+                                        $('input[name="cumple"]').bootstrapSwitch('toggleState');
+                                    } else {
+                                        cumple_ini = '';
+                                    }
+                                });
+
+                                $('input[name="cumple"]').on('switchChange.bootstrapSwitch', function (event, state) {
+                                    if (cumple_ini != 'general_cumple') {
+                                        cumple_ini = 'cumple';
+                                        $('input[name="general_cumple"]').bootstrapSwitch('toggleState');
+                                    } else {
+                                        cumple_ini = '';
+                                    }
+                                });
+                                /**
+                                 *****************************************************************************************************************************************
+                                 *  */
+
+                                function regvac_submit() {
+                                    $('#regvac_submit').click();
                                 }
-                            });
 
-                            $('input[name="cumple"]').on('switchChange.bootstrapSwitch', function (event, state) {
-                                if (cumple_ini != 'general_cumple') {
-                                    cumple_ini = 'cumple';
-                                    $('input[name="general_cumple"]').bootstrapSwitch('toggleState');
-                                } else {
-                                    cumple_ini = '';
-                                }
-                            });
-                            /**
-                             *****************************************************************************************************************************************
-                             *  */
-
-                            function regvac_submit() {
-                                $('#regvac_submit').click();
-                            }
-
-                            function crearModalEdit(url, title, urlTarget, targetContent) {
-                                $('#okButton').button('reset');
-                                $('#panel-config .modal-footer *').show();
-                                $('#panel-config .modal-title').html(title);
-                                $('#panel-config .modal-body').html("");
-                                $('#okButton').html('listo');
-                                $('#panel-config .modal-body').load(url, function () {
-                                    $('#panel-config form').submit(function (event) {
-                                        event.preventDefault();
-                                        $.post(url, $('#panel-config form').serialize(), function (data) {
-                                            if (data.success === 1) {
-                                                toastr['success'](data.message, '');
-                                                targetContent.html('');
-                                                targetContent.load(urlTarget);
-                                            } else {
-                                                toastr['error'](data.message, '');
-                                            }
+                                function crearModalEdit(url, title, urlTarget, targetContent) {
+                                    $('#okButton').button('reset');
+                                    $('#panel-config .modal-footer *').show();
+                                    $('#panel-config .modal-title').html(title);
+                                    $('#panel-config .modal-body').html("");
+                                    $('#okButton').html('listo');
+                                    $('#panel-config .modal-body').load(url, function () {
+                                        $('#panel-config form').submit(function (event) {
+                                            event.preventDefault();
+                                            $.post(url, $('#panel-config form').serialize(), function (data) {
+                                                if (data.success === 1) {
+                                                    toastr['success'](data.message, '');
+                                                    targetContent.html('');
+                                                    targetContent.load(urlTarget);
+                                                } else {
+                                                    toastr['error'](data.message, '');
+                                                }
+                                            });
                                         });
                                     });
-                                });
-                                $('#panel-config').modal();
-                            }
+                                    $('#panel-config').modal();
+                                }
 
-                            function crearModalView(url, title) {
-                                $('#okButton').button('reset');
-                                $('#panel-config .modal-footer').show();
-                                $('#cancelButton').hide();
-                                $('#panel-config .modal-title').html(title);
-                                $('#panel-config .modal-body').html("");
-                                $('#panel-config .modal-body').load(url, function () {
-                                    $('#panel-config form').submit(function (event) {
-                                        event.preventDefault();
-                                        $('#panel-config').modal('toggle');
+                                function crearModalView(url, title) {
+                                    $('#okButton').button('reset');
+                                    $('#panel-config .modal-footer').show();
+                                    $('#cancelButton').hide();
+                                    $('#panel-config .modal-title').html(title);
+                                    $('#panel-config .modal-body').html("");
+                                    $('#panel-config .modal-body').load(url, function () {
+                                        $('#panel-config form').submit(function (event) {
+                                            event.preventDefault();
+                                            $('#panel-config').modal('toggle');
+                                        });
                                     });
-                                });
-                                $('#panel-config').modal();
-                            }
+                                    $('#panel-config').modal();
+                                }
 
-                            function regenfermedadesNew() {
-                                crearModalEdit(
-                                        "{{ path('regenfermedad_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
-                                        "Nuevo Registro de Enfermedad", //Título del panel
-                                        "{{path('regenfermedades_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
-                                        $("#regenfermedades_content"), //Elemento DOM en donde actualizar
-                                        );
-                            }
+                                function regenfermedadesNew() {
+                                    crearModalEdit(
+                                            "{{ path('regenfermedad_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
+                                            "Nuevo Registro de Enfermedad", //Título del panel
+                                            "{{path('regenfermedades_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
+                                            $("#regenfermedades_content"), //Elemento DOM en donde actualizar
+                                            );
+                                }
 
-                            function regfactorriesgoNew() {
-                                crearModalEdit(
-                                        "{{ path('regfactorriesgo_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
-                                        "Nuevo Registro de Factor de Riesgo", //Título del panel
-                                        "{{path('regfactorriesgo_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
-                                        $("#regfactorriesgo_content"), //Elemento DOM en donde actualizar
-                                        );
-                            }
+                                function regfactorriesgoNew() {
+                                    crearModalEdit(
+                                            "{{ path('regfactorriesgo_new', {'id':  visitante.id }) }}", //URL para obtener el contenido inicial del panel
+                                            "Nuevo Registro de Factor de Riesgo", //Título del panel
+                                            "{{path('regfactorriesgo_de', {'id': visitante.id }) }}", //URL para obtener el panel actualizado
+                                            $("#regfactorriesgo_content"), //Elemento DOM en donde actualizar
+                                            );
+                                }
 
-                            function regenfermedadesDelete(url) {
-                                targetContent = $('#regenfermedades_content');
-                                swal({
-                                    title: '¿Estas seguro?',
-                                    text: "Estas por eliminar un registro de enfermedad del sistema!",
-                                    type: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    cancelButtonText: 'Cancelar',
-                                    confirmButtonText: 'Si, Eliminarla'
-                                }).then((result) => {
-                                    if (result.value) {
-                                        $.post(url, {}).done((data) => {
-                                            if (data.success) {
-                                                swal('Borrado!', data.message, 'success').then(function () {
-                                                    targetContent.html('');
-                                                    targetContent.load("{{path('regenfermedades_de', {'id': visitante.id }) }}");
-                                                });
-                                            } else {
-                                                swal('Cuidado!', data.message, 'error');
+                                function observacionPublicaNew() {
+                                    crearModalEdit(
+                                            "{{ path('observacion_new', {'id':  visitante.getRegistroVacunacion().getId() }) }}", //URL para obtener el contenido inicial del panel
+                                            "Nueva Observación Pública", //Título del panel
+                                            "{{path('observacion_publica_de', {'id': visitante.getRegistroVacunacion().getId()}) }}", //URL para obtener el panel actualizado
+                                            $("#comentarios_publicos_content"), //Elemento DOM en donde actualizar
+                                            );
+                                }
+
+                                function regenfermedadesDelete(url) {
+                                    targetContent = $('#regenfermedades_content');
+                                    swal({
+                                        title: '¿Estas seguro?',
+                                        text: "Estas por eliminar un registro de enfermedad del sistema!",
+                                        type: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        cancelButtonText: 'Cancelar',
+                                        confirmButtonText: 'Si, Eliminarla'
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            $.post(url, {}).done((data) => {
+                                                if (data.success) {
+                                                    swal('Borrado!', data.message, 'success').then(function () {
+                                                        targetContent.html('');
+                                                        targetContent.load("{{path('regenfermedades_de', {'id': visitante.id }) }}");
+                                                    });
+                                                } else {
+                                                    swal('Cuidado!', data.message, 'error');
+                                                }
+                                            }).fail(() => {
+                                                swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
                                             }
-                                        }).fail(() => {
-                                            swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                            );
                                         }
-                                        );
-                                    }
-                                });
-                            }
+                                    });
+                                }
 
-                            function regfactorriesgoDelete(url) {
-                                targetContent = $('#regfactorriesgo_content');
-                                swal({
-                                    title: '¿Estas seguro?',
-                                    text: "Estas por eliminar un registro de factor de riesdo del sistema!",
-                                    type: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    cancelButtonText: 'Cancelar',
-                                    confirmButtonText: 'Si, Eliminarla'
-                                }).then((result) => {
-                                    if (result.value) {
-                                        $.post(url, {}).done((data) => {
-                                            if (data.success) {
-                                                swal('Borrado!', data.message, 'success').then(function () {
-                                                    targetContent.html('');
-                                                    targetContent.load("{{path('regfactorriesgo_de', {'id': visitante.id }) }}");
-                                                });
-                                            } else {
-                                                swal('Cuidado!', data.message, 'error');
+                                function regfactorriesgoDelete(url) {
+                                    targetContent = $('#regfactorriesgo_content');
+                                    swal({
+                                        title: '¿Estas seguro?',
+                                        text: "Estas por eliminar un registro de factor de riesdo del sistema!",
+                                        type: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        cancelButtonText: 'Cancelar',
+                                        confirmButtonText: 'Si, Eliminarla'
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            $.post(url, {}).done((data) => {
+                                                if (data.success) {
+                                                    swal('Borrado!', data.message, 'success').then(function () {
+                                                        targetContent.html('');
+                                                        targetContent.load("{{path('regfactorriesgo_de', {'id': visitante.id }) }}");
+                                                    });
+                                                } else {
+                                                    swal('Cuidado!', data.message, 'error');
+                                                }
+                                            }).fail(() => {
+                                                swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
                                             }
-                                        }).fail(() => {
-                                            swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                                            );
                                         }
-                                        );
-                                    }
+                                    });
+                                }
+
+                                function regenfermedadesView(urlTarget) {
+                                    $('#cancelButton').hide(); //Modal
+                                    crearModalView(
+                                            urlTarget, //URL para obtener el contenido inicial del panel
+                                            "Ver Registro de Enfermedad", //Título del panel
+                                            );
+                                    $('#cancelButton').hide();
+                                }
+
+                                function regfactorriesgoView(urlTarget) {
+                                    $('#cancelButton').hide(); //Modal
+                                    crearModalView(
+                                            urlTarget, //URL para obtener el contenido inicial del panel
+                                            "Ver Registro de Factor de Riesgo", //Título del panel
+                                            );
+                                    $('#cancelButton').hide();
+                                }
+
+                                $(document).ready(function () {
+                                    $('#okButton').on('click', function () {
+                                        $('#panel-config form').submit();
+                                    });
+                                    $.fn.bootstrapSwitch.defaults.size = 'mini';
+                                    $.fn.bootstrapSwitch.defaults.onText = 'SI';
+                                    $.fn.bootstrapSwitch.defaults.offText = 'NO';
+                                    $.fn.bootstrapSwitch.defaults.offColor = 'danger';
+                                    $.fn.bootstrapSwitch.defaults.onColor = 'success';
+                                    $("form input[type=checkbox].mini_button").bootstrapSwitch();
+                                    $.fn.bootstrapSwitch.defaults.size = 'small';
+                                    $("form input[type=checkbox].small_button").bootstrapSwitch();
+                                    $.fn.bootstrapSwitch.defaults.size = 'normal';
+                                    $("form input[type=checkbox].normal_button").bootstrapSwitch();
+
                                 });
-                            }
-
-                            function regenfermedadesView(urlTarget) {
-                                $('#cancelButton').hide(); //Modal
-                                crearModalView(
-                                        urlTarget, //URL para obtener el contenido inicial del panel
-                                        "Ver Registro de Enfermedad", //Título del panel
-                                        );
-                                $('#cancelButton').hide();
-                            }
-
-                            function regfactorriesgoView(urlTarget) {
-                                $('#cancelButton').hide(); //Modal
-                                crearModalView(
-                                        urlTarget, //URL para obtener el contenido inicial del panel
-                                        "Ver Registro de Factor de Riesgo", //Título del panel
-                                        );
-                                $('#cancelButton').hide();
-                            }
-
-                            $(document).ready(function () {
-                                $('#okButton').on('click', function () {
-                                    $('#panel-config form').submit();
-                                });
-                                $.fn.bootstrapSwitch.defaults.size = 'mini';
-                                $.fn.bootstrapSwitch.defaults.onText = 'SI';
-                                $.fn.bootstrapSwitch.defaults.offText = 'NO';
-                                $.fn.bootstrapSwitch.defaults.offColor = 'danger';
-                                $.fn.bootstrapSwitch.defaults.onColor = 'success';
-                                $("form input[type=checkbox].mini_button").bootstrapSwitch();
-                                $.fn.bootstrapSwitch.defaults.size = 'small';
-                                $("form input[type=checkbox].small_button").bootstrapSwitch();
-                                $.fn.bootstrapSwitch.defaults.size = 'normal';
-                                $("form input[type=checkbox].normal_button").bootstrapSwitch();
-
-                            });
     </script>
 {% endblock %}

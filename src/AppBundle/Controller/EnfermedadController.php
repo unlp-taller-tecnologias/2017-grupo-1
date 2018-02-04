@@ -26,9 +26,7 @@ class EnfermedadController extends Controller {
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
-
-        $enfermedades = $em->getRepository('AppBundle:Enfermedad')->findAll();
-
+        $enfermedades = $em->getRepository('AppBundle:Enfermedad')->findAllOrderedByNombre();
         return $this->render('enfermedad/index.html.twig', array(
                     'enfermedades' => $enfermedades,
         ));

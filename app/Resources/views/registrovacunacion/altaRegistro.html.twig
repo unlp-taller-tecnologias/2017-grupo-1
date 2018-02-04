@@ -88,7 +88,7 @@
 
 {% block page_content %}
     <div class="row">
-        <form  enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("alta_registro_action", {'id': visitante.id}) }}" method="POST">
+        <form  enctype="multipart/form-data" name="formRegistroVacunacion" action="{{path ("editar_registro_action", {'id': visitante.id}) }}" method="POST">
             <div class="col-lg-9 col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -208,7 +208,18 @@
                                 <label class="control-label">Documento:</label>
                                 <p class="form-control-static">{{visitante.tipoDocumento | upper}} {{visitante.nroDocumento | number_format(0,',','.') }}</p>
                             </div>
-
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="clip-bars"></i>
+                        <h4 class="panel-title">Comentarios <span class="text-bold"> P&uacute;blicos</span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="observacionPublica">Observacion Publica:</label>
+                            <textarea class="form-control" rows="5" style="width: 100%;"  name="observacionPublica" id="observacionPublica" placeholder="OPCIONAL"></textarea>
                         </div>
                     </div>
                 </div>

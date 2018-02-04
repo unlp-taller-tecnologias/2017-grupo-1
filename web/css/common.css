@@ -50,3 +50,6 @@ span.bootstrap-switch-label{
 #regvac_infovisitante div.panel-body > div{
     margin: 0px;
 }
+#vacunas_optativas div.bootstrap-switch-container, #vacunas_calendario div.bootstrap-switch-container {
+    width: 85px !important;
+}

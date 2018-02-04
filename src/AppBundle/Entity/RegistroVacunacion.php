@@ -29,7 +29,7 @@ class RegistroVacunacion {
     /**
      * @var bool
      *
-     * @ORM\Column(name="cumple", type="boolean")
+     * @ORM\Column(name="cumple", type="boolean", options={"default" : false})
      */
     private $cumple;
 

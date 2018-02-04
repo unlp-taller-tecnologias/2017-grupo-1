@@ -1,0 +1,20 @@
+{{ form_start(form, {'attr':{ 'novalidate': 'novalidate'} } ) }}
+<div class="form-group">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="" >Observacion</label>
+            <div class="input-group margin-bottom-sm">
+                <span class="input-group-addon">
+                    <i class="fa fa-keyboard-o"></i>
+                </span>
+                {{ form_widget(form.contenido,{'attr':{'class':'form-control', 'rows':6} }) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hidden">
+    <input class="btn btn-primary" type="submit" name="submit" value="Guardar">
+    {{ form_rest(form) }}
+</div>
+{{ form_end(form) }}
+<div class="clearfix"></div>

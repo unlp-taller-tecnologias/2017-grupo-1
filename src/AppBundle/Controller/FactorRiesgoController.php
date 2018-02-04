@@ -25,8 +25,7 @@ class FactorRiesgoController extends Controller {
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
-
-        $factorRiesgos = $em->getRepository('AppBundle:FactorRiesgo')->findAll();
+        $factorRiesgos = $em->getRepository('AppBundle:FactorRiesgo')->findAllOrderedByNombre();
         return $this->render('factorriesgo/index.html.twig', array(
                     'factorRiesgos' => $factorRiesgos,
         ));

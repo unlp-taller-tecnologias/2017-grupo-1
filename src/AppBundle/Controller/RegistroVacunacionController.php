@@ -29,26 +29,43 @@ class RegistroVacunacionController extends Controller {
      * @Route("/{id}/altaRegistro", name="alta_registro")
      * @Method("GET")
      */
+    
     public function altaRegistro(Request $request, Visitante $visitante) {
         $em = $this->getDoctrine()->getManager();
         $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
         $cantVacunas = sizeof($vacunas);
-        return $this->render('registrovacunacion/altaRegistro.html.twig', array(
-                    'visitante' => $visitante,
-                    'vacunas' => $vacunas,
-                    'cantVacunas' => $cantVacunas,
-        ));
+        $registrovacunacion = new RegistroVacunacion();
+        $registrovacunacion->setCumple(false);
+        $registrovacunacion->setPropietario($visitante);
+        $registrovacunacion->setCreador($this->getUser());
+        $registrovacunacion->setActualizadoPor($this->getUser());
+        $fechaCreacion = new DateTime(date("Y-m-d H:i:s"));
+        $registrovacunacion->setFechaCreacion($fechaCreacion);
+        $registrovacunacion->setFechaActualizacion($fechaCreacion);
+        $visitante->setRegistroVacunacion($registrovacunacion);
+        $em->persist($registrovacunacion);
+        $em->persist($visitante);
+        try {
+            $em->flush();
+            return $this->render('registrovacunacion/altaRegistro.html.twig', array(
+                        'visitante' => $visitante,
+                        'vacunas' => $vacunas,
+                        'cantVacunas' => $cantVacunas,
+            ));
+        } catch (\Exception $e) {
+            return $this->createAccessDeniedException('No se pudo crear el registro de vacunacion');
+        }
     }
 
     /**
      * Alta registro
      *
-     * @Route("/{id}/altaRegistroAction", name="alta_registro_action")
-     * @Method("POST")
+     * @ Route("/{id}/altaRegistroAction", name="alta_registro_action")
+     * @ .Method("POST")
      */
-    public function altaRegistroAction(Request $request, Visitante $visitante) {
+   /* public function altaRegistroAction(Request $request, Visitante $visitante) {
         $em = $this->getDoctrine()->getManager();
-        $registrovacunacion = new registrovacunacion();
+        $registrovacunacion = new RegistroVacunacion();
         $usuario = $this->getUser();
         $registrovacunacion->setPropietario($visitante);
         $registrovacunacion->setCreador($usuario);
@@ -115,7 +132,7 @@ class RegistroVacunacionController extends Controller {
             $this->get('session')->getFlashBag()->add('error', 'No se ha podido dar de alta el registro. Detalle: ' . $e->getMessage());
         }
         return $this->redirectToRoute("inscripto_index");
-    }
+    }*/
 
     /**
      * Editar registro
@@ -125,7 +142,6 @@ class RegistroVacunacionController extends Controller {
      */
     public function editarRegistro(Request $request, Visitante $visitante) {
         $em = $this->getDoctrine()->getManager();
-       // $visitante = $em->getRepository('AppBundle:Visitante')->find($request->get("id"));
         $registrovacunacion = $visitante->getRegistroVacunacion();
         $componentes = $registrovacunacion->getComponentes();
         $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
@@ -229,7 +245,7 @@ class RegistroVacunacionController extends Controller {
                 return $this->redirectToRoute("nodocente_index", array('id' => $request->get("idVisitante")));
             }
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el registro. Detalle: ' /*. $e->getMessage()*/);
+            $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el registro. Detalle: ' /* . $e->getMessage() */);
         }
 
         return $this->render('registrovacunacion/index.html.twig', array('registroVacunacion' => $registroVacunacion, 'vacunas' => $vacunas));

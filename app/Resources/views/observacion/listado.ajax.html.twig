@@ -1,0 +1,14 @@
+{% for observacion in observaciones  %}
+    <div class="panel panel-danger">
+        <div class="panel-body">
+            <blockquote>
+                <p>{{ observacion.getContenido() | capitalize }}.</p>
+                <footer>Creado el {{observacion.getFechaCreacion() | date('d/m/Y - H:j:s')}}  <cite title="Usuario"> por<em> {{observacion.getCreadoPor().getUsername() | upper}}</em></cite></footer>
+            </blockquote>
+        </div>
+
+    </div>
+
+{% endfor %}
+
+
