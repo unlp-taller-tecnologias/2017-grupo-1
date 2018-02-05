@@ -99,6 +99,7 @@
                                 <th class="text-center">Apellido</th>
                                 <th class="text-center">Pais</th>
                                 <th class="text-center">Documento</th>
+                                <th class="text-center">Vacunaci&oacute;n</th>
                                 <th class="text-center">
                                     <i class="fa fa-cogs" aria-hidden="true"></i>
                                 </th>
@@ -112,6 +113,13 @@
                                     <td class="text-center">{{ inscripto.apellido }}</td>
                                     <td class="text-center">{{ inscripto.pais }}</td>
                                     <td class="text-center">{{ inscripto.nroDocumento }}</td>
+                                    <td class="text-center">
+                                        {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.cumple == 1) %}
+                                            <span class="label label-sm label-success">CUMPLE</span>
+                                        {% else %}
+                                             <span class="label label-sm label-danger">NO CUMPLE</span>
+                                        {% endif %}
+                                    </td>
                                     <td class="text-center">
                                         {% if not inscripto.borrado %}
                                             {% if inscripto.registroVacunacion %}

@@ -30,7 +30,11 @@ body{
     margin-bottom: 30px;
 }
 
-.validacion_sregistro{
+div.validacion_cregistro div.panel-body > div {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.validacion_sregistro, .validacion_cregistro{
     margin-top: 50px;
 }
 
@@ -65,15 +69,23 @@ blockquote.reg_observacion{
     margin: 0px;
     padding: 5px 15px;;
     border-left: 5px solid #bab4ae;
-} 
+}
+
 blockquote.reg_observacion footer{
     height: auto !important;
 } 
+
 blockquote.reg_observacion footer > div{
     padding: 0px;
 } 
+
 div.panel.observacion_publica,  div.panel.observacion_publica footer{
     background-color: #F1F6F9;
+    border-radius: 15px !important
+}
+
+div.panel.observacion_publica_validacion, div.panel.observacion_publica_validacion footer{
+    background-color: white;
     border-radius: 15px !important
 }
 

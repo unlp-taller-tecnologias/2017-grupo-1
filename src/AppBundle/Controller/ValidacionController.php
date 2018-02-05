@@ -29,7 +29,6 @@ class ValidacionController extends Controller {
      */
     public function validacionAction(Request $request) {
         $error = null;
-        //echo $request->get("validacion_documento") ; die();
         if ($request->get("validacion_fnacimiento") == '' || (strtotime($request->get("validacion_fnacimiento")) == FALSE)) {
             $this->get('session')->getFlashBag()->add('error', 'El campo fecha de nacimiento no es válido.');
             $error = true;
@@ -73,7 +72,7 @@ class ValidacionController extends Controller {
             ));
         }
         return $this->render('validacion/conregistro.html.twig', array(
-                    'entity' => $visitante
+                    'visitante' => $visitante
         ));
     }
 
