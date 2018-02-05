@@ -107,6 +107,7 @@ class RegistroVacunacion {
      */
     public function addObservacion(Observacion $observacion) {
         $this->observaciones->add($observacion);
+        $observacion->setRegistroVacunacion($this);
     }
 
     /**

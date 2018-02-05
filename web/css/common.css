@@ -53,3 +53,44 @@ span.bootstrap-switch-label{
 #vacunas_optativas div.bootstrap-switch-container, #vacunas_calendario div.bootstrap-switch-container {
     width: 85px !important;
 }
+
+/**
+* Registro de vacunacion
+*/
+
+blockquote.reg_observacion small::before, blockquote.reg_observacion footer::before {
+    content: '';
+}
+blockquote.reg_observacion{
+    margin: 0px;
+    padding: 5px 15px;;
+    border-left: 5px solid #bab4ae;
+} 
+blockquote.reg_observacion footer{
+    height: auto !important;
+} 
+blockquote.reg_observacion footer > div{
+    padding: 0px;
+} 
+div.panel.observacion_publica,  div.panel.observacion_publica footer{
+    background-color: #F1F6F9;
+    border-radius: 15px !important
+}
+
+div.panel.observacion_privada,  div.panel.observacion_privada footer{
+    background-color: #FEF2EE;
+    border-radius: 15px !important
+}
+div.observacion_add{
+    margin: 0px;
+}
+
+div.panel.panel_observaciones_privadas{
+    background-color: #aba8a8;
+}
+div.panel.panel_observaciones_publicas{
+    background-color: #646E7B;   
+}
+/**
+*************************************************
+*/

@@ -1,14 +1,35 @@
 {% for observacion in observaciones  %}
-    <div class="panel panel-danger">
+    <div class="panel panel-default {{ observacion.getEsPrivada?'observacion_privada':'observacion_publica' }} ">
         <div class="panel-body">
-            <blockquote>
+            <blockquote class="reg_observacion">
                 <p>{{ observacion.getContenido() | capitalize }}.</p>
-                <footer>Creado el {{observacion.getFechaCreacion() | date('d/m/Y - H:j:s')}}  <cite title="Usuario"> por<em> {{observacion.getCreadoPor().getUsername() | upper}}</em></cite></footer>
+                <small>
+                    <footer>
+                        <div class="col-md-10">
+                            <span class="glyphicon glyphicon-user"></span> Creado <cite title="Usuario"> por</cite><em> {{observacion.getCreadoPor().getUsername() | upper}}</em>, el {{observacion.getFechaCreacion() | date('d/m/Y - H:j:s')}} 
+                        </div>
+                        <div class="col-md-2 text-right">
+                            {% if observacion.getEsPrivada %}
+                                <button onclick="observacionPrivadaEdit('{{ path('observacion_edit', {'id': observacion.getId() } ) }}');" type="button" class="btn btn-xs btn-orange">
+                                    <i class="fa fa-pencil"></i>
+                                </button> 
+                                <button onclick="observacionPrivadaDelete('{{ path('observacion_delete', {'id': observacion.getId() } ) }}');" type="button" class="btn btn-xs btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            {% else%}
+                                <button onclick="observacionPublicaEdit('{{ path('observacion_edit', {'id': observacion.getId() } ) }}');" type="button" class="btn btn-xs btn-orange">
+                                    <i class="fa fa-pencil"></i>
+                                </button> 
+                                <button onclick="observacionPublicaDelete('{{ path('observacion_delete', {'id': observacion.getId() } ) }}');" type="button" class="btn btn-xs btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </footer>
+                </small>
             </blockquote>
         </div>
-
     </div>
-
 {% endfor %}
 
 

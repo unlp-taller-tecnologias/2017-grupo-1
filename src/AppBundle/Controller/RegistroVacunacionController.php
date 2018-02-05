@@ -29,11 +29,8 @@ class RegistroVacunacionController extends Controller {
      * @Route("/{id}/altaRegistro", name="alta_registro")
      * @Method("GET")
      */
-    
     public function altaRegistro(Request $request, Visitante $visitante) {
         $em = $this->getDoctrine()->getManager();
-        $vacunas = $em->getRepository('AppBundle:Vacuna')->findAll();
-        $cantVacunas = sizeof($vacunas);
         $registrovacunacion = new RegistroVacunacion();
         $registrovacunacion->setCumple(false);
         $registrovacunacion->setPropietario($visitante);
@@ -47,11 +44,7 @@ class RegistroVacunacionController extends Controller {
         $em->persist($visitante);
         try {
             $em->flush();
-            return $this->render('registrovacunacion/altaRegistro.html.twig', array(
-                        'visitante' => $visitante,
-                        'vacunas' => $vacunas,
-                        'cantVacunas' => $cantVacunas,
-            ));
+            return $this->redirectToRoute('editar_registro', array('id' => $visitante->getId()));
         } catch (\Exception $e) {
             return $this->createAccessDeniedException('No se pudo crear el registro de vacunacion');
         }
@@ -63,76 +56,76 @@ class RegistroVacunacionController extends Controller {
      * @ Route("/{id}/altaRegistroAction", name="alta_registro_action")
      * @ .Method("POST")
      */
-   /* public function altaRegistroAction(Request $request, Visitante $visitante) {
-        $em = $this->getDoctrine()->getManager();
-        $registrovacunacion = new RegistroVacunacion();
-        $usuario = $this->getUser();
-        $registrovacunacion->setPropietario($visitante);
-        $registrovacunacion->setCreador($usuario);
-        $registrovacunacion->setActualizadoPor($usuario);
-        $registrovacunacion->setCumple($request->get('cumple') ? TRUE : FALSE);
-        date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $fechaCreacion = new DateTime(date("Y-m-d H:i:s"));
-        $registrovacunacion->setFechaCreacion($fechaCreacion);
-        // Creo las observaciones
-        if ($request->get('observacionPublica') != '') {
-            $observacionPublica = new Observacion();
-            $observacionPublica->setContenido($request->get('observacionPublica'));
-            $observacionPublica->setFechaCreacion($fechaCreacion);
-            $observacionPublica->setCreadoPor($usuario);
-            $observacionPublica->setRegistroVacunacion($registrovacunacion);
-            $observacionPublica->setEsPrivada(FALSE);
-            $registrovacunacion->addObservacion($observacionPublica);
-            $em->persist($observacionPublica);
-        }
-        if ($request->get('observacionPrivada') != '') {
-            $observacionPrivada = new Observacion();
-            $observacionPrivada->setContenido($request->get('observacionPrivada'));
-            $observacionPrivada->setFechaCreacion($fechaCreacion);
-            $observacionPrivada->setCreadoPor($usuario);
-            $observacionPrivada->setRegistroVacunacion($registrovacunacion);
-            $observacionPrivada->setEsPrivada(TRUE);
-            $registrovacunacion->addObservacion($observacionPrivada);
-            $em->persist($observacionPrivada);
-        }
-        $cantVacunas = $request->get('cantVacunas');
+    /* public function altaRegistroAction(Request $request, Visitante $visitante) {
+      $em = $this->getDoctrine()->getManager();
+      $registrovacunacion = new RegistroVacunacion();
+      $usuario = $this->getUser();
+      $registrovacunacion->setPropietario($visitante);
+      $registrovacunacion->setCreador($usuario);
+      $registrovacunacion->setActualizadoPor($usuario);
+      $registrovacunacion->setCumple($request->get('cumple') ? TRUE : FALSE);
+      date_default_timezone_set('America/Argentina/Buenos_Aires');
+      $fechaCreacion = new DateTime(date("Y-m-d H:i:s"));
+      $registrovacunacion->setFechaCreacion($fechaCreacion);
+      // Creo las observaciones
+      if ($request->get('observacionPublica') != '') {
+      $observacionPublica = new Observacion();
+      $observacionPublica->setContenido($request->get('observacionPublica'));
+      $observacionPublica->setFechaCreacion($fechaCreacion);
+      $observacionPublica->setCreadoPor($usuario);
+      $observacionPublica->setRegistroVacunacion($registrovacunacion);
+      $observacionPublica->setEsPrivada(FALSE);
+      $registrovacunacion->addObservacion($observacionPublica);
+      $em->persist($observacionPublica);
+      }
+      if ($request->get('observacionPrivada') != '') {
+      $observacionPrivada = new Observacion();
+      $observacionPrivada->setContenido($request->get('observacionPrivada'));
+      $observacionPrivada->setFechaCreacion($fechaCreacion);
+      $observacionPrivada->setCreadoPor($usuario);
+      $observacionPrivada->setRegistroVacunacion($registrovacunacion);
+      $observacionPrivada->setEsPrivada(TRUE);
+      $registrovacunacion->addObservacion($observacionPrivada);
+      $em->persist($observacionPrivada);
+      }
+      $cantVacunas = $request->get('cantVacunas');
 
-        for ($i = 1; $i <= $cantVacunas; $i++) {
-            $componente = new Componente();
-            if ($request->get('vencimiento' . $i) != '') {
-                $fechaVencimiento = new DateTime($request->get('vencimiento' . $i));
-                $componente->setVencimiento($fechaVencimiento);
-            }
-            if ($request->get('cumple' . $i)) {
-                $componente->setCumple(TRUE);
-            } else {
-                $componente->setCumple(FALSE);
-            }
-            $componente->setDosisRecibidas($request->get('dosisRecibidas' . $i) == '' ? NULL : $request->get('dosisRecibidas' . $i));
-            $componente->setComentario($request->get('comentario' . $i));
-            $vacuna = $em->getRepository('AppBundle:Vacuna')->find($request->get('idVacuna' . $i));
-            $componente->setVacuna($vacuna);
-            $componente->setRegistroVacunacion($registrovacunacion);
-            $registrovacunacion->addComponente($componente);
-            $em->persist($componente);
-        }
-        $visitante->setRegistroVacunacion($registrovacunacion);
-        $em->persist($visitante);
-        $em->persist($registrovacunacion);
-        try {
-            $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'El registro se dio de alta exitosamente.');
-            if ($visitante->getTipo() == 'Inscripto') {
-                return $this->redirectToRoute("inscripto_index");
-            } else {
-                return $this->redirectToRoute("nodocente_index");
-            }
-        } catch (\Exception $e) {
-            //echo $e->getMessage();
-            $this->get('session')->getFlashBag()->add('error', 'No se ha podido dar de alta el registro. Detalle: ' . $e->getMessage());
-        }
-        return $this->redirectToRoute("inscripto_index");
-    }*/
+      for ($i = 1; $i <= $cantVacunas; $i++) {
+      $componente = new Componente();
+      if ($request->get('vencimiento' . $i) != '') {
+      $fechaVencimiento = new DateTime($request->get('vencimiento' . $i));
+      $componente->setVencimiento($fechaVencimiento);
+      }
+      if ($request->get('cumple' . $i)) {
+      $componente->setCumple(TRUE);
+      } else {
+      $componente->setCumple(FALSE);
+      }
+      $componente->setDosisRecibidas($request->get('dosisRecibidas' . $i) == '' ? NULL : $request->get('dosisRecibidas' . $i));
+      $componente->setComentario($request->get('comentario' . $i));
+      $vacuna = $em->getRepository('AppBundle:Vacuna')->find($request->get('idVacuna' . $i));
+      $componente->setVacuna($vacuna);
+      $componente->setRegistroVacunacion($registrovacunacion);
+      $registrovacunacion->addComponente($componente);
+      $em->persist($componente);
+      }
+      $visitante->setRegistroVacunacion($registrovacunacion);
+      $em->persist($visitante);
+      $em->persist($registrovacunacion);
+      try {
+      $em->flush();
+      $this->get('session')->getFlashBag()->add('success', 'El registro se dio de alta exitosamente.');
+      if ($visitante->getTipo() == 'Inscripto') {
+      return $this->redirectToRoute("inscripto_index");
+      } else {
+      return $this->redirectToRoute("nodocente_index");
+      }
+      } catch (\Exception $e) {
+      //echo $e->getMessage();
+      $this->get('session')->getFlashBag()->add('error', 'No se ha podido dar de alta el registro. Detalle: ' . $e->getMessage());
+      }
+      return $this->redirectToRoute("inscripto_index");
+      } */
 
     /**
      * Editar registro
@@ -165,7 +158,7 @@ class RegistroVacunacionController extends Controller {
      */
     public function editarRegistroAction(Request $request, Visitante $visitante) {
         $em = $this->getDoctrine()->getManager();
-        $usuario = $this->getUser();
+        //$usuario = $this->getUser();
         $registrovacunacion = $visitante->getRegistroVacunacion($request->get("idRegistro"));
 
         date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -177,30 +170,30 @@ class RegistroVacunacionController extends Controller {
             $registrovacunacion->setCumple(FALSE);
         }
         // Creo las observaciones
-        if ($request->get('observacionPublica') != '') {
-            $observacionPublica = new Observacion();
-            $observacionPublica->setContenido($request->get('observacionPublica'));
-            $observacionPublica->setFechaCreacion($fechaActualizacion);
-            $observacionPublica->setCreadoPor($usuario);
-            $observacionPublica->setRegistroVacunacion($registrovacunacion);
-            $observacionPublica->setEsPrivada(FALSE);
-            $registrovacunacion->addObservacion($observacionPublica);
-            $em->persist($observacionPublica);
-        }
+        /*
+          if ($request->get('observacionPublica') != '') {
+          $observacionPublica = new Observacion();
+          $observacionPublica->setContenido($request->get('observacionPublica'));
+          $observacionPublica->setFechaCreacion($fechaActualizacion);
+          $observacionPublica->setCreadoPor($usuario);
+          $observacionPublica->setRegistroVacunacion($registrovacunacion);
+          $observacionPublica->setEsPrivada(FALSE);
+          $registrovacunacion->addObservacion($observacionPublica);
+          $em->persist($observacionPublica);
+          }
 
-        if ($request->get('observacionPrivada') != '') {
-            $observacionPrivada = new Observacion();
-            $observacionPrivada->setContenido($request->get('observacionPrivada'));
-            $observacionPrivada->setFechaCreacion($fechaActualizacion);
-            $observacionPrivada->setCreadoPor($usuario);
-            $observacionPrivada->setRegistroVacunacion($registrovacunacion);
-            $observacionPrivada->setEsPrivada(TRUE);
-            $registrovacunacion->addObservacion($observacionPrivada);
-            $em->persist($observacionPrivada);
-        }
-
+          if ($request->get('observacionPrivada') != '') {
+          $observacionPrivada = new Observacion();
+          $observacionPrivada->setContenido($request->get('observacionPrivada'));
+          $observacionPrivada->setFechaCreacion($fechaActualizacion);
+          $observacionPrivada->setCreadoPor($usuario);
+          $observacionPrivada->setRegistroVacunacion($registrovacunacion);
+          $observacionPrivada->setEsPrivada(TRUE);
+          $registrovacunacion->addObservacion($observacionPrivada);
+          $em->persist($observacionPrivada);
+          }
+         */
         $cantVacunas = $request->get('cantVacunas');
-
 
         for ($i = 1; $i <= $cantVacunas; $i++) {
             if ($request->get("idComponente" . $i)) {
@@ -220,7 +213,8 @@ class RegistroVacunacionController extends Controller {
                 $componente->setCumple(FALSE);
             }
 
-            $componente->setDosisRecibidas($request->get('dosisRecibidas' . $i));
+            //  $componente->setDosisRecibidas($request->get('dosisRecibidas' . $i));
+            $componente->setDosisRecibidas($request->get('dosisRecibidas' . $i) == '' ? NULL : $request->get('dosisRecibidas' . $i));
 
             $componente->setComentario($request->get('comentario' . $i));
 
@@ -240,15 +234,21 @@ class RegistroVacunacionController extends Controller {
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'El registro se edito exitosamente.');
             if ($visitante->getTipo() == 'Inscripto') {
-                return $this->redirectToRoute("editar_registro", array('id' => $request->get("idVisitante")));
+                return $this->redirectToRoute("inscripto_index");
             } else {
-                return $this->redirectToRoute("nodocente_index", array('id' => $request->get("idVisitante")));
+                return $this->redirectToRoute("nodocente_index");
             }
         } catch (\Exception $e) {
+           // echo var_dump($e->getMessage()); die();
             $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el registro. Detalle: ' /* . $e->getMessage() */);
         }
 
-        return $this->render('registrovacunacion/index.html.twig', array('registroVacunacion' => $registroVacunacion, 'vacunas' => $vacunas));
+        return $this->redirectToRoute('editar_registro', array('id' => $visitante->getId()));
+
+        /*  return $this->render('registrovacunacion/index.html.twig', array(
+          'registroVacunacion' => $registrovacunacion,
+          //    'vacunas' => $vacunas
+          )); */
     }
 
     /**

@@ -52,14 +52,21 @@ class ObservacionController extends Controller {
     /**
      * Creates a new Observacion entity.
      *
-     * @Route("/{id}/new", name="observacion_new")
+     * @Route("/{id}/{tipo}/new", name="observacion_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request, RegistroVacunacion $regvacunacion) {
+    public function newAction(Request $request, RegistroVacunacion $regvacunacion, $tipo) {
         $observacion = new Observacion();
         $form = $this->createForm('AppBundle\Form\ObservacionType', $observacion);
-        $form->handleRequest($request);
+        $now = new \DateTime();
         $em = $this->getDoctrine()->getManager();
+        $observacion->setCreadoPor($this->getUser());
+        $observacion->setEsPrivada(($tipo == 'publica') ? false : true);
+        $observacion->setActualizadoPor($this->getUser());
+        $observacion->setFechaActualizacion($now);
+        $observacion->setFechaCreacion($now);
+        $regvacunacion->addObservacion($observacion);
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($observacion);
             $em->persist($regvacunacion);
@@ -77,6 +84,58 @@ class ObservacionController extends Controller {
                     'entity' => $observacion,
                     'form' => $form->createView(),
         ));
+    }
+
+    /**
+     * Editar una observacion.
+     *
+     * @Route("/{id}/edit", name="observacion_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request, Observacion $observacion) {
+        $form = $this->createForm('AppBundle\Form\ObservacionType', $observacion);
+        $now = new \DateTime();
+        $em = $this->getDoctrine()->getManager();
+        //$observacion->setEsPrivada(false);
+        $observacion->setActualizadoPor($this->getUser());
+        $observacion->setFechaActualizacion($now);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($observacion);
+            try {
+                $em->flush();
+                return new JsonResponse(array('success' => 1, 'message' => 'La observación se modificó correctamente.'));
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'No se ha podido modificar la observación en el sistema. Detalle: ' . $e->getMessage());
+            }
+        }
+        if ($form->isSubmitted() && !$form->isValid()) {
+            return new JsonResponse(array('success' => 0, 'message' => 'No se pudo modificar la observación. Verifique que los campos ingresados sean correctos.'));
+        }
+        return $this->render('observacion/new.html.twig', array(
+                    'entity' => $observacion,
+                    'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * Eliminar una observacion
+     *
+     * @Route("/{id}/delete", name="observacion_delete")
+     * @Method("POST")
+     */
+    public function deleteAction(Request $request, Observacion $observacion) {
+        $em = $this->getDoctrine()->getManager();
+        $reg_vacunacion = $observacion->getRegistroVacunacion();
+        $reg_vacunacion->removeObservacion($observacion);
+        $em->persist($reg_vacunacion);
+        $em->remove($observacion);
+        try {
+            $em->flush();
+            return new JsonResponse(array('success' => 1, 'message' => 'La observación se eliminó del sistema correctamente.'));
+        } catch (\Exception $e) {
+            return new JsonResponse(array('success' => 0, 'message' => 'No se pudo eliminar la observación del sistema.'));
+        }
     }
 
 }

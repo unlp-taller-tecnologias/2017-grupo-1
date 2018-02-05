@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th class="text-center col-md-3">
-                <a href="#" onclick="regenfermedadesNew();" class="btn btn-orange"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                <a href="#" onclick="regenfermedadesNew();" class="btn btn-orange"><i class="fa fa-plus" aria-hidden="true"></i> Nuevo</a>
             </th>
             <th class="text-center">Nombre</th>
         </tr>
@@ -19,7 +19,7 @@
                 <tr>
                     <td class="text-center">
                         <a href="#" onclick="regenfermedadesView('{{ path('regenfermedades_show', { 'id': regenfermedad.id }) }}');"  class="btn btn-xs  btn-primary " data-placement="top" data-original-title="Ver registro de enfermedad">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
+                            <i class="fa fa-binoculars" aria-hidden="true"></i>
                         </a>
                         <a href="#" onclick="regenfermedadesDelete('{{ path('regenfermedades_delete', { 'id': regenfermedad.id }) }}');"  class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver registro de enfermedad">
                             <i class="fa fa-trash" aria-hidden="true"></i>
