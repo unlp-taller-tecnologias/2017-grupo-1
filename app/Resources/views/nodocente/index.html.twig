@@ -85,9 +85,9 @@
             <table id="nodocentes_tabla" class="table table-condensed table-bordered table-striped table-hover">
                 <thead> 
                     <tr>
+                        <th class="text-center"><i class="fa fa-hashtag"></i></th>
                         <th class="text-center">Nombre</th>
-                        <th class="text-center">Apellido</th>
-                        <th class="text-center">Pais</th>
+                        <th class="text-center">Departamento</th>
                         <th class="text-center">Documento</th>
                         <th class="text-center">Vacunaci&oacute;n</th>
                         <th class="text-center">
@@ -98,21 +98,28 @@
                 <tbody>
                     {% for noDocente in noDocentes %}
                         <tr   {% if noDocente.borrado %} class="danger" {% endif %}>
-                            <td class="text-center">{{ noDocente.nombre }}</td>
-                            <td class="text-center">{{ noDocente.apellido }}</td>
-                            <td class="text-center">{{ noDocente.pais }}</td>
+                            <td class="text-center">{{loop.index}}</td>
+                            <td class="text-center">{{ noDocente.apellido  |upper}}, {{ noDocente.apellido | capitalize}}</td>
+                            <td class="text-center">{{ noDocente.departamento }}</td>
                             <td class="text-center">{{ noDocente.nroDocumento }}</td>
                             <td class="text-center">
                                 {% if (noDocente.registroVacunacion) and (noDocente.registroVacunacion.cumple == 1) %}
                                     <span class="label label-sm label-success">CUMPLE</span>
-                                {% else %}
+                                {% endif  %}
+                                {% if (noDocente.registroVacunacion) and (noDocente.registroVacunacion.fechaCreacion == noDocente.registroVacunacion.fechaActualizacion) %}
+                                    <span class="label label-sm label-warning">NO PROCESADO</span>
+                                {% endif  %}
+                                {% if (not noDocente.registroVacunacion) %}
+                                    <span class="label label-sm label-warning">NO PROCESADO</span>
+                                {% endif  %}
+                                {% if (noDocente.registroVacunacion) and (noDocente.registroVacunacion.cumple == 0) %}
                                     <span class="label label-sm label-danger">NO CUMPLE</span>
-                                {% endif %}
+                                {% endif  %}
                             </td>
                             <td class="text-center">
                                 {% if not noDocente.borrado %}
                                     {% if noDocente.registroVacunacion %}
-                                        <a href="{{ path('editar_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-warning"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
+                                        <a href="{{ path('editar_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
                                             {% else %}
                                         <a href="{{ path('alta_registro', { 'id': noDocente.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
                                             {% endif %}
@@ -229,9 +236,9 @@
                                                     "columnDefs": [{
                                                             "searchable": false,
                                                             "orderable": false,
-                                                            "targets": [6]
+                                                            "targets": [0]
                                                         }],
-                                                    "order": [[0, 'asc']],
+                                                    "order": [[1, 'asc']],
                                                     "iDisplayLength": 10,
                                                 });
                                             });

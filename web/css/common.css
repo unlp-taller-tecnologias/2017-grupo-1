@@ -17,7 +17,9 @@ body{
     background-color: white;
     border: none;
 }
-
+.dropdown-menu.dropdown-dark > li:hover {
+    background-color: red !important;
+}
 .login_passwdforget{
     margin-top: 10px;
 }
@@ -84,6 +86,16 @@ div.panel.observacion_publica,  div.panel.observacion_publica footer{
     border-radius: 15px !important
 }
 
+#obsevaciones_publicas_content > div.panel-heading {
+    background-color: #646E7B !important;
+    color: whitesmoke;
+}
+
+#obsevaciones_privadas_content > div.panel-heading {
+    background-color: #aba8a8 !important;
+    color: whitesmoke;
+}
+
 div.panel.observacion_publica_validacion, div.panel.observacion_publica_validacion footer{
     background-color: white;
     border-radius: 15px !important
@@ -106,3 +118,28 @@ div.panel.panel_observaciones_publicas{
 /**
 *************************************************
 */
+
+#cumple_boton_header{
+    margin: 0px;
+}
+
+/**
+* easy pie chart
+*/
+.easy-pie-chart {
+    position: relative;
+    text-align: center;
+}
+.percent {
+    display: inline-block;
+    line-height: 70px;
+    z-index: 2;
+}
+
+.easy-pie-chart .number {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    text-align: center;
+}

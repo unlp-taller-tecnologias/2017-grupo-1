@@ -43,7 +43,7 @@ class InscriptoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $inscriptos = $em->getRepository('AppBundle:Inscripto')->findAll();
+        $inscriptos = $em->getRepository('AppBundle:Inscripto')->findAllOrderedByApellido();
 
         return $this->render('inscripto/index.html.twig', array(
             'inscriptos' => $inscriptos,
@@ -270,7 +270,6 @@ class InscriptoController extends Controller
      *
      * @Route("/{id}/show", name="inscripto_show")
      * @Method({"GET", "POST"})
-     * @Security("has_role('ROLE_ADMIN')")
      */
     public function showAction(Request $request, Inscripto $inscripto) {
         return $this->render('inscripto/show.html.twig', array(

@@ -49,14 +49,14 @@ class RegistroVacunacion {
     /**
      * @var \Date
      *
-     * @ORM\Column(name="fechaCreacion", type="date")
+     * @ORM\Column(name="fechaCreacion", type="datetime")
      */
     private $fechaCreacion;
 
     /**
      * @var \Date
      *
-     * @ORM\Column(name="fechaActualizacion", type="date", nullable=true)
+     * @ORM\Column(name="fechaActualizacion", type="datetime", nullable=true)
      */
     private $fechaActualizacion;
 
@@ -175,7 +175,7 @@ class RegistroVacunacion {
     /**
      * Set fechaCreacion
      *
-     * @param \Date $fechaCreacion
+
      *
      * @return RegistroVacunacion
      */
@@ -196,8 +196,6 @@ class RegistroVacunacion {
 
     /**
      * Set fechaActualizacion
-     *
-     * @param \Date $fechaActualizacion
      *
      * @return RegistroVacunacion
      */

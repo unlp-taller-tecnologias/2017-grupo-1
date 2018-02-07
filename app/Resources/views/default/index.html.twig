@@ -1,1 +1,278 @@
 {% extends 'base.html.twig' %}
+
+{% block otherstylesheets %}
+    <link href="{{ asset('css/easypiewrapper.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block  page_slideleft %}
+    {% include 'slide_left.html.twig' with {'menu': 1, 'submenu': 1}  %}
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- start: BREADCRUMB -->
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+
+            </ol>
+        </div>
+    </div>
+    <!-- end: BREADCRUMB -->
+{% endblock %}
+
+
+{% block toolbar %}
+    <div class="toolbar row">
+        <div class="col-sm-6 hidden-xs">
+            <div class="page-header">
+                <h1>Bienvenido <small><i class="fa fa-home"></i> Inicio</small></h1>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <a href="#" class="back-subviews">
+                <i class="fa fa-chevron-left"></i> BACK
+            </a>
+            <a href="#" class="close-subviews">
+                <i class="fa fa-times"></i> CLOSE
+            </a>
+            <div class="toolbar-tools pull-right">
+                <!-- start: TOP NAVIGATION MENU -->
+                <ul class="nav navbar-right">
+                    <!-- start: TO-DO DROPDOWN -->
+
+                </ul>
+                <!-- end: TOP NAVIGATION MENU -->
+            </div>
+        </div>
+    </div>
+    <!-- end: TOOLBAR -->
+{% endblock %}
+
+{% block page_content %}
+
+    <div class="panel panel-white">
+        <div class="panel-body">
+            <div class="jumbotron">
+                <h1><strong>SCV</strong></h1>
+                <p class="lead">
+                    Este es el nuevo Sistema de Control de Vacunaci&oacute;n (SCV) desarrollado integramente para la Facultad de Medicina y con el objetivo de agilizar y simplificar las tareas de administraci&oacute;n de los registros de vacunaci&oacute;n del personal no-docente y aspirantes a la carrera de medicina.
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+                </p>
+                <p>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+                <p>
+                    Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+                </p>
+                <p>
+                    Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget metus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+                </p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Subheading</h4>
+                        <p>
+                            Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.
+                        </p>
+                        <h4>Subheading</h4>
+                        <p>
+                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.
+                        </p>
+                        <h4>Subheading</h4>
+                        <p>
+                            Maecenas sed diam eget risus varius blandit sit amet non magna.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Subheading</h4>
+                        <p>
+                            Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.
+                        </p>
+                        <h4>Subheading</h4>
+                        <p>
+                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.
+                        </p>
+                        <h4>Subheading</h4>
+                        <p>
+                            Maecenas sed diam eget risus varius blandit sit amet non magna.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <h3>Tablero de Control</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-azure">
+                            <div class="panel-body text-center">
+                                <div>
+                                    <h1><strong>2.888</strong></h1>
+                                </div>
+                                <h4>Inscriptos <br>2018</h4>
+                            </div>
+                        </div>
+                        <div class="panel panel-grey">
+                            <div class="panel-body text-center">
+                                <div>
+                                    <h1><strong>1.989</strong></h1>
+                                </div>
+                                <h4>Inscriptos <br>SCV</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-blue">
+                            <div class="panel-body text-center">
+                                <div class="chart" data-percent="55">
+                                    <span class="percent">55</span>
+                                </div>
+                                <h4>Vacunaci&oacute;n<br>Cumplen</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-green">
+                            <div class="panel-body text-center">
+                                <div class="chart" data-percent="55" >
+                                    <span class="percent">55</span>
+                                </div>
+                                <h4>Vacunaci&oacute;n<br>Procesados</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="col-md-12">
+                <h3>M&oacute;dulos</h3>
+                <div class="col-md-3">
+                    <div class="panel panel-default panel-white core-box">
+                        <div class="panel-tools">
+                            <a class="btn btn-xs btn-link panel-close" href="#">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                        <div class="panel-body no-padding">
+                            <div class="partition-green padding-20 text-center core-icon">
+                                <i class="fa fa-medkit fa-2x icon-big"></i>
+                            </div>
+                            <div class="padding-20 core-content">
+                                <h3 class="title block no-margin">Vacunas</h3>
+                                <span class="subtitle"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </span>
+                            </div>
+                        </div>
+                        <div class="panel-footer clearfix no-padding">
+                            <div></div>
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-green" href="#" data-original-title="More Options" data-toggle="tooltip" data-placement="top"><i class="fa fa-cog"></i></a>
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-blue" href="#" data-original-title="Add Content" data-toggle="tooltip" data-placement="top"><i class="fa fa-plus"></i></a>
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-red" href="#" data-original-title="View More" data-toggle="tooltip" data-placement="top"><i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-default panel-white core-box">
+                        <div class="panel-tools">
+                            <a class="btn btn-xs btn-link panel-close" href="#">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                        <div class="panel-body no-padding">
+                            <div class="partition-blue padding-20 text-center core-icon">
+                                <i class="fa fa-users fa-2x icon-big"></i>
+                            </div>
+                            <div class="padding-20 core-content">
+                                <h3 class="title block no-margin">Inscriptos</h3>
+                                <span class="subtitle"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </span>
+                            </div>
+                        </div>
+                        <div class="panel-footer clearfix no-padding">
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-green" href="#" data-original-title="More Options" data-toggle="tooltip" data-placement="top"><i class="fa fa-cog"></i></a>
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-blue" href="#" data-original-title="Add Content" data-toggle="tooltip" data-placement="top"><i class="fa fa-plus"></i></a>
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-red" href="#" data-original-title="View More" data-toggle="tooltip" data-placement="top"><i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-default panel-white core-box">
+                        <div class="panel-tools">
+                            <a class="btn btn-xs btn-link panel-close" href="#">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                        <div class="panel-body no-padding">
+                            <div class="partition-azure padding-20 text-center core-icon">
+                                <i class="fa fa-heartbeat  fa-2x icon-big"></i>
+                            </div>
+                            <div class="padding-20 core-content">
+                                <h3 class="title block no-margin">Factores de Riesgo</h3>
+                                <span class="subtitle"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </span>
+                            </div>
+                        </div>
+                        <div class="panel-footer clearfix no-padding">
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-green" href="#" data-original-title="More Options" data-toggle="tooltip" data-placement="top"><i class="fa fa-cog"></i></a>
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-blue" href="#" data-original-title="Add Content" data-toggle="tooltip" data-placement="top"><i class="fa fa-plus"></i></a>
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-red" href="#" data-original-title="View More" data-toggle="tooltip" data-placement="top"><i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-default panel-white core-box">
+                        <div class="panel-tools">
+                            <a class="btn btn-xs btn-link panel-close" href="#">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                        <div class="panel-body no-padding">
+                            <div class="partition-red padding-20 text-center core-icon">
+                                <i class="fa fa-hospital-o fa-2x icon-big"></i>
+                            </div>
+                            <div class="padding-20 core-content">
+                                <h3 class="title block no-margin">Enfermedades</h3>
+                                <span class="subtitle"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </span>
+                            </div>
+                        </div>
+                        <div class="panel-footer clearfix no-padding">
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-green" href="#" data-original-title="More Options" data-toggle="tooltip" data-placement="top"><i class="fa fa-cog"></i></a>
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-blue" href="#" data-original-title="Add Content" data-toggle="tooltip" data-placement="top"><i class="fa fa-plus"></i></a>
+                            <a title="" class="col-xs-4 padding-10 text-center text-white tooltips partition-red" href="#" data-original-title="View More" data-toggle="tooltip" data-placement="top"><i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block otherJavascript %}
+    <script src="{{ asset('vendor/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js') }}"></script>
+    <script src="{{ asset('js/easypiewrapper.js') }}"></script>
+    <script>
+
+        $(document).ready(function () {
+            var chartSize = '100';
+
+            $('.chart').easyPieChart({
+                animate: 2000,
+                scaleColor: false,
+                lineWidth: 12,
+                lineCap: 'square',
+                size: chartSize,
+                trackColor: '#e5e5e5',
+                barColor: '#3da0ea'
+            });
+            $('.chart').css({
+                width: chartSize + 'px',
+                height: chartSize + 'px'
+            });
+            $('.chart .percent').css({
+                "line-height": chartSize + 'px'
+            });
+        });
+    </script>
+{% endblock %}
