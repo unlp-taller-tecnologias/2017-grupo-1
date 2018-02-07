@@ -50,7 +50,7 @@
 		<h3>Personas que cumplen el calendario de vacunacion</h3>
 	</div>
 	<div class="panel-body">
-		<table id="usuarios_tabla" style="border-collapse:collapse;width:100%;font-size:13px" class="table table-condensed table-bordered table-striped table-hover">
+		<table id="usuarios_tabla" style="border-collapse:collapse;width:100%;font-size:12px" class="table table-condensed table-bordered table-striped table-hover">
 			<thead>
 			<tr>
 				<th class="text-center">Numero de ficha</th>
@@ -141,7 +141,8 @@ $(document).ready( function(){
         pageSize: 'Legal',
         customize: function(doc) {
           doc.pageMargins=[3.5,3.5,3.5,3.5];
-          doc.fontSize=8;
+          doc.styles.tableHeader.fontSize = 8;
+          doc.defaultStyle.fontSize=8;
         }
       }
     ],
