@@ -1,12 +1,12 @@
 {% extends 'default/base.login.html.twig' %}
 {% block container_main %}
     <div class="col-md-6 col-md-offset-3 validacion_cregistro">
-        <div class="panel panel-default">
+        <div class="panel panel-light-grey">
             <div class="panel-heading">
                 <h4 class="panel-title">Resultado <span class="text-bold"> del Registro de Vacunaci&oacute;n</span></h4>
             </div>
             <div  class="panel-body">
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="panel panel-dark">
                         <div class="panel-heading">
                             <h3 class="panel-title">Propietari@ <span class="text-bold"> del registro de vacunaci&oacute;n</span></h3>
@@ -22,11 +22,15 @@
                                         <p class="form-control-static">{{visitante.apellido | upper}}, {{visitante.nombre | capitalize}}</p>
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Documento:</label>
+                                        <label>
+                                            <i class="fa fa-credit-card"></i>  Documento:
+                                        </label>
                                         <p class="form-control-static">{{visitante.tipoDocumento | upper}} {{visitante.nroDocumento | number_format(0,',','.') }}</p>
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Nacimiento:</label>
+                                        <label>
+                                            <i class="fa fa-calendar"></i>  Nacimiento:
+                                        </label>
                                         <p class="form-control-static">{{visitante.fechaNacimiento | date('d/m/Y')}}</p>
                                     </div>
                                 </form>
@@ -35,89 +39,64 @@
                     </div>
                     <div class="panel panel-note panel-dark">
                         <div class="panel-heading">
-                            <h3 class="panel-title">ESTADO <span class="text-bold"> del registro de vacunaci&oacute;n</span></h3>
+                            <h3 class="panel-title">¿Cumple <span class="text-bold"> el registro de vacunaci&oacute;n?</span></h3>
                         </div>
                         <div class="panel-body">
                             {% if visitante.getRegistroVacunacion().getCumple() %}
-                                <div class="alert alert-success" role="alert">
-                                    <strong>La persona CUMPLE con el registro de vacuna&oacute;n</strong> 
+                                <div class="alert alert-success text-center" role="alert">
+                                    <strong><h1>SI</h1></strong> 
                                 </div>
                             {% else %}
-                                <div class="alert alert-danger" role="alert">
-                                    <strong>ATENCI&Oacute;N!! La persona no cumple con el registro de vacunaci&oacute;n</strong>
+                                <div class="alert alert-danger text-center" role="alert">
+                                    <strong><h1>NO</h1></strong> 
                                 </div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8">
-                    <div class="col-md-12">
-                        <div class="col-md-6">
-                            <div class="panel panel-green">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Vacunas <span class="text-bold"> Cumplidas</span></h4>
-                                </div>
-                                <div class="panel-body">
-                                    <table  class="table  ">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center col-md-1 text-white">#</th>
-                                                <th class="text-center text-white">Nombre</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% set index = 1 %}
-                                            {% for componente in visitante.registroVacunacion.componentes %}
-                                                {% if (componente.vacuna.esObligatoria) and (componente.cumple == 1) %}
-                                                    <tr>
-                                                        <td class="text-center">{{ index }}</td>
-                                                        <td>{{componente.vacuna.nombre}} ({{componente.vacuna.abreviatura}})</td>
-                                                    </tr>
-                                                    {% set index = index + 1 %}
-                                                {% endif %}
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                <div class="col-md-7">
+                    <div class="panel panel-dark">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Vacunas <span class="text-bold"> Obligatorias</span></h4>
                         </div>
-                        <div class="col-md-6">
-                            <div class="panel panel-red">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Vacunas <span class="text-bold"> Sin Cumplir</span></h4>
-                                </div>
-                                <div class="panel-body">
-                                    <table  class="table  ">
-                                        <thead>
+                        <div class="panel-body">
+                            <table  class="table  ">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center col-md-1 text-white">#</th>
+                                        <th class="text-center text-white">Nombre</th>
+                                        <th class="text-center text-white">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% set index = 1 %}
+                                    {% for componente in visitante.registroVacunacion.componentes %}
+                                        {% if (componente.vacuna.esObligatoria) %}
                                             <tr>
-                                                <th class="text-center col-md-1 text-white">#</th>
-                                                <th class="text-center text-white">Nombre</th>
+                                                <td class="text-center">{{ index }}</td>
+                                                <td>{{componente.vacuna.nombre}} ({{componente.vacuna.abreviatura}})</td>
+                                                <td class="text-center">
+                                                    {% if componente.cumple %}
+                                                        <span class="label label-success"> cumple </span>
+                                                    {% else %}
+                                                        <span class="label label-danger"> no cumple </span>
+                                                    {% endif %}
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% set index = 1 %}
-                                            {% for componente in visitante.registroVacunacion.componentes %}
-                                                {% if (componente.vacuna.esObligatoria) and (componente.cumple == 0) %}
-                                                    <tr>
-                                                        <td class="text-center">{{ index }}</td>
-                                                        <td>{{componente.vacuna.nombre}} ({{componente.vacuna.abreviatura}})</td>
-                                                    </tr>
-                                                    {% set index = index + 1 %}
-                                                {% endif %}
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                            {% set index = index + 1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="panel panel-dark">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Observaciones <span class="text-bold"> del registro de vacunaci&oacute;n</span></h3>
-                            </div>
-                            <div class="panel-body">
-                                {% for observacion in visitante.getRegistroVacunacion().getObservaciones()  %}
+                    <div class="panel panel-dark">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Observaciones <span class="text-bold"> del registro de vacunaci&oacute;n</span></h3>
+                        </div>
+                        <div class="panel-body">
+                            {% for observacion in visitante.getRegistroVacunacion().getObservaciones()  %}
+                                {% if not observacion.esPrivada %}
                                     <div class="panel panel-default observacion_publica_validacion ">
                                         <div class="panel-body">
                                             <blockquote class="reg_observacion">
@@ -132,12 +111,11 @@
                                             </blockquote>
                                         </div>
                                     </div>
-                                {% endfor %}
-                            </div>
+                                {% endif%}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
-                         
                 <p class="text-right"><a class="btn btn-grey" href="{{ path('validacion_login') }}" role="button"> <i class="fa fa-backward"></i> Volver</a></p>
             </div>
         </div>

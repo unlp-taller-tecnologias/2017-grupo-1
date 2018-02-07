@@ -35,7 +35,7 @@ class NoDocenteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $noDocentes = $em->getRepository('AppBundle:NoDocente')->findAll();
+        $noDocentes = $em->getRepository('AppBundle:NoDocente')->findAllOrderedByApellido();
 
         return $this->render('nodocente/index.html.twig', array(
             'noDocentes' => $noDocentes,

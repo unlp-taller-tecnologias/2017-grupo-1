@@ -84,22 +84,6 @@
         <p class="form-control-static text-extra-large">{{ noDocente.getNroDocumento() | capitalize}}</p>
     </div>
 </div>
-{% if noDocente.registroVacunacion %}
-    {% for componente in noDocente.registroVacunacion.componentes %}
-        <div class="form-group">
-            <label class="col-md-3 control-label "><strong><em>{{ componente.vacuna.getNombre() }}:</em></strong></label>
-            <div class="col-sm-9">
-                <p class="form-control-static text-extra-large">Dosis Recibidas: {{componente.getDosisRecibidas() | capitalize }} Completa: {% if componente.cumple == 1 %} SI {% else %} NO {% endif %}</p>
-            </div>
-        </div>
-    {% endfor %}
-    <div class="form-group">
-        <label class="col-md-3 control-label "><strong><em>Cumple el Registro de Vacunacion</em></strong></label>
-        <div class="col-sm-9">
-            <p class="form-control-static text-extra-large">{% if noDocente.registroVacunacion.cumple == 1 %} SI {% else %} NO {% endif %}</p>
-        </div>
-    </div>
-{% endif %}
 
 <div class="hidden">
     {{ form_rest(form) }}

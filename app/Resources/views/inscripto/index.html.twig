@@ -96,7 +96,6 @@
                             <tr>
                                 <th class="text-center">Nro ficha</th>
                                 <th class="text-center">Nombre</th>
-                                <th class="text-center">Apellido</th>
                                 <th class="text-center">Pais</th>
                                 <th class="text-center">Documento</th>
                                 <th class="text-center">Vacunaci&oacute;n</th>
@@ -109,16 +108,22 @@
                             {% for inscripto in inscriptos %}
                                 <tr   {% if inscripto.borrado %} class="danger" {% endif %}>
                                     <td class="text-center">{{ inscripto.nroFicha }}</td>
-                                    <td class="text-center">{{ inscripto.nombre }}</td>
-                                    <td class="text-center">{{ inscripto.apellido }}</td>
+                                    <td class="text-left">{{ inscripto.nombre | upper}}, {{ inscripto.nombre | capitalize}}</td>
                                     <td class="text-center">{{ inscripto.pais }}</td>
                                     <td class="text-center">{{ inscripto.nroDocumento }}</td>
                                     <td class="text-center">
                                         {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.cumple == 1) %}
                                             <span class="label label-sm label-success">CUMPLE</span>
-                                        {% else %}
-                                             <span class="label label-sm label-danger">NO CUMPLE</span>
-                                        {% endif %}
+                                        {% endif  %}
+                                        {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.fechaCreacion == inscripto.registroVacunacion.fechaActualizacion) %}
+                                            <span class="label label-sm label-warning">NO PROCESADO</span>
+                                        {% endif  %}
+                                        {% if (not inscripto.registroVacunacion) %}
+                                            <span class="label label-sm label-warning">NO PROCESADO</span>
+                                        {% endif  %}
+                                        {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.cumple == 0) %}
+                                            <span class="label label-sm label-danger">NO CUMPLE</span>
+                                        {% endif  %}
                                     </td>
                                     <td class="text-center">
                                         {% if not inscripto.borrado %}
@@ -127,7 +132,7 @@
                                                     {% else %}
                                                 <a href="{{ path('alta_registro', { 'id': inscripto.id }) }}"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-id-card-o" aria-hidden="true"></i></button></a>
                                                     {% endif %}
-                                            <a href="{{ path('inscripto_show', {'id': inscripto.id} )}}"><button type="button" class="btn btn-xs btn-info"><i class="fa fa-binoculars" aria-hidden="true"></i></button></a>
+                                            <a href="{{ path('inscripto_show', {'id': inscripto.id} )}}"><button type="button" class="btn btn-xs btn-primary"><i class="fa fa-binoculars" aria-hidden="true"></i></button></a>
                                                     {% if is_granted('ROLE_ADMIN') %}  
                                                 <a href="{{ path('inscripto_edit', { 'id': inscripto.id }) }}">
                                                     <button type="button" class="btn btn-xs btn-warning">
@@ -285,7 +290,7 @@
                                                         "columnDefs": [{
                                                                 "searchable": false,
                                                                 "orderable": false,
-                                                                "targets": []
+                                                                "targets": [5]
                                                             }],
                                                         "order": [[1, 'asc']],
                                                         "iDisplayLength": 20,

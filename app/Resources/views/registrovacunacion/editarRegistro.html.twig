@@ -33,7 +33,7 @@
                         </a>
                     </li>
                     <li class="dropdown">
-                        <a href="#">
+                        <a id="cumple_boton_header" href="#">
                             <form style="margin-bottom: 0px;">
                                 <input class="normal_button" type="checkbox" name="general_cumple" {% if registrovacunacion.cumple %} checked {% endif %}/>
                             </form>
@@ -79,7 +79,7 @@
                 <li>
                     <a href="{{path('inscripto_index')}}">visitantes</a>
                 </li>
-                <li class="active">Registro Vacunacion</li>
+                <li class="active">Registro Vacunacion - {{visitante.apellido | capitalize}}, {{visitante.nombre |lower}}</li>
             </ol>
         </div>
     </div>
@@ -232,7 +232,7 @@
                         {% include 'registrofactorriesgo/listado.ajax.html.twig' with {'regfactorriesgo': visitante.getRegistroFactoresRiesgo() }  %}
                     </div>
                 </div>
-                <div class="panel panel-default panel_observaciones_publicas">
+                <div id="obsevaciones_publicas_content" class="panel panel-default panel_observaciones_publicas">
                     <div class="panel-heading">
                         <i class="clip-bars"></i>
                         <h4 class="panel-title">Comentarios <span class="text-bold"> P&uacute;blicos</span></h4>
@@ -248,7 +248,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default panel_observaciones_privadas">
+                <div id="obsevaciones_privadas_content" class="panel panel-default panel_observaciones_privadas">
                     <div class="panel-heading">
                         <i class="clip-bars"></i>
                         <h4 class="panel-title">Comentarios <span class="text-bold"> Privados</span></h4>
@@ -437,7 +437,7 @@
                                             $("#comentarios_publicos_content"), //Elemento DOM en donde actualizar
                                             );
                                 }
-                                
+
                                 function observacionPrivadaEdit(url) {
                                     crearModalEdit(
                                             url, //URL para obtener el contenido inicial del panel
@@ -455,7 +455,7 @@
                                             $("#comentarios_publicos_content"), //Elemento DOM en donde actualizar
                                             );
                                 }
-                                
+
                                 function observacionPrivadaDelete(url) {
                                     crearModalDelete(
                                             url, //URL para obtener el contenido inicial del panel

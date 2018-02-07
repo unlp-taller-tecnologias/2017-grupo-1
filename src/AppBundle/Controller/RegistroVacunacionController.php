@@ -162,7 +162,7 @@ class RegistroVacunacionController extends Controller {
         $registrovacunacion = $visitante->getRegistroVacunacion($request->get("idRegistro"));
 
         date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $fechaActualizacion = new DateTime(date("Y-m-d"));
+        $fechaActualizacion = new DateTime(date("Y-m-d H:i:s"));
         $registrovacunacion->setFechaActualizacion($fechaActualizacion);
         if ($request->get('cumple')) {
             $registrovacunacion->setCumple(TRUE);
