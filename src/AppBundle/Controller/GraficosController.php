@@ -19,7 +19,7 @@ class GraficosController extends Controller{
     private function itHasOnlyNumbers($data){
       $regEx="/^[0-9]+$/";
       foreach($data as $info){
-        if(!preg_match($reg,$info)){
+        if(!preg_match($regEx,$info)){
           return false;
         }
       }
@@ -159,32 +159,24 @@ class GraficosController extends Controller{
         $this->get('session')->getFlashBag()->add('error', 'Ha habido un error en el sistema. Intente nuevamente');
         return $this->redirectToRoute("dosis_recibidas");
       }
-      $dosisR=$request->get('dosis');
-      if($dosisR==NULL||empty($dosisR)){
+      $dosis=array_diff($request->get('dosis'),array(''));
+      if($dosis==NULL||empty($dosis)){
         $this->get('session')->getFlashBag()->add('error', 'No se ingresaron dosis para poder mostrar el grafico.');
         return $this->redirectToRoute("dosis_recibidas");
       }
-      elseif(!$this->itHasOnlyNumbers($dosisR)){
+      elseif(!$this->itHasOnlyNumbers($dosis)){
         $this->get('session')->getFlashBag()->add('error', 'No deben ingresarse caracteres que no sean numeros a la cantidad de dosis.');
         return $this->redirectToRoute("dosis_recibidas");
       }
-      $dosis=array();
       $lastV=$vacunas[count($vacunas)-1];
       $where="";
       $i=1;
       foreach($vacunas as $vacuna){
-        if($dosisR[$vacuna]!=''){
-          $dosis[$vacuna]=$dosisR[$vacuna];
-          $where.="registroVacunacion_id IN (SELECT registroVacunacion_id FROM componente WHERE vacuna_id=:vacuna$i and dosisRecibidas>=:dosis$i)";
-          if($vacuna!=$lastV){
-            $where.=" AND ";
-            $i++;
-          }
+        $where.="registroVacunacion_id IN (SELECT registroVacunacion_id FROM componente WHERE vacuna_id=:vacuna$i and dosisRecibidas>=:dosis$i)";
+        if($vacuna!=$lastV){
+          $where.=" AND ";
+          $i++;
         }
-      }
-      if(empty($dosis)){
-        $this->get('session')->getFlashBag()->add('error', 'No se seleccionaron vacunas para mostrar el grafico.');
-        return $this->redirectToRoute("dosis_recibidas");
       }
       $em=$this->getDoctrine()->getManager();
       $ranges=$this->rangeArray();

@@ -4,6 +4,10 @@
     {% include 'slide_left.html.twig' with {'menu': 7, 'submenu': 3}  %}
 {% endblock %}
 
+{% block otherstylesheets %}
+  <link rel="stylesheet" href="vendor/datatables.net-buttons-bs/css/buttons.bootstrap.css" />
+{% endblock %}
+
 {% block toolbar %}
     <div class="toolbar row">
         <div class="col-sm-6 hidden-xs">
@@ -46,15 +50,15 @@
 		<h3>Personas que cumplen el calendario de vacunacion</h3>
 	</div>
 	<div class="panel-body">
-		<table id="usuarios_tabla" class="table table-condensed table-bordered table-striped table-hover">
+		<table id="usuarios_tabla" style="border-collapse:collapse;width:100%;font-size:13px" class="table table-condensed table-bordered table-striped table-hover">
 			<thead>
 			<tr>
 				<th class="text-center">Numero de ficha</th>
 				<th class="text-center">Numero de documento</th>
 				<th class="text-center">Nombre</th>
 				<th class="text-center">Apellido</th>
-				<th class="text-center">Provincia de procedencia</th>
-				<th class="text-center">Municipio de procedencia</th>
+				<th class="text-center">Provincia</th>
+				<th class="text-center">Municipio</th>
 				{% for item in vac %}
 				    <th class="text-center">Fecha de vencimiento de {{item.nombre}}</th>
 				{% endfor %}
@@ -109,15 +113,17 @@
 
 {% block otherJavascript %}
 <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-<script src="{{ asset('vendor/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
+<script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.js') }}"></script>
+<script src="{{ asset('vendor/datatables.net-buttons-bs/js/buttons.bootstrap.js') }}"></script>
 <script src="{{ asset('vendor/pdfmake/build/pdfmake.min.js')}}" charset="utf-8"></script>
 <script src="{{asset('vendor/pdfmake/build/vfs_fonts.js')}}" charset="utf-8"></script>
 <script src="{{asset('vendor/datatables.net-buttons/js/buttons.html5.min.js')}}" charset="utf-8"></script>
 <script src="{{asset('vendor/datatables.net-buttons/js/buttons.flash.min.js')}}" charset="utf-8"></script>
 <script src="{{asset('vendor/datatables.net-buttons/js/buttons.print.min.js')}}" charset="utf-8"></script>
 <script src="{{asset('vendor/jszip/dist/jszip.js')}}" charset="utf-8"></script>
-<script src="{{asset('vendor/datatables.net-buttons/js/dataTables.buttons.min.js')}}" charset="utf-8"></script>
+<script src="{{asset('vendor/datatables.net-buttons/js/dataTables.buttons.js')}}" charset="utf-8"></script>
+<script src="{{asset('vendor/datatables.net-buttons/js/buttons.html5.js')}}" charset="utf-8"></script>
+<script src="{{asset('vendor/datatables.net-responsive/js/dataTables.responsive.js')}}" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready( function(){
 	$('#usuarios_tabla').DataTable({
@@ -129,15 +135,17 @@ $(document).ready( function(){
 		dom: 'Bfrtip',
     buttons: [
       {
-        extend: 'pdf',
+        extend: 'pdfHtml5',
         text: 'Exportar a PDF',
+        orientation: 'landscape',
+        pageSize: 'Legal',
+        customize: function(doc) {
+          doc.pageMargins=[3.5,3.5,3.5,3.5];
+          doc.fontSize=8;
+        }
       }
     ],
     "searching": false,
-		"columnDefs": [{
-						"orderable": true,
-						"targets": [0,5+{{vselec}}]
-				}],
 		"order": [[0, 'asc']],
 	});
 });
