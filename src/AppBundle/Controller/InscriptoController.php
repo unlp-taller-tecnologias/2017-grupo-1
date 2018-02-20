@@ -45,7 +45,7 @@ class InscriptoController extends Controller
 
         $inscriptos = $em->getRepository('AppBundle:Inscripto')->findAllOrderedByApellido();
 
-        return $this->render('inscripto/index.html.twig', array(
+        return $this->render('inscripto/index2.html.twig', array(
             'inscriptos' => $inscriptos,
         ));
     }
@@ -372,6 +372,16 @@ class InscriptoController extends Controller
         return $this->render('inscripto/show.html.twig', array(
                     'inscripto' => $inscripto
         ));
+    }
+
+    /**
+     * Show a inscripto entity.
+     *
+     * @Route("/importar", name="importar")
+     * @Method({"GET", "POST"})
+     */
+    public function importarAction(Request $request) {
+        return $this->render('inscripto/importar.html.twig');
     }
 
     /**
