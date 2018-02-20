@@ -132,14 +132,14 @@
                                     <td class="text-center">{{ enfermedad.descripcion }}</td>
                                     <td class="text-center">
                                         {% if enfermedad.borrado %}
-                                            <a href="#" onclick="enfermedadAlta('{{ path("enfermedad_alta", {"id":enfermedad.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <a href="#" onclick="enfermedadAlta('{{ path("enfermedad_alta", {"id":enfermedad.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área" title="Dar de alta">
                                                 <i class="fa fa-plus" aria-hidden="true"></i>
                                             </a>
-                                        {% else %}                                  
-                                            <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área">
+                                        {% else %}
+                                            <a href="{{ path('enfermedad_edit', { 'id': enfermedad.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área" title="Modificar">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a href="#" onclick="enfermedadDelete('{{ path("enfermedad_delete", {"id":enfermedad.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <a href="#" onclick="enfermedadDelete('{{ path("enfermedad_delete", {"id":enfermedad.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área" title="Eliminar">
                                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                             </a>
                                         {% endif %}

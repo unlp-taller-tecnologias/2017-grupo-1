@@ -133,14 +133,14 @@
                                     <td class="text-center">{{ factorRiesgo.descripcion }}</td>
                                     <td class="text-center">
                                         {% if not factorRiesgo.borrado %}
-                                            <a href="{{ path('factorriesgo_edit', { 'id': factorRiesgo.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <a href="{{ path('factorriesgo_edit', { 'id': factorRiesgo.id }) }}" class="btn btn-xs  btn-warning " data-placement="top" data-original-title="Ver acreditados del área" title="Modificar">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
-                                            <a href="#" onclick="factorDelete('{{ path("factorriesgo_delete", {"id":factorRiesgo.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <a href="#" onclick="factorDelete('{{ path("factorriesgo_delete", {"id":factorRiesgo.id }) }}');" class="btn btn-xs  btn-danger " data-placement="top" data-original-title="Ver acreditados del área" title="Eliminar">
                                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                             </a>
                                         {% else %}
-                                            <a href="#" onclick="factorRiesgoAlta('{{ path("factorriesgo_alta", {"id":factorRiesgo.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área">
+                                            <a href="#" onclick="factorRiesgoAlta('{{ path("factorriesgo_alta", {"id":factorRiesgo.id }) }}');" class="btn btn-xs  btn-success " data-placement="top" data-original-title="Ver acreditados del área" title="Dar de alta">
                                                 <i class="fa fa-plus" aria-hidden="true"></i>
                                             </a>
                                         {% endif %}
