@@ -74,7 +74,7 @@ class Componente {
      */
     private $comentario;
 
-    function getRegistroVacunacion(): RegistroVacunacion {
+    function getRegistroVacunacion() {
         return $this->registroVacunacion;
     }
 
@@ -135,7 +135,7 @@ class Componente {
         return $this->dosisRecibidas;
     }
 
-    function getVacuna(): Vacuna {
+    function getVacuna() {
         return $this->vacuna;
     }
 

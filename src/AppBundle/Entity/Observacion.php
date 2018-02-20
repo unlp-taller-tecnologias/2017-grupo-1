@@ -78,7 +78,7 @@ class Observacion {
      */
     private $registroVacunacion;
 
-    function getRegistroVacunacion(): RegistroVacunacion {
+    function getRegistroVacunacion() {
         return $this->registroVacunacion;
     }
 
