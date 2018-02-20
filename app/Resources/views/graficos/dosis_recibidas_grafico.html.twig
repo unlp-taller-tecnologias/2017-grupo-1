@@ -55,12 +55,30 @@
   <script src="{{asset('vendor/highcharts/highcharts.js')}}"></script>
   <script type="text/javascript">
   $(function(){
+    var elements=new Array();
     var value1=new Array();
     var value2=new Array();
+    var color=new Array();
     {% for item in data %}
       value1.push({{ item.SI }});
       value2.push({{ item.NO }});
     {% endfor %}
+    if({{positive}}){
+      var obj={
+        name:'SI',
+        data:value1
+      }
+      elements.push(obj);
+      color.push("#00FF00");
+    }
+    if({{negative}}){
+      var obj2={
+        name:'NO',
+        data:value2
+      }
+      elements.push(obj2);
+      color.push("#FF0000");
+    }
       var myChart=Highcharts.chart('grafico',{
         chart:{
           type:'bar'
@@ -71,13 +89,8 @@
         xAxis:{
           categories:['15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65+']
         },
-        series:[{
-          name:'SI',
-          data:value1
-        },{
-          name:'NO',
-          data:value2
-        }]
+        colors:color,
+        series:elements
       });
     });
   </script>

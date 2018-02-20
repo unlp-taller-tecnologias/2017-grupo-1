@@ -111,24 +111,27 @@ class GraficosController extends Controller{
         $this->get('session')->getFlashBag()->add('error','Ha habido un problema en la base de datos');
         return $this->redirectToRoute('homepage');
       }
-      $isThereData=false;
+      $isThereNegativeData=$isTherePositiveData=0;
       foreach($values as $value){
         if($value['rango']!='Invalido'){
-          $isThereData=true;
           if($value['cumple']==0){
             $data[$value['rango']]['NO']=$value['total'];
+            $isThereNegativeData=true;
           }
           else{
             $data[$value['rango']]['SI']=$value['total'];
+            $isTherePositiveData=true;
           }
         }
       }
-      if(!$isThereData){
+      if((!$isTherePositiveData&&!$isThereNegativeData)){
         $this->get('session')->getFlashBag()->add('error', 'No existen datos suficientes para mostrar el grafico de personas que cumplieron con el calendario de vacunacion.');
         return $this->redirectToRoute("homepage");
       }
       return $this->render('graficos/quien_cumple.html.twig', array(
-        'data'=>$data
+        'data'=>$data,
+        'negative'=>$isThereNegativeData,
+        'positive'=>$isTherePositiveData
       ));
     }
 
@@ -212,7 +215,7 @@ class GraficosController extends Controller{
  	           END
           ";
           $sql2=str_replace('>=', '<', $sql1);
-          $isThereData=false;
+          $isThereNegativeData=$isTherePositiveData=0;
           try {
             $stm1=$em->getConnection()->prepare($sql1);
             $stm2=$em->getConnection()->prepare($sql2);
@@ -233,23 +236,25 @@ class GraficosController extends Controller{
           $values=$stm1->fetchAll();
           foreach($values as $value){
             if($value['rango']!='Invalido'){
-              $isThereData=true;
               $ranges[$value['rango']]['SI']=$value['total'];
+              $isTherePositiveData=true;
             }
           }
           $values=$stm2->fetchAll();
           foreach($values as $value){
             if($value['rango']!='Invalido'){
               $ranges[$value['rango']]['NO']=$value['total'];
-              $isThereData=true;
+              $isThereNegativeData=true;
             }
           }
-          if(!$isThereData){
+          if(!$isTherePositiveData&&!$isThereNegativeData){
             $this->get('session')->getFlashBag()->add('error', 'No existen datos suficientes para mostrar el grafico de personas que recibieron dosis para las vacunas seleccionadas.');
             return $this->redirectToRoute("dosis_recibidas");
           }
           return $this->render('graficos/dosis_recibidas_grafico.html.twig',array(
-            'data'=>$ranges
+            'data'=>$ranges,
+            'negative'=>$isThereNegativeData,
+            'positive'=>$isTherePositiveData
           ));
     }
 
