@@ -143,3 +143,26 @@ div.panel.panel_observaciones_publicas{
     height: 70px;
     text-align: center;
 }
+
+div.carga{
+    border: solid ; 
+    border-radius: 20px ; 
+    border-width: 2 ; 
+    width: 400 ;
+    padding: 10px;
+    border-color: #8B91A0 ;
+}
+
+div.carga:hover{
+    background-color:#cccccc !important;
+}
+
+p.g{
+    font-size:16px;
+    color: #006600;
+}
+
+p.r{
+    font-size:16px;
+    color: red;
+}

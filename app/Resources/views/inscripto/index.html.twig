@@ -33,8 +33,9 @@
                                 <i class="fa fa-user-plus"></i> INSCR&Iacute;PTO
                             </a>
                         </li>
+
                         <li class="dropdown">
-                            <a href="#" onclick="$('#excel').click();">
+                            <a href="{{ path('cargarExcel') }}">
                                 <i class="fa fa-upload" aria-hidden="true"></i> CARGAR EXCEL
                                 <div class="tooltip-notification hide">
                                     <div class="tooltip-notification-arrow"></div>
@@ -153,21 +154,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <div class="hide">
-                        <button type="button" class="btn btn-xs btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Importar Excel de Inscriptos</button>
-                        <div class="collapse" id="collapseExample">
-                            <div class="card card-body">
-                                <div class="container">
-                                    <form id="form_input" class="form-inline" enctype="multipart/form-data" name="formHosp"action="{{path ("altaExcel") }}" method="POST">
-                                        <div class="form-group">
-                                            <input type="file" name="excel"class="form-control" id="excel">
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Importar</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -180,127 +166,86 @@
     <script src="{{ asset('vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
-                                                function crearModalView(url, title) {
-                                                    $('#okButton').button('reset');
-                                                    $('#panel-config .modal-footer').show();
-                                                    $('#cancelButton').hide();
-                                                    $('#panel-config .modal-title').html(title);
-                                                    $('#panel-config .modal-body').html("");
-                                                    $('#panel-config .modal-body').load(url, function () {
-                                                        $('#panel-config form').submit(function (event) {
-                                                            event.preventDefault();
-                                                            $('#panel-config').modal('toggle');
-                                                        });
-                                                    });
-                                                    $('#panel-config').modal();
-                                                }
 
-                                                function inscriptoAlta(url) {
-                                                    swal({
-                                                        title: '¿Estas seguro?',
-                                                        text: "Estas por dar de alta un inscripto del sistema!",
-                                                        type: 'warning',
-                                                        showCancelButton: true,
-                                                        confirmButtonColor: '#3085d6',
-                                                        cancelButtonColor: '#d33',
-                                                        cancelButtonText: 'Cancelar',
-                                                        confirmButtonText: 'Si, Dar de Alta'
-                                                    }).then((result) => {
-                                                        if (result.value) {
-                                                            $.post(url, {}).done((data) => {
-                                                                if (data.success) {
-                                                                    swal('Agregada!', data.message, 'success').then(function () {
-                                                                        location.reload();
-                                                                    });
-                                                                } else {
-                                                                    swal('Cuidado!', data.message, 'error');
-                                                                }
-                                                            }).fail(() => {
-                                                                swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
-                                                            }
-                                                            );
-                                                        }
-                                                    });
-                                                }
+        function inscriptoAlta(url) {
+            swal({
+                title: '¿Estas seguro?',
+                text: "Estas por dar de alta un inscripto del sistema!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, Dar de Alta'
+            }).then((result) => {
+                if (result.value) {
+                    $.post(url, {}).done((data) => {
+                        if (data.success) {
+                            swal('Agregada!', data.message, 'success').then(function () {
+                                location.reload();
+                            });
+                        } else {
+                            swal('Cuidado!', data.message, 'error');
+                        }
+                    }).fail(() => {
+                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                    }
+                    );
+                }
+            });
+        }
 
+        function usuarioDelete(url) {
+            swal({
+                title: '¿Estas seguro?',
+                text: "Estas por eliminar un inscripto del sistema!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, Eliminarlo'
+            }).then((result) => {
+                if (result.value) {
+                    $.post(url, {}).done((data) => {
+                        if (data.success) {
+                            swal('Borrado!', data.message, 'success').then(function () {
+                                location.reload();
+                            });
+                        } else {
+                            swal('Cuidado!', data.message, 'error');
+                        }
+                    }).fail(() => {
+                        swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
+                    });
+                }
+            });
+        }
 
-                                                function usuarioDelete(url) {
-                                                    swal({
-                                                        title: '¿Estas seguro?',
-                                                        text: "Estas por eliminar un inscripto del sistema!",
-                                                        type: 'warning',
-                                                        showCancelButton: true,
-                                                        confirmButtonColor: '#3085d6',
-                                                        cancelButtonColor: '#d33',
-                                                        cancelButtonText: 'Cancelar',
-                                                        confirmButtonText: 'Si, Eliminarlo'
-                                                    }).then((result) => {
-                                                        if (result.value) {
-                                                            $.post(url, {}).done((data) => {
-                                                                if (data.success) {
-                                                                    swal('Borrado!', data.message, 'success').then(function () {
-                                                                        location.reload();
-                                                                    });
-                                                                } else {
-                                                                    swal('Cuidado!', data.message, 'error');
-                                                                }
-                                                            }).fail(() => {
-                                                                swal('Cuidado!', 'Ocurrio un error en la comunicación con el servidor', 'error')
-                                                            });
-                                                        }
-                                                    });
-                                                }
-                                                $(document).ready(function () {
-                                                    $('#excel').change(function () {
-                                                        //archivo = $('#excel');
-                                                        swal({
-                                                            title: '¿Estas seguro?',
-                                                            text: "Estas por importar el archivo excel con nombre: " + document.getElementById("excel").files.item(0).name + "!",
-                                                            type: 'warning',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#3085d6',
-                                                            cancelButtonColor: '#d33',
-                                                            cancelButtonText: 'Cancelar',
-                                                            confirmButtonText: 'Si, Importar'
-                                                        }).then((result) => {
-                                                            if (result.value) {
-                                                                $('#form_input').submit();
-                                                                $('#okButton').hide();
-                                                                $('#panel-config .modal-footer').show();
-                                                                $('#panel-config button.close').hide();
-                                                                $('#cancelButton').hide();
-                                                                $('#panel-config .modal-title').html('Importando Inscriptos...');
-                                                                $('#panel-config .modal-body').html('<div class="col-md-12  text-center"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div><div class="clearfix"></div>');
-                                                                $('#panel-config').modal('toggle');
-                                                                $('#panel-config').modal();
-                                                            }
-                                                        });
-                                                    });
+        $(document).ready(function () {
+            $('#inscriptos_tabla').hide();
+        });
 
-                                                    $(document).ready(function () {
-                                                        $('#inscriptos_tabla').hide();
-                                                    });
+        $(document).ready(function () {
+            dtable = $('#inscriptos_tabla').DataTable({
+                "autoWidth": false,
+                "aLengthMenu": [[5, 20, 50, 100, -1], [5, 20, 50, 100, "Todas"]], // change per page values here
+                "language": {
+                    "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
+                },
+                "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": [5]
+                    }],
+                "order": [[1, 'asc']],
+                "iDisplayLength": 20,
+            });
 
-                                                    dtable = $('#inscriptos_tabla').DataTable({
-                                                        "autoWidth": false,
-                                                        "aLengthMenu": [[5, 20, 50, 100, -1], [5, 20, 50, 100, "Todas"]], // change per page values here
-                                                        "language": {
-                                                            "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
-                                                        },
-                                                        "columnDefs": [{
-                                                                "searchable": false,
-                                                                "orderable": false,
-                                                                "targets": [5]
-                                                            }],
-                                                        "order": [[1, 'asc']],
-                                                        "iDisplayLength": 20,
-                                                    });
-
-                                                    dtable.on('draw', function () {
-                                                        $('#inscriptos_tabla').show();
-                                                        $('#tabla-loading').hide()();
-                                                    });
-
-                                                });
+            dtable.on('draw', function () {
+                $('#inscriptos_tabla').show();
+                $('#tabla-loading').hide()();
+            });
+        });
     </script>
 {% endblock %}
