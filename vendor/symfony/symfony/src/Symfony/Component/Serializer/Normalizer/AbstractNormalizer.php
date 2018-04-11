@@ -313,7 +313,7 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
             if (__CLASS__ !== get_class($this)) {
                 $r = new \ReflectionMethod($this, __FUNCTION__);
                 if (__CLASS__ !== $r->getDeclaringClass()->getName()) {
-                    @trigger_error(sprintf('Method %s::%s() will have a 6th `string $format = null` argument in version 4.0. Not defining it is deprecated since 3.2.', get_class($this), __FUNCTION__), E_USER_DEPRECATED);
+                    @trigger_error(sprintf('Method %s::%s() will have a 6th `string $format = null` argument in version 4.0. Not defining it is deprecated since Symfony 3.2.', get_class($this), __FUNCTION__), E_USER_DEPRECATED);
                 }
             }
 
@@ -402,6 +402,8 @@ abstract class AbstractNormalizer extends SerializerAwareNormalizer implements N
     {
         if (isset($parentContext[self::ATTRIBUTES][$attribute])) {
             $parentContext[self::ATTRIBUTES] = $parentContext[self::ATTRIBUTES][$attribute];
+        } else {
+            unset($parentContext[self::ATTRIBUTES]);
         }
 
         return $parentContext;

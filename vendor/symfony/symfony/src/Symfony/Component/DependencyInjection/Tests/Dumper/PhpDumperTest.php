@@ -133,7 +133,7 @@ class PhpDumperTest extends TestCase
 
     /**
      * @group legacy
-     * @expectedDeprecation Dumping an uncompiled ContainerBuilder is deprecated since version 3.3 and will not be supported anymore in 4.0. Compile the container beforehand.
+     * @expectedDeprecation Dumping an uncompiled ContainerBuilder is deprecated since Symfony 3.3 and will not be supported anymore in 4.0. Compile the container beforehand.
      */
     public function testAddServiceWithoutCompilation()
     {
@@ -325,6 +325,15 @@ class PhpDumperTest extends TestCase
         $dumper = new PhpDumper($container);
 
         $this->assertStringEqualsFile(self::$fixturesPath.'/php/services24.php', $dumper->dump());
+    }
+
+    public function testEnvInId()
+    {
+        $container = include self::$fixturesPath.'/containers/container_env_in_id.php';
+        $container->compile();
+        $dumper = new PhpDumper($container);
+
+        $this->assertStringEqualsFile(self::$fixturesPath.'/php/services_env_in_id.php', $dumper->dump());
     }
 
     public function testEnvParameter()

@@ -121,7 +121,7 @@ class ProcessBuilder
      */
     public function inheritEnvironmentVariables($inheritEnv = true)
     {
-        @trigger_error(sprintf('The %s() method is deprecated since version 3.3 and will be removed in 4.0.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The %s() method is deprecated since Symfony 3.3 and will be removed in 4.0.', __METHOD__), E_USER_DEPRECATED);
 
         $this->inheritEnv = $inheritEnv;
 
@@ -167,7 +167,7 @@ class ProcessBuilder
     /**
      * Sets the input of the process.
      *
-     * @param resource|scalar|\Traversable|null $input The input content
+     * @param resource|string|int|float|bool|\Traversable|null $input The input content
      *
      * @return $this
      *
@@ -222,7 +222,7 @@ class ProcessBuilder
      */
     public function setOption($name, $value)
     {
-        @trigger_error(sprintf('The %s() method is deprecated since version 3.3 and will be removed in 4.0.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The %s() method is deprecated since Symfony 3.3 and will be removed in 4.0.', __METHOD__), E_USER_DEPRECATED);
 
         $this->options[$name] = $value;
 

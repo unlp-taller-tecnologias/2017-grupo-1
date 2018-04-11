@@ -12,6 +12,7 @@
 namespace Symfony\Bundle\FrameworkBundle\DependencyInjection;
 
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Bridge\Monolog\Processor\DebugProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,6 +25,7 @@ use Symfony\Component\Config\ResourceCheckerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -56,6 +58,7 @@ use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\ObjectInitializerInterface;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
 use Symfony\Component\Workflow;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * FrameworkExtension.
@@ -171,6 +174,10 @@ class FrameworkExtension extends Extension
         }
 
         if ($this->isConfigEnabled($container, $config['form'])) {
+            if (!class_exists('Symfony\Component\Form\Form')) {
+                throw new LogicException('Form support cannot be enabled as the Form component is not installed.');
+            }
+
             $this->formConfigEnabled = true;
             $this->registerFormConfiguration($config, $container, $loader);
             $config['validation']['enabled'] = true;
@@ -216,6 +223,10 @@ class FrameworkExtension extends Extension
         $this->registerPropertyAccessConfiguration($config['property_access'], $container, $loader);
 
         if ($this->isConfigEnabled($container, $config['serializer'])) {
+            if (!class_exists('Symfony\Component\Serializer\Serializer')) {
+                throw new LogicException('Serializer support cannot be enabled as the Serializer component is not installed.');
+            }
+
             $this->registerSerializerConfiguration($config['serializer'], $container, $loader);
         }
 
@@ -352,6 +363,8 @@ class FrameworkExtension extends Extension
     private function registerEsiConfiguration(array $config, ContainerBuilder $container, XmlFileLoader $loader)
     {
         if (!$this->isConfigEnabled($container, $config)) {
+            $container->removeDefinition('fragment.renderer.esi');
+
             return;
         }
 
@@ -361,6 +374,8 @@ class FrameworkExtension extends Extension
     private function registerSsiConfiguration(array $config, ContainerBuilder $container, XmlFileLoader $loader)
     {
         if (!$this->isConfigEnabled($container, $config)) {
+            $container->removeDefinition('fragment.renderer.ssi');
+
             return;
         }
 
@@ -743,8 +758,9 @@ class FrameworkExtension extends Extension
         if (1 === count($engines)) {
             $container->setAlias('templating', (string) reset($engines));
         } else {
+            $templateEngineDefinition = $container->getDefinition('templating.engine.delegating');
             foreach ($engines as $engine) {
-                $container->getDefinition('templating.engine.delegating')->addMethodCall('addEngine', array($engine));
+                $templateEngineDefinition->addMethodCall('addEngine', array($engine));
             }
             $container->setAlias('templating', 'templating.engine.delegating');
         }
@@ -1078,6 +1094,11 @@ class FrameworkExtension extends Extension
 
         $loader->load('annotations.xml');
 
+        if (!method_exists(AnnotationRegistry::class, 'registerUniqueLoader')) {
+            $container->getDefinition('annotations.dummy_registry')
+                ->setMethodCalls(array(array('registerLoader', array('class_exists'))));
+        }
+
         if ('none' !== $config['cache']) {
             $cacheService = $config['cache'];
 
@@ -1112,7 +1133,8 @@ class FrameworkExtension extends Extension
             $container
                 ->getDefinition('annotations.cached_reader')
                 ->replaceArgument(2, $config['debug'])
-                ->addTag('annotations.cached_reader', array('provider' => $cacheService))
+                // temporary property to lazy-reference the cache provider without using it until AddAnnotationsCachedReaderPass runs
+                ->setProperty('cacheProviderBackup', new ServiceClosureArgument(new Reference($cacheService)))
             ;
             $container->setAlias('annotation_reader', 'annotations.cached_reader');
             $container->setAlias(Reader::class, new Alias('annotations.cached_reader', false));
@@ -1143,7 +1165,7 @@ class FrameworkExtension extends Extension
         }
 
         if (!class_exists('Symfony\Component\Security\Csrf\CsrfToken')) {
-            throw new LogicException('CSRF support cannot be enabled as the Security CSRF component is not installed.');
+            throw new LogicException('CSRF support cannot be enabled as the Security CSRF component is not installed. Try running "composer require security-csrf".');
         }
 
         if (!$this->sessionConfigEnabled) {
@@ -1162,6 +1184,10 @@ class FrameworkExtension extends Extension
         if (!class_exists('Symfony\Component\PropertyAccess\PropertyAccessor')) {
             $container->removeAlias('serializer.property_accessor');
             $container->removeDefinition('serializer.normalizer.object');
+        }
+
+        if (!class_exists(Yaml::class)) {
+            $container->removeDefinition('serializer.encoder.yaml');
         }
 
         $serializerLoaders = array();

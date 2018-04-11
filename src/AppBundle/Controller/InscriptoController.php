@@ -147,10 +147,10 @@ class InscriptoController extends Controller
 
 
     /**
-     * @Route("/noCargados", name="noCargados")
+     * @Route("/altaExcel", name="altaExcel")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function noCargadosAction(Request $request)
+    public function altaExcelAction(Request $request)
     {
         $nombreArchivo = $_FILES['excel']['name']; //captura el nombre del archivo
         $tipo = $_FILES['excel']['type']; //captura el tipo de archivo (2003 o 2007)
@@ -161,7 +161,7 @@ class InscriptoController extends Controller
         $nombreArchivo = $date.$nombreArchivo;
         $destino = './uploads/'.$nombreArchivo; //lugar donde se copiara el archivo
  
-        if (copy($_FILES['excel']['tmp_name'],$destino)){
+        if (copy($_FILES['excel']['tmp_name'],$destino)) {
             $filename = $this->container->getParameter('kernel.root_dir').'/../web/uploads/'.$nombreArchivo;
             // load the factory
             /** @var \Liuggio\ExcelBundle\Factory $reader */
@@ -187,11 +187,12 @@ class InscriptoController extends Controller
             $i = 2;
             $noCargados = 0;
             $arrNoCargados = array ();
+            $em = $this->getDoctrine()->getManager();
+
             while ($sheet->getCell('A'.$i)->getValue() != ''){
-
                 $tipoYdoc = $sheet->getCell('C'.$i)->getValue(); // el tipo y documento estan en una misma celda hay que separarlos.
-                list($tipo, $documento) = explode(" ", $tipoYdoc); // la funcion explode divide un string en varios string
-
+                list($tipo, $documento) = explode(" ", $tipoYdoc); // la funcion explode divide un string en varios string                
+               
                 $ficha = $sheet->getCell('A'.$i)->getValue();
                 
                 $nomYape = $sheet->getCell('B'.$i)->getValue(); // el nombre y apellido estan en una misma celda hay que separarlos.
@@ -206,30 +207,31 @@ class InscriptoController extends Controller
                 $provincia = $sheet->getCell('X'.$i)->getValue();
                 $pais = $sheet->getCell('Y'.$i)->getValue();
 
-                $inscripto = new Inscripto();
-                $inscripto->setNroFicha($ficha);
-                $inscripto->setNombre($nombre);
-                $inscripto->setApellido($apellido);
-                $inscripto->setEmail($email);
-                $inscripto->setPais($pais);
-                $inscripto->setProvincia($provincia);
-                $inscripto->setLocalidad($localidad);
-                $inscripto->setCodigoPostal($cp);
+                $existe = $em->getRepository('AppBundle:Inscripto')->findByNroDocumento($documento);
+                if (!$existe) {
 
-                $fecha = gmdate("Y-m-d", (($fechaInsc - 25569) * 86400));
-                $date = new DateTime($fecha);
-                $inscripto->setFechaInscripcion($date);
+                    $inscripto = new Inscripto();
+                    $inscripto->setNroFicha($ficha);
+                    $inscripto->setNombre($nombre);
+                    $inscripto->setApellido($apellido);
+                    $inscripto->setEmail($email);
+                    $inscripto->setPais($pais);
+                    $inscripto->setProvincia($provincia);
+                    $inscripto->setLocalidad($localidad);
+                    $inscripto->setCodigoPostal($cp);
 
-                $inscripto->setPartido($partido);
-                $inscripto->setTipoDocumento($tipo);
-                $inscripto->setNroDocumento($documento);
-                $inscripto->setBorrado(FALSE);
+                    $fecha = gmdate("Y-m-d", (($fechaInsc - 25569) * 86400));
+                    $date = new DateTime($fecha);
+                    $inscripto->setFechaInscripcion($date);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($inscripto);
-                try {
-                    $em->flush();
-                } catch (\Exception $e) {
+                    $inscripto->setPartido($partido);
+                    $inscripto->setTipoDocumento($tipo);
+                    $inscripto->setNroDocumento($documento);
+                    $inscripto->setBorrado(FALSE);
+
+                    $em->persist($inscripto);
+
+                } else {
                     $noCargados = $noCargados + 1;
 
                     $noCargado = new NoCargado();
@@ -237,122 +239,27 @@ class InscriptoController extends Controller
                     $noCargado->setApellido($apellido);
                     $noCargado->setFicha($ficha);
                     $noCargado->setDni($documento);
-                    $noCargado->setMotivo("La persona ya se encuentra en el sistema");
+                    $noCargado->setMotivo("Ya existe una persona con este numero de documento");
 
                     $arrNoCargados[] = $noCargado;
-
-                    $em = $this->getDoctrine()->resetManager();
                 }
                 $i = $i + 1;
             }
-        }
-        $total = ($i - 2);
-        $cargados = ($total - sizeof($arrNoCargados));
-        if (sizeof($arrNoCargados) == 0){
-            $this->get('session')->getFlashBag()->add('success', 'Se importaron '.$total.' inscriptos correctamente');
-            return $this->redirectToRoute("inscripto_index");
-        }else{
-            return $this->render('inscripto/noCargados.html.twig', array(
-                'noCargados' => $arrNoCargados,
-                'cargados' => $cargados,
-                'total' => $total
-            ));
-        }
-    }
 
-    /**
-     * @Route("/cargaRapida", name="cargaRapida")
-     * @Security("has_role('ROLE_ADMIN')")
-     */
-    public function cargaRapidaAction(Request $request)
-    {
-        $nombreArchivo = $_FILES['excelRapida']['name']; //captura el nombre del archivo
-        $tipo = $_FILES['excelRapida']['type']; //captura el tipo de archivo (2003 o 2007)
-
-        // Creo un nombre unico para el archivo (solucionar posibles problemas con nombres de archvios repetidos)
-        date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $date = Date('Y.m.d.H.i.s-');
-        $nombreArchivo = $date.$nombreArchivo;
-        $destino = './uploads/'.$nombreArchivo; //lugar donde se copiara el archivo
- 
-        if (copy($_FILES['excelRapida']['tmp_name'],$destino)){
-            $filename = $this->container->getParameter('kernel.root_dir').'/../web/uploads/'.$nombreArchivo;
-            // load the factory
-            /** @var \Liuggio\ExcelBundle\Factory $reader */
-            $factory = $this->get('phpexcel');
-            // create a reader
-            /** @var \PHPExcel_Reader_IReader $reader */
-            $inputFileType = PHPExcel_IOFactory::identify($filename); // Le digo de que tipo es el archivo ej: excel5, excel2007, ect.
-            $reader = $factory->createReader($inputFileType);
-            // check that the file can be read
-            $canread = $reader->canRead($filename);
-            // check that an empty temporary file cannot be read
-            $someFile = tempnam($this->getParameter('kernel.root_dir'), "tmp");
-            $cannotread = $reader->canRead($someFile);
-            unlink($someFile);
-            // load the excel file
-            $phpExcelObject = $reader->load($filename);
-            // read some data
-            $sheet = $phpExcelObject->getActiveSheet();
-                
-            set_time_limit(300); // Maximum execution time of each script, in seconds 
-
-            // Recorro el excel dando de alta 1 por 1 
-            $i = 2;
-            while ($sheet->getCell('A'.$i)->getValue() != ''){
-
-                $tipoYdoc = $sheet->getCell('C'.$i)->getValue(); // el tipo y documento estan en una misma celda hay que separarlos.
-                list($tipo, $documento) = explode(" ", $tipoYdoc); // la funcion explode divide un string en varios string
-
-                $ficha = $sheet->getCell('A'.$i)->getValue();
-                
-                $nomYape = $sheet->getCell('B'.$i)->getValue(); // el nombre y apellido estan en una misma celda hay que separarlos.
-                list($apellido, $nombre) = explode(",", $nomYape); // la funcion explode divide un string en varios string
-                
-                $email = $sheet->getCell('H'.$i)->getValue();
-                
-                $fechaInsc = $sheet->getCell('L'.$i)->getValue();
-                $localidad = $sheet->getCell('U'.$i)->getValue();
-                $cp = $sheet->getCell('V'.$i)->getValue();
-                $partido = $sheet->getCell('W'.$i)->getValue();
-                $provincia = $sheet->getCell('X'.$i)->getValue();
-                $pais = $sheet->getCell('Y'.$i)->getValue();
-
-                $inscripto = new Inscripto();
-                $inscripto->setNroFicha($ficha);
-                $inscripto->setNombre($nombre);
-                $inscripto->setApellido($apellido);
-                $inscripto->setEmail($email);
-                $inscripto->setPais($pais);
-                $inscripto->setProvincia($provincia);
-                $inscripto->setLocalidad($localidad);
-                $inscripto->setCodigoPostal($cp);
-
-                $fecha = gmdate("Y-m-d", (($fechaInsc - 25569) * 86400));
-                $date = new DateTime($fecha);
-                $inscripto->setFechaInscripcion($date);
-
-                $inscripto->setPartido($partido);
-                $inscripto->setTipoDocumento($tipo);
-                $inscripto->setNroDocumento($documento);
-                $inscripto->setBorrado(FALSE);
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($inscripto);
-
-                $i = $i + 1;
-            }
-
-            try {
-                $em->flush();
-                $this->get('session')->getFlashBag()->add('success', 'Se importaron '.($i-2).' inscriptos correctamente.');
+            $em->flush();
+            $total = ($i - 2);
+            $cargados = ($total - sizeof($arrNoCargados));
+            if (sizeof($arrNoCargados) == 0){
+                $this->get('session')->getFlashBag()->add('success', 'Se importaron '.$total.' inscriptos correctamente');
                 return $this->redirectToRoute("inscripto_index");
-            } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('warning', 'Algunos inscripts no pudieron ser importados.');
-                return $this->redirectToRoute("inscripto_index");
+            }else{
+                return $this->render('inscripto/noCargados.html.twig', array(
+                    'noCargados' => $arrNoCargados,
+                    'cargados' => $cargados,
+                    'total' => $total
+                ));
             }
         }
-
     }
 
     /**

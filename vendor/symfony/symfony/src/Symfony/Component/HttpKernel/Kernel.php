@@ -61,11 +61,11 @@ abstract class Kernel implements KernelInterface, TerminableInterface
 
     private $projectDir;
 
-    const VERSION = '3.3.13';
-    const VERSION_ID = 30313;
+    const VERSION = '3.3.16';
+    const VERSION_ID = 30316;
     const MAJOR_VERSION = 3;
     const MINOR_VERSION = 3;
-    const RELEASE_VERSION = 13;
+    const RELEASE_VERSION = 16;
     const EXTRA_VERSION = '';
 
     const END_OF_MAINTENANCE = '01/2018';
@@ -353,7 +353,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     public function loadClassCache($name = 'classes', $extension = '.php')
     {
         if (\PHP_VERSION_ID >= 70000) {
-            @trigger_error(__METHOD__.'() is deprecated since version 3.3, to be removed in 4.0.', E_USER_DEPRECATED);
+            @trigger_error(__METHOD__.'() is deprecated since Symfony 3.3, to be removed in 4.0.', E_USER_DEPRECATED);
         }
 
         $this->loadClassCache = array($name, $extension);
@@ -367,7 +367,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     public function setClassCache(array $classes)
     {
         if (\PHP_VERSION_ID >= 70000) {
-            @trigger_error(__METHOD__.'() is deprecated since version 3.3, to be removed in 4.0.', E_USER_DEPRECATED);
+            @trigger_error(__METHOD__.'() is deprecated since Symfony 3.3, to be removed in 4.0.', E_USER_DEPRECATED);
         }
 
         file_put_contents($this->getCacheDir().'/classes.map', sprintf('<?php return %s;', var_export($classes, true)));
@@ -419,7 +419,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     protected function doLoadClassCache($name, $extension)
     {
         if (\PHP_VERSION_ID >= 70000) {
-            @trigger_error(__METHOD__.'() is deprecated since version 3.3, to be removed in 4.0.', E_USER_DEPRECATED);
+            @trigger_error(__METHOD__.'() is deprecated since Symfony 3.3, to be removed in 4.0.', E_USER_DEPRECATED);
         }
 
         if (!$this->booted && is_file($this->getCacheDir().'/classes.map')) {
@@ -536,7 +536,8 @@ abstract class Kernel implements KernelInterface, TerminableInterface
         if (!$cache->isFresh()) {
             if ($this->debug) {
                 $collectedLogs = array();
-                $previousHandler = set_error_handler(function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {
+                $previousHandler = defined('PHPUNIT_COMPOSER_INSTALL');
+                $previousHandler = $previousHandler ?: set_error_handler(function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {
                     if (E_USER_DEPRECATED !== $type && E_DEPRECATED !== $type) {
                         return $previousHandler ? $previousHandler($type, $message, $file, $line) : false;
                     }
@@ -572,7 +573,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
                 $container = $this->buildContainer();
                 $container->compile();
             } finally {
-                if ($this->debug) {
+                if ($this->debug && true !== $previousHandler) {
                     restore_error_handler();
 
                     file_put_contents($this->getCacheDir().'/'.$class.'Deprecations.log', serialize(array_values($collectedLogs)));

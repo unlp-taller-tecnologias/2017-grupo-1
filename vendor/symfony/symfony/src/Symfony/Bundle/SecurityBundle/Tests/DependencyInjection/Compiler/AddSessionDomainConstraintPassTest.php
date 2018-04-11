@@ -121,12 +121,13 @@ class AddSessionDomainConstraintPassTest extends TestCase
         );
 
         $ext = new FrameworkExtension();
-        $ext->load(array(), $container);
+        $ext->load(array('framework' => array('csrf_protection' => false)), $container);
 
         $ext = new SecurityExtension();
         $ext->load($config, $container);
 
-        (new AddSessionDomainConstraintPass())->process($container);
+        $pass = new AddSessionDomainConstraintPass();
+        $pass->process($container);
 
         return $container;
     }
