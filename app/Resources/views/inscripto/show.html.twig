@@ -187,7 +187,7 @@
 
 
                 <div class="col-md-9 text-right">
-                    <a href="{{ path("inscripto_index") }}" class="btn btn-default" >Volver</a>
+                    <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default" >Volver</a>
                 </div>
             </div>
         </div>

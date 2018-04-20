@@ -51,6 +51,23 @@ class InscriptoController extends Controller
     }
 
     /**
+     * Lists all noCargados entities.
+     *
+     * @Route("/noCargados", name="noCargados")
+     * @Method("GET")
+     */
+    public function noCargadosAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $noCargados = $em->getRepository('AppBundle:NoCargado')->findAll();
+
+        return $this->render('inscripto/noCargados.html.twig', array(
+            'noCargados' => $noCargados,
+        ));
+    }
+
+    /**
      * Creates a new inscripto entity.
      *
      * @Route("/new", name="inscripto_new")
@@ -152,13 +169,13 @@ class InscriptoController extends Controller
      */
     public function altaExcelAction(Request $request)
     {
-        $nombreArchivo = $_FILES['excel']['name']; //captura el nombre del archivo
+        $nombreArchivoReal = $_FILES['excel']['name']; //captura el nombre del archivo
         $tipo = $_FILES['excel']['type']; //captura el tipo de archivo (2003 o 2007)
 
         // Creo un nombre unico para el archivo (solucionar posibles problemas con nombres de archvios repetidos)
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $date = Date('Y.m.d.H.i.s-');
-        $nombreArchivo = $date.$nombreArchivo;
+        $nombreArchivo = $date.$nombreArchivoReal;
         $destino = './uploads/'.$nombreArchivo; //lugar donde se copiara el archivo
  
         if (copy($_FILES['excel']['tmp_name'],$destino)) {
@@ -187,7 +204,11 @@ class InscriptoController extends Controller
             $i = 2;
             $noCargados = 0;
             $arrNoCargados = array ();
+            $dnis = array ();
+            $indiceDnis = 0;
             $em = $this->getDoctrine()->getManager();
+            $enm = $this->getDoctrine()->getManager();
+
 
             while ($sheet->getCell('A'.$i)->getValue() != ''){
                 $tipoYdoc = $sheet->getCell('C'.$i)->getValue(); // el tipo y documento estan en una misma celda hay que separarlos.
@@ -208,7 +229,19 @@ class InscriptoController extends Controller
                 $pais = $sheet->getCell('Y'.$i)->getValue();
 
                 $existe = $em->getRepository('AppBundle:Inscripto')->findByNroDocumento($documento);
-                if (!$existe) {
+                
+
+                $existeEnExcel = false;
+                $tam = sizeof($dnis);
+                for ($x= 0; $x<$tam; $x++) {
+                    if ($dnis[$x] == $documento) {
+                        $existeEnExcel = true;
+                    }
+                }
+                
+                if (!$existe && !$existeEnExcel) {
+                    $dnis[$indiceDnis] = $documento;
+                    $indiceDnis++;
 
                     $inscripto = new Inscripto();
                     $inscripto->setNroFicha($ficha);
@@ -229,9 +262,11 @@ class InscriptoController extends Controller
                     $inscripto->setNroDocumento($documento);
                     $inscripto->setBorrado(FALSE);
 
+                
                     $em->persist($inscripto);
 
                 } else {
+                
                     $noCargados = $noCargados + 1;
 
                     $noCargado = new NoCargado();
@@ -239,26 +274,40 @@ class InscriptoController extends Controller
                     $noCargado->setApellido($apellido);
                     $noCargado->setFicha($ficha);
                     $noCargado->setDni($documento);
-                    $noCargado->setMotivo("Ya existe una persona con este numero de documento");
+                    $noCargado->setNombreExcel($nombreArchivoReal);
 
-                    $arrNoCargados[] = $noCargado;
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    $date = new DateTime("now");
+                    $noCargado->setFecha($date);
+                    if ($existe) { //existe en la base de datos
+                        $noCargado->setMotivo("Ya existe una persona con este numero de documento en la base de datos");
+                    }else{ //existe en el archvio excel
+                        $noCargado->setMotivo("Ya existe una persona con este numero de documento en el archivo excel que se importo");
+                    }
+                    
+
+                    $enm->persist($noCargado);
                 }
                 $i = $i + 1;
             }
 
-            $em->flush();
-            $total = ($i - 2);
-            $cargados = ($total - sizeof($arrNoCargados));
-            if (sizeof($arrNoCargados) == 0){
-                $this->get('session')->getFlashBag()->add('success', 'Se importaron '.$total.' inscriptos correctamente');
-                return $this->redirectToRoute("inscripto_index");
-            }else{
-                return $this->render('inscripto/noCargados.html.twig', array(
-                    'noCargados' => $arrNoCargados,
-                    'cargados' => $cargados,
-                    'total' => $total
-                ));
+            try {
+                $enm->flush(); //No cargados
+                $em->flush(); // Importados
+                $total = ($i - 2);
+                if ($noCargados == 0){
+                    $this->get('session')->getFlashBag()->add('success', 'Se importaron '.$total.' inscriptos correctamente');
+                    return $this->redirectToRoute("inscripto_index");
+                }else{
+                    $this->get('session')->getFlashBag()->add('warning', 'No se han podido importar '.$noCargados.' inscriptos de un total de '.$total);
+                    return $this->redirectToRoute("noCargados");
+                }
+            } catch (Exception $e) {
+                    $this->get('session')->getFlashBag()->add('Error', 'No se pudo cargar el excel, uno o varios campos incompatibles, verificar el archivo.');
+                    return $this->redirectToRoute("inscripto_index");
             }
+            
+            
         }
     }
 

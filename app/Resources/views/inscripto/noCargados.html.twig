@@ -76,13 +76,8 @@
                         <i class="fa fa-users"></i> Inscr&iacute;ptos
                     </a>
                 </li>
-                <li>
-                    <a href="{{ path('cargarExcel') }}">
-                        <i class="fa fa-upload"></i> Cargar Excel
-                    </a>
-                </li>
                 <li class="active">
-                    Inscriptos No Cargados 
+                    No Cargados 
                 </li>
             </ol>
         </div>
@@ -96,7 +91,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="clip-bars"></i>
-                    <h2 class="panel-title">No se han podido importar {{ noCargados | length }} inscriptos de un total de {{ total }}.</h2>
+                    <h2 class="panel-title">No se han podido importar inscriptos de un total de.</h2>
                 </div>
                 <div class="panel-body">
                     <table id="inscriptos_tabla" class="table table-condensed table-bordered table-striped table-hover">
@@ -108,6 +103,8 @@
                                 <th class="text-center">Apellido</th>
                                 <th class="text-center">Nro documento</th>
                                 <th class="text-center">Motivo</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Nombre del archivo</th>
                             </tr>
                         </thead>
 
@@ -120,6 +117,8 @@
                                     <td class="text-center">{{ inscripto.apellido }}</td>
                                     <td class="text-center">{{ inscripto.dni }}</td>
                                     <td class="text-center">{{ inscripto.motivo }}</td>
+                                    <td class="text-center">{{ inscripto.fecha |date('Y-m-d') }}</td>
+                                    <td class="text-center">{{ inscripto.nombreExcel }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -140,8 +139,7 @@
     <script src="{{ asset('vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
         $(document).ready(function () {
-            
-            $('#inscriptos_tabla').DataTable({
+            dtable = $('#inscriptos_tabla').DataTable({
                 "autoWidth": false,
                 "aLengthMenu": [[5, 20, 50, 100, -1], [5, 20, 50, 100, "Todas"]], // change per page values here
                 "language": {
@@ -150,10 +148,15 @@
                 "columnDefs": [{
                         "searchable": false,
                         "orderable": false,
-                        "targets": [0, 5]
+                        "targets": [5]
                     }],
                 "order": [[1, 'asc']],
-                "iDisplayLength": 10,
+                "iDisplayLength": 20,
+            });
+
+            dtable.on('draw', function () {
+                $('#inscriptos_tabla').show();
+                $('#tabla-loading').hide()();
             });
         });
     </script>
