@@ -227,19 +227,24 @@
                                             }
 
                                             $(document).ready(function () {
-                                                $('#nodocentes_tabla').DataTable({
+                                                dtable = $('#nodocentes_tabla').DataTable({
                                                     "autoWidth": false,
-                                                    "aLengthMenu": [[5, 15, 50, -1], [5, 15, 50, "Todas"]], // change per page values here
+                                                    "aLengthMenu": [[15, 20, 50, 100, -1], [15, 20, 50, 100, "Todas"]], // change per page values here
                                                     "language": {
                                                         "url": "{{ asset('vendor/datatables.net/Spanish.json') }}"
                                                     },
                                                     "columnDefs": [{
                                                             "searchable": false,
                                                             "orderable": false,
-                                                            "targets": [0]
+                                                            "targets": [5]
                                                         }],
                                                     "order": [[1, 'asc']],
-                                                    "iDisplayLength": 10,
+                                                    "iDisplayLength": 15,
+                                                });
+
+                                                dtable.on('draw', function () {
+                                                    $('#inscriptos_tabla').show();
+                                                    $('#tabla-loading').hide()();
                                                 });
                                             });
     </script>

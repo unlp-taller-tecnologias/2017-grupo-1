@@ -170,20 +170,8 @@ abstract class Visitante {
     protected $codigoPostal;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="tipoDocumento", type="string", length=255)
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 20,
-     *      minMessage = "El tipo documento deberá tener al menos {{ limit }} caracteres",
-     *      maxMessage = "El tipo documento no puede tener más de {{ limit }} caracteres"
-     * )
-     * @Assert\Regex(
-     *     pattern="/[a-zA-Z]+$/",
-     *     match=true,
-     *     message="El tipo documento no puede contener numeros ni caracteres especiales"
-     * )
+     * @ORM\ManyToOne(targetEntity="TipoDocumento")
+     * @ORM\JoinColumn(name="tipoDocumento_id", referencedColumnName="id")
      */
     protected $tipoDocumento;
 

@@ -107,7 +107,12 @@
                             <label class="col-md-3 control-label "><strong><em>Fecha Nacimiento</em></strong></label>
                             <div class="col-md-6">
                                 <div class="input-group margin-bottom-sm">
-                                    <p class="text-extra-large">{{ inscripto.getFechaNacimiento() | date('Y-m-d')}}</p>
+                                    {% if inscripto.getFechaNacimiento() %}
+                                        <p class="text-extra-large">{{ inscripto.getFechaNacimiento() | date('Y-m-d')}}</p>
+                                    {% else %}
+                                        <p class="text-extra-large">No cargada</p>
+                                    {% endif %}
+                                    
                                 </div>
                             </div>
                         </div>

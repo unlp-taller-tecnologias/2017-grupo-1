@@ -41,12 +41,31 @@ class InscriptoController extends Controller
      */
     public function indexAction()
     {
+        $añoActual = date("Y");
+        $ComienzoNuevoCicloLectivo = date("Y-m-d", strtotime($añoActual."-04-01")); 
+        $FechaActual = date("Y-m-d");
+        if ($FechaActual > $ComienzoNuevoCicloLectivo){
+            //Ej. Estoy en la fecha 10/06/2018 por lo que voy a obtener las inscripciones para el ciclo 2019
+            $anoClicloLectivo = date("Y")+1;
+            $desdeFecha = date("Y-m-d", strtotime(($anoClicloLectivo-1)."-04-01")); 
+            $hastaFecha = date("Y-m-d", strtotime($anoClicloLectivo."-04-01"));
+        }else{
+            //Ej. Estoy en la fecha 10/02/2018 por lo que voy a obtener las inscripciones para el ciclo 2018
+            $anoClicloLectivo = date("Y");
+            $desdeFecha = date("Y-m-d", strtotime(($anoClicloLectivo-1)."-04-01")); 
+            $hastaFecha = date("Y-m-d", strtotime($anoClicloLectivo."-04-01"));
+        }
+
+         
         $em = $this->getDoctrine()->getManager();
 
-        $inscriptos = $em->getRepository('AppBundle:Inscripto')->findAllOrderedByApellido();
+        $inscriptos = $em->getRepository('AppBundle:Inscripto')->findAllOrderedByApellido($desdeFecha, $hastaFecha);
 
         return $this->render('inscripto/index.html.twig', array(
             'inscriptos' => $inscriptos,
+            'anoClicloLectivo' => $anoClicloLectivo,
+            'desde'=>$desdeFecha,
+            'hasta'=>$hastaFecha
         ));
     }
 
@@ -229,7 +248,7 @@ class InscriptoController extends Controller
                 $pais = $sheet->getCell('Y'.$i)->getValue();
 
                 $existe = $em->getRepository('AppBundle:Inscripto')->findByNroDocumento($documento);
-                
+                $tiposDoc = $em->getRepository('AppBundle:TipoDocumento')->findall();      
 
                 $existeEnExcel = false;
                 $tam = sizeof($dnis);
@@ -258,7 +277,14 @@ class InscriptoController extends Controller
                     $inscripto->setFechaInscripcion($date);
 
                     $inscripto->setPartido($partido);
-                    $inscripto->setTipoDocumento($tipo);
+                    
+                    foreach ($tiposDoc as $tipoD) {
+                        if ($tipoD->getTipo() == $tipo) {
+                            $idTipo = $tipoD;
+                        }
+                    }
+
+                    $inscripto->setTipoDocumento($idTipo);
                     $inscripto->setNroDocumento($documento);
                     $inscripto->setBorrado(FALSE);
 

@@ -86,7 +86,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="clip-bars"></i>
-                    <h4 class="panel-title">Listado <span class="text-bold">de Inscr&iacute;ptos</span></h4>
+                    <h4 class="panel-title">Listado <span class="text-bold">de Inscr&iacute;ptos</span> del Ciclo Lectivo {{anoClicloLectivo}} (Desde {{desde}} hasta {{hasta}})</h4>
                 </div>
                 <div id="tabla_conteiner" class="panel-body">
                     <div id="tabla-loading" class="text-center">
@@ -97,6 +97,7 @@
                             <tr>
                                 <th class="text-center">Nro ficha</th>
                                 <th class="text-center">Nombre</th>
+                                <th class="text-center">Fecha Inscripcion</th>
                                 <th class="text-center">Pais</th>
                                 <th class="text-center">Documento</th>
                                 <th class="text-center">Vacunaci&oacute;n</th>
@@ -109,21 +110,25 @@
                             {% for inscripto in inscriptos %}
                                 <tr   {% if inscripto.borrado %} class="danger" {% endif %}>
                                     <td class="text-center">{{ inscripto.nroFicha }}</td>
-                                    <td class="text-left">{{ inscripto.nombre | upper}}, {{ inscripto.nombre | capitalize}}</td>
+                                    <td class="text-center">{{ inscripto.nombre | upper}}, {{ inscripto.nombre | capitalize}}</td>
+                                    <td class="text-center">{{ inscripto.fechaInscripcion | date("Y-m-d") }}</td>
                                     <td class="text-center">{{ inscripto.pais }}</td>
                                     <td class="text-center">{{ inscripto.nroDocumento }}</td>
                                     <td class="text-center">
-                                        {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.cumple == 1) %}
-                                            <span class="label label-sm label-success">CUMPLE</span>
-                                        {% endif  %}
-                                        {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.fechaCreacion == inscripto.registroVacunacion.fechaActualizacion) %}
-                                            <span class="label label-sm label-warning">NO PROCESADO</span>
-                                        {% endif  %}
                                         {% if (not inscripto.registroVacunacion) %}
                                             <span class="label label-sm label-warning">NO PROCESADO</span>
-                                        {% endif  %}
-                                        {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.cumple == 0) %}
-                                            <span class="label label-sm label-danger">NO CUMPLE</span>
+                                        {% else  %}
+                                            {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.fechaCreacion == inscripto.registroVacunacion.fechaActualizacion) %}
+                                                <span class="label label-sm label-warning">NO PROCESADO</span>
+                                            {% else  %}
+
+                                                {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.cumple == 1) %}
+                                                    <span class="label label-sm label-success">CUMPLE</span>
+                                                {% endif  %}
+                                                {% if (inscripto.registroVacunacion) and (inscripto.registroVacunacion.cumple == 0) %}
+                                                    <span class="label label-sm label-danger">NO CUMPLE</span>
+                                                {% endif  %}
+                                            {% endif  %}
                                         {% endif  %}
                                     </td>
                                     <td class="text-center">

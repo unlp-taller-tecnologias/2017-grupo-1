@@ -32,7 +32,10 @@ class InscriptoType extends AbstractType {
                 ->add('partido', TextType::class)
                 ->add('localidad', TextType::class)
                 ->add('codigoPostal', TextType::class)
-                ->add('tipoDocumento', TextType::class)
+                ->add('tipoDocumento', EntityType::class, array(
+                    'class' => 'AppBundle:TipoDocumento',
+                    'multiple' => false,
+                ))
                 ->add('nroDocumento', TextType::class)
                 ->add('fechaNacimiento', DateType::class, array(
                     'required' => true,
