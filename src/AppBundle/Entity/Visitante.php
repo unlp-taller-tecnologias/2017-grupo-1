@@ -547,7 +547,7 @@ abstract class Visitante {
         return $this->registroFactoresRiesgo;
     }
 
-    function setRegistroFactoresRiesgo(Arra $registroFactoresRiesgo) {
+    function setRegistroFactoresRiesgo(Array $registroFactoresRiesgo) {
         $this->registroFactoresRiesgo = $registroFactoresRiesgo;
     }
 

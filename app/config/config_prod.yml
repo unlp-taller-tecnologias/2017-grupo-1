@@ -7,20 +7,49 @@ imports:
 #        result_cache_driver: apc
 #        query_cache_driver: apc
         
+#monolog:
+#    handlers:
+#        main:
+#            type: fingers_crossed
+#            action_level: error
+#            handler: nested
+#        nested:
+#            type: stream
+#            path: '%kernel.logs_dir%/%kernel.environment%.log'
+#            level: debug
+#        console:
+#            type: console
+#            process_psr_3_messages: false
+#        orm:
+#            auto_generate_proxy_classes:  true # <- change to true
+#            proxy_dir:            '%kernel.cache_dir%/doctrine/orm/Proxies'
+#            proxy_namespace:      Proxies
+
 monolog:
     handlers:
         main:
-            type: fingers_crossed
-            action_level: error
-            handler: nested
-        nested:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.log'
             level: debug
+            channels: ['!event']
         console:
             type: console
             process_psr_3_messages: false
-        orm:
-            auto_generate_proxy_classes:  true # <- change to true
-            proxy_dir:            '%kernel.cache_dir%/doctrine/orm/Proxies'
-            proxy_namespace:      Proxies
+            channels: ['!event', '!doctrine', '!console']
+        # To follow logs in real time, execute the following command:
+        # `bin/console server:log -vv`
+        server_log:
+            type: server_log
+            process_psr_3_messages: false
+            host: 127.0.0.1:9911
+        # uncomment to get logging in your browser
+        # you may have to allow bigger header sizes in your Web server configuration
+        #firephp:
+        #    type: firephp
+        #    level: info
+        #chromephp:
+        #    type: chromephp
+        #    level: info
+
+#swiftmailer:
+#    delivery_addresses: ['me@example.com']
