@@ -29,7 +29,7 @@ class Inscripto extends Visitante {
     /**
      * @var string
      *
-     * @ORM\Column(name="nroFicha", type="string", length=255, unique=true)
+     * @ORM\Column(name="nroFicha", type="string", length=255, unique=true, nullable=true)
      */
     protected $nroFicha;
 
@@ -53,6 +53,13 @@ class Inscripto extends Visitante {
      * @Assert\Date()
      */
     protected $fechaInscripcion;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="anoIngreso", type="integer", length=4)
+     */
+    protected $anoIngreso;
 
     /**
      * Get id
@@ -131,6 +138,16 @@ class Inscripto extends Visitante {
 
     public function getTipo() {
         return 'Inscripto';
+    }
+
+    public function setAnoIngreso($anoIngreso) {
+        $this->anoIngreso = $anoIngreso;
+
+        return $this;
+    }
+
+    public function getAnoIngreso() {
+        return $this->anoIngreso;
     }
 
     public function __toString() {

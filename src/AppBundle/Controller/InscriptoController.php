@@ -25,48 +25,38 @@ class InscriptoController extends Controller
 {
 
     /**
+     * Lists all inscripto entities.
+     *
+     * @Route("/", name="inscripto_index")
+     * @Method({"GET","POST"})
+     */
+    public function indexAction(Request $request)
+    {  
+        $anoActual = date("Y");
+        if ($request->get('ano')){
+            $anoIngreso = $request->get('ano');
+        }else{
+            $anoIngreso = $anoActual;
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $inscriptos = $em->getRepository('AppBundle:Inscripto')->findAllOrderedByApellido($anoIngreso);
+
+        return $this->render('inscripto/index.html.twig', array(
+            'inscriptos' => $inscriptos,
+            'hastaAno' => ($anoActual+1),
+            'anoIngreso'=>$anoIngreso,
+        ));
+    }
+
+    /**
      * @Route("/altaExcelView", name="altaExcelView")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function altaExcel(Request $request)
     {
         return $this->render('inscripto/altaExcel.html.twig');
-    }
-
-    /**
-     * Lists all inscripto entities.
-     *
-     * @Route("/", name="inscripto_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $añoActual = date("Y");
-        $ComienzoNuevoCicloLectivo = date("Y-m-d", strtotime($añoActual."-04-01")); 
-        $FechaActual = date("Y-m-d");
-        if ($FechaActual > $ComienzoNuevoCicloLectivo){
-            //Ej. Estoy en la fecha 10/06/2018 por lo que voy a obtener las inscripciones para el ciclo 2019
-            $anoClicloLectivo = date("Y")+1;
-            $desdeFecha = date("Y-m-d", strtotime(($anoClicloLectivo-1)."-04-01")); 
-            $hastaFecha = date("Y-m-d", strtotime($anoClicloLectivo."-04-01"));
-        }else{
-            //Ej. Estoy en la fecha 10/02/2018 por lo que voy a obtener las inscripciones para el ciclo 2018
-            $anoClicloLectivo = date("Y");
-            $desdeFecha = date("Y-m-d", strtotime(($anoClicloLectivo-1)."-04-01")); 
-            $hastaFecha = date("Y-m-d", strtotime($anoClicloLectivo."-04-01"));
-        }
-
-         
-        $em = $this->getDoctrine()->getManager();
-
-        $inscriptos = $em->getRepository('AppBundle:Inscripto')->findAllOrderedByApellido($desdeFecha, $hastaFecha);
-
-        return $this->render('inscripto/index.html.twig', array(
-            'inscriptos' => $inscriptos,
-            'anoClicloLectivo' => $anoClicloLectivo,
-            'desde'=>$desdeFecha,
-            'hasta'=>$hastaFecha
-        ));
     }
 
     /**
@@ -246,6 +236,7 @@ class InscriptoController extends Controller
                 $partido = $sheet->getCell('W'.$i)->getValue();
                 $provincia = $sheet->getCell('X'.$i)->getValue();
                 $pais = $sheet->getCell('Y'.$i)->getValue();
+                $anoIngreso = $sheet->getCell('AI'.$i)->getValue();
 
                 $existe = $em->getRepository('AppBundle:Inscripto')->findByNroDocumento($documento);
                 $tiposDoc = $em->getRepository('AppBundle:TipoDocumento')->findall();      
@@ -275,6 +266,14 @@ class InscriptoController extends Controller
                     $fecha = gmdate("Y-m-d", (($fechaInsc - 25569) * 86400));
                     $date = new DateTime($fecha);
                     $inscripto->setFechaInscripcion($date);
+
+                    if ($anoIngreso == '') {    
+                        $fechaIngreso = date($fecha);
+                        $anoIngreso = date("Y", strtotime($fechaIngreso));  
+                        $anoIngreso = $anoIngreso+1;
+                    }
+                    
+                    $inscripto->setAnoIngreso($anoIngreso);
 
                     $inscripto->setPartido($partido);
                     

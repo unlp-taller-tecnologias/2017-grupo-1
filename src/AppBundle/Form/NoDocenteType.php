@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,10 +15,28 @@ class NoDocenteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('departamento')->add('oficina')->add('telefono')->add('funcion')->add('nombre')->add('apellido')->add('email')->add('pais')->add('provincia')->add('partido')->add('localidad')->add('codigoPostal')->add('tipoDocumento')->add('nroDocumento')->add('fechaNacimiento',DateType::class, array(
-          'required'=>true,
-          'widget'=>'single_text'
-        ));
+        $builder->add('departamento')
+                ->add('oficina')
+                ->add('telefono')
+                ->add('funcion')
+                ->add('nombre')
+                ->add('apellido')
+                ->add('email')
+                ->add('pais')
+                ->add('provincia')
+                ->add('partido')
+                ->add('localidad')
+                ->add('codigoPostal')
+                ->add('tipoDocumento', EntityType::class, array(
+                    'class' => 'AppBundle:TipoDocumento',
+                    'multiple' => false,
+                    'required'=>true,
+                ))
+                ->add('nroDocumento')
+                ->add('fechaNacimiento', DateType::class, array(
+                    'required'=>true,
+                    'widget'=>'single_text'
+                ));
     }
     
     /**

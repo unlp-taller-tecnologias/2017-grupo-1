@@ -38,7 +38,7 @@ class NoDocente extends Visitante
     /**
      * @var int
      *
-     * @ORM\Column(name="telefono", type="integer")
+     * @ORM\Column(name="telefono", type="string", length=63) 
      */
     protected $telefono;
 

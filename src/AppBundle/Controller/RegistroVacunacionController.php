@@ -234,16 +234,16 @@ class RegistroVacunacionController extends Controller {
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'El registro se edito exitosamente.');
             if ($visitante->getTipo() == 'Inscripto') {
-                return $this->redirectToRoute("inscripto_index");
+                return $this->redirectToRoute("inscripto_index", array('ano' => $request->get('ano')));
             } else {
-                return $this->redirectToRoute("nodocente_index");
+                return $this->redirectToRoute("nodocente_index", array('ano' => $request->get('ano')));
             }
         } catch (\Exception $e) {
            // echo var_dump($e->getMessage()); die();
             $this->get('session')->getFlashBag()->add('error', 'No se ha podido editar el registro. Detalle: ' /* . $e->getMessage() */);
         }
 
-        return $this->redirectToRoute('editar_registro', array('id' => $visitante->getId()));
+        return $this->redirectToRoute('editar_registro', array('id' => $visitante->getId(),'ano' => $request->get('ano')));
 
         /*  return $this->render('registrovacunacion/index.html.twig', array(
           'registroVacunacion' => $registrovacunacion,

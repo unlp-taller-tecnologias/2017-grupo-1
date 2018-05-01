@@ -15,7 +15,9 @@ class InscriptoType extends AbstractType {
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('nroFicha', TextType::class)
+        $builder->add('nroFicha', TextType::class, array(
+                    'required' => false,
+                ))
                 ->add('legajo', TextType::class, array(
                     'required' => false,
                 ))
@@ -24,9 +26,7 @@ class InscriptoType extends AbstractType {
                 ))
                 ->add('nombre', TextType::class)
                 ->add('apellido', TextType::class)
-                ->add('email', TextType::class, array(
-                    'required' => false,
-                ))
+                ->add('email', TextType::class)
                 ->add('pais', TextType::class)
                 ->add('provincia', TextType::class)
                 ->add('partido', TextType::class)

@@ -99,7 +99,7 @@
                     {% for noDocente in noDocentes %}
                         <tr   {% if noDocente.borrado %} class="danger" {% endif %}>
                             <td class="text-center">{{loop.index}}</td>
-                            <td class="text-center">{{ noDocente.apellido  |upper}}, {{ noDocente.apellido | capitalize}}</td>
+                            <td class="text-center">{{ noDocente.apellido  |upper}}, {{ noDocente.nombre | capitalize}}</td>
                             <td class="text-center">{{ noDocente.departamento }}</td>
                             <td class="text-center">{{ noDocente.nroDocumento }}</td>
                             <td class="text-center">

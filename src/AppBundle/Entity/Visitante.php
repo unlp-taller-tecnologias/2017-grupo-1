@@ -73,7 +73,7 @@ abstract class Visitante {
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @ORM\Column(name="email", type="string", length=255)
      * @Assert\Email(
      *     message = "El email {{ value }} no es un email valido."
      * )

@@ -22,12 +22,10 @@ class InscriptoRepository extends \Doctrine\ORM\EntityRepository {
      /**
      * Retorna los Inscriptos del sistema ordenados ASC por apellido
      */
-    public function findAllOrderedByApellido($desdeFecha, $hastaFecha) {
+    public function findAllOrderedByApellido($anoIngreso) {
         return $this->createQueryBuilder('inscripto')
-    				->andWhere('inscripto.fechaInscripcion > :desde')
-                    ->andWhere('inscripto.fechaInscripcion < :hasta')
-        			->setParameter('desde', $desdeFecha)
-                    ->setParameter('hasta', $hastaFecha)
+    				->andWhere('inscripto.anoIngreso = :anoIngreso')
+                    ->setParameter('anoIngreso', $anoIngreso)
                     ->orderBy("inscripto.apellido", "ASC")
                     ->getQuery()->getResult();
     }

@@ -192,7 +192,7 @@
 
 
                 <div class="col-md-9 text-right">
-                    <a href="{{ app.request.headers.get('referer') }}" class="btn btn-default" >Volver</a>
+                    <a href="{{ app.request.headers.get('referer',{'ano': inscripto.anoIngreso}) }}" class="btn btn-default" >Volver</a>
                 </div>
             </div>
         </div>
